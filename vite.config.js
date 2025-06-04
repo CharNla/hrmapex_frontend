@@ -20,5 +20,5 @@ export default defineConfig({
       }
     }
   },
-  base: './'
+  base: '/hrmapex_frontend/',
 })
