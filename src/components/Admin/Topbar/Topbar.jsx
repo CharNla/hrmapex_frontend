@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FiSearch, FiBell, FiChevronDown, FiUser, FiLogOut, FiFileText, FiDollarSign } from 'react-icons/fi'
+import { FiSearch, FiBell, FiChevronDown, FiUser, FiLogOut, FiFileText, FiDollarSign, FiMenu } from 'react-icons/fi'
 import './Topbar.css'
 import userImage from '../../../assets/profile.png'
 
-function Topbar({ pageTitle = "Dashboard", pageSubtitle = "" }) {
+function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick }) {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
@@ -79,8 +79,13 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "" }) {
     <>
       <div className="topbar">
         <div className="left-section">
-          <h1 className="greeting">{pageTitle}</h1>
-          <p className="sub-greeting">{pageSubtitle || getGreeting()}</p>  
+          <button className="mobile-menu-toggle" onClick={onMobileMenuClick}>
+            <FiMenu />
+          </button>
+          <div className="page-info">
+            <h1 className="greeting">{pageTitle}</h1>
+            <p className="sub-greeting">{pageSubtitle || getGreeting()}</p>  
+          </div>
         </div>
 
         <div className="right-section">

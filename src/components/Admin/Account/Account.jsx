@@ -64,6 +64,7 @@ const Account = () => {
   const [accounts, setAccounts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -115,6 +116,10 @@ const Account = () => {
     )
   );
 
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   if (error) {
     return <div className="error-message">{error}</div>;
   }
@@ -133,11 +138,16 @@ const Account = () => {
       </ul>
       <SideMenu 
         isMinimized={isMinimized} 
-        onToggleMinimize={() => setIsMinimized(!isMinimized)} 
+        onToggleMinimize={setIsMinimized}
+        mobileOpen={isMobileMenuOpen}
       />
       <div className="account dashboard-main">
         <div className="account dashboard-content">
-          <Topbar pageTitle="Account Management" pageSubtitle="Manage user accounts" />
+          <Topbar 
+            pageTitle="Account Management" 
+            pageSubtitle="Manage user accounts" 
+            onMobileMenuClick={handleMobileMenuToggle}
+          />
           <div className="account-container">
             <div className="account-header">
               <div className="account-search-bar">

@@ -9,6 +9,17 @@ import FilterModal from '../FilterModal/FilterModal'
 import './AllEmployees.css'
 import '../AnimationCircles/AnimationCircles.css'
 
+// Custom hook to detect mobile screen
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= breakpoint)
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= breakpoint)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [breakpoint])
+  return isMobile
+}
+
 const AllEmployees = () => {
   const [employees, setEmployees] = useState([])
   const [filteredEmployees, setFilteredEmployees] = useState([])
@@ -21,10 +32,12 @@ const AllEmployees = () => {
   const [employeeToDelete, setEmployeeToDelete] = useState(null)
   const [selectedDepartments, setSelectedDepartments] = useState([])
   const [isMinimized, setIsMinimized] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
   const navigate = useNavigate()
+  const isMobile = useIsMobile(768)
 
   useEffect(() => {
     // ตรวจสอบ authentication
@@ -213,6 +226,10 @@ const AllEmployees = () => {
     setCurrentPage(page)
   }
 
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   const DeleteModal = ({ isOpen, onClose, onConfirm, employeeName }) => {
     if (!isOpen) return null;
 
@@ -276,30 +293,21 @@ const AllEmployees = () => {
     <div className="dashboard-container">
       <SideMenu 
         isMinimized={isMinimized} 
-        onToggleMinimize={() => setIsMinimized(!isMinimized)}
+        onToggleMinimize={setIsMinimized} 
+        mobileOpen={isMobileMenuOpen}
       />
-      <motion.div 
-        className="dashboard-main"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+      <div className="dashboard-main">
         <ul className="circles">
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-        </ul>
-        <ul className="circles-bottom">
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
+          {[...Array(15)].map((_, i) => (
+            <li key={i}></li>
+          ))}
         </ul>
 
-        <Topbar pageTitle="All Employees" pageSubtitle="Manage employee information" />
+        <Topbar 
+          pageTitle="All Employees" 
+          pageSubtitle="Manage employee information"
+          onMobileMenuClick={handleMobileMenuToggle}
+        />
 
         <motion.div 
           className="content-wrapper"
@@ -317,82 +325,114 @@ const AllEmployees = () => {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <div className="action-buttons">
-              <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
+            <div className="action-buttons">              <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
                 <FiPlus />
-                Add Employee
-              </button>
-              <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
+                <span>Add Employee</span>
+              </button>              <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
                 <FiFilter />
-                Filter
+                <span>Filter</span>
               </button>
             </div>
           </motion.div>
 
-          <div className="table-container">
-            <motion.table 
-              className="employees-table"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <thead>
-                <tr>
-                  <th>Employee</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Position</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentEmployees.map((employee) => (
-                  <motion.tr 
-                    key={employee.EmployeeId}
-                    variants={itemVariants}
-                  >
-                    <td className="employee-name">
-                      <img
-                        src={employee.ImageUrl || '/src/assets/profile.png'}
-                        alt={employee.FName}
-                        onError={(e) => {e.target.src = '/src/assets/profile.png'}}
-                      />
-                      <div className="name-info">
-                        <span>{`${employee.FName} ${employee.LName}`}</span>
-                        {employee.Nickname && <span className="nickname">({employee.Nickname})</span>}
-                      </div>
-                    </td>
-                    <td>{employee.Email || '-'}</td>
-                    <td>{employee.MobileNumber || '-'}</td>
-                    <td>{employee.Position || '-'}</td>
-                    <td>
-                      <span className={`type-badge type-${employee.Type?.toLowerCase()}`}>
-                        {employee.Type}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`status ${employee.Status?.toLowerCase()}`}>
-                        {employee.Status}
-                      </span>
-                    </td>
-                    <td className="actions">
-                      <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
-                        <FiEye />
-                      </button>
-                      <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
-                        <FiEdit2 />
-                      </button>
-                      <button onClick={() => handleDeleteClick(employee)}>
-                        <FiTrash2 />
-                      </button>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </motion.table>
-          </div>
+          {/* MOBILE: Employee Card List */}
+          {isMobile ? (
+            <div className="employee-card-list">
+              {currentEmployees.map((employee) => (
+                <div className="employee-card" key={employee.EmployeeId}>
+                  <img
+                    className="employee-card-img"
+                    src={employee.ImageUrl || '/src/assets/profile.png'}
+                    alt={employee.FName}
+                    onError={e => { e.target.src = '/src/assets/profile.png' }}
+                  />
+                  <div className="employee-card-info">
+                    <div className="employee-card-name">{employee.FName} {employee.LName}</div>
+                    {employee.Nickname && (
+                      <div className="employee-card-nickname">({employee.Nickname})</div>
+                    )}
+                  </div>
+                  <div className="employee-card-actions">
+                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)} title="ดูข้อมูล">
+                      <FiEye />
+                    </button>
+                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)} title="แก้ไข">
+                      <FiEdit2 />
+                    </button>
+                    <button onClick={() => handleDeleteClick(employee)} title="ลบ">
+                      <FiTrash2 />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            // DESKTOP: Table Layout
+            <div className="table-container">
+              <motion.table 
+                className="employees-table"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Position</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentEmployees.map((employee) => (
+                    <motion.tr 
+                      key={employee.EmployeeId}
+                      variants={itemVariants}
+                    >
+                      <td className="employee-name">
+                        <img
+                          src={employee.ImageUrl || '/src/assets/profile.png'}
+                          alt={employee.FName}
+                          onError={(e) => {e.target.src = '/src/assets/profile.png'}}
+                        />
+                        <div className="name-info">
+                          <span>{`${employee.FName} ${employee.LName}`}</span>
+                          {employee.Nickname && <span className="nickname">({employee.Nickname})</span>}
+                        </div>
+                      </td>
+                      <td>{employee.Email || '-'}</td>
+                      <td>{employee.MobileNumber || '-'}</td>
+                      <td>{employee.Position || '-'}</td>
+                      <td>
+                        <span className={`type-badge type-${employee.Type?.toLowerCase()}`}>
+                          {employee.Type}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`status ${employee.Status?.toLowerCase()}`}>
+                          {employee.Status}
+                        </span>
+                      </td>
+                      <td className="actions">
+                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
+                          <FiEye />
+                        </button>
+                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
+                          <FiEdit2 />
+                        </button>
+                        <button onClick={() => handleDeleteClick(employee)}>
+                          <FiTrash2 />
+                        </button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </motion.table>
+            </div>
+          )}
 
           <motion.div 
             className="table-footer"
@@ -431,7 +471,7 @@ const AllEmployees = () => {
             </div>
           </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Filter Modal */}
       {isFilterModalOpen && (

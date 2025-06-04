@@ -8,6 +8,12 @@ import './setting.css';
 const Setting = () => {
   const { isDark, toggleTheme } = useTheme();
   const [activeTab, setActiveTab] = useState('account');
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   const settingTabs = [
     { id: 'account', label: 'Account Settings', icon: <FiUser /> },
@@ -20,7 +26,12 @@ const Setting = () => {
 
   return (
     <div className="dashboard-container">
-      <SideMenu />
+      <SideMenu 
+        isMinimized={isMinimized} 
+        onToggleMinimize={() => setIsMinimized(!isMinimized)}
+        mobileOpen={isMobileMenuOpen}
+        onMobileMenuToggle={handleMobileMenuToggle}
+      />
       <div className="dashboard-main">
         <ul className="circles">
           {[...Array(15)].map((_, i) => (
@@ -35,7 +46,11 @@ const Setting = () => {
         </ul>
 
         <div className="dashboard-content">
-          <Topbar pageTitle="Settings" pageSubtitle="Manage your account settings and preferences" />
+          <Topbar 
+            pageTitle="Settings" 
+            pageSubtitle="Manage your account settings and preferences"
+            onMobileMenuClick={handleMobileMenuToggle}
+          />
           
           <div className="settings-container">
             <div className="settings-sidebar">

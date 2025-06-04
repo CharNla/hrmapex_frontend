@@ -17,12 +17,11 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { useTheme } from '../../../context/ThemeContext'
 import './Side_menu.css'
 
-const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup }) => {
+const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, mobileOpen }) => {
   const { isDark, toggleTheme } = useTheme()
   const location = useLocation()
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const handleTouchStart = (e) => {
     setTouchStart(e.touches[0].clientX)
@@ -40,13 +39,9 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup }) => {
     const isRightSwipe = distance < -50
 
     if (isLeftSwipe) {
-      // Swipe left to close
-      setIsMobileOpen(false)
-      if (!isMinimized) onToggleMinimize()
+      onToggleMinimize(true)
     } else if (isRightSwipe) {
-      // Swipe right to open
-      setIsMobileOpen(true)
-      if (isMinimized) onToggleMinimize()
+      onToggleMinimize(false)
     }
 
     setTouchStart(0)
@@ -54,9 +49,15 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup }) => {
   }
 
   useEffect(() => {
-    // Close mobile menu on route change
-    setIsMobileOpen(false)
-  }, [location])
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [mobileOpen])
   
   const menuItems = [
     { icon: <FaUsers />, text: 'All Employees', path: '/employees' },
@@ -97,32 +98,31 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup }) => {
   return (
     <>
       <AnimatePresence>
-        {isMobileOpen && (
+        {mobileOpen && (
           <motion.div
             className="menu-overlay"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setIsMobileOpen(false)}
+            onClick={() => onToggleMinimize(true)}
           />
         )}
       </AnimatePresence>
 
       <motion.div 
-        className={`side-menu ${isMinimized ? 'minimized' : ''} ${hasPopup ? 'has-popup' : ''} ${isDark ? 'dark' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}
+        className={`side-menu ${isMinimized ? 'minimized' : ''} ${hasPopup ? 'has-popup' : ''} ${isDark ? 'dark' : ''} ${mobileOpen ? 'mobile-open' : ''}`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="logo-container">
-          <h1 
+        <div className="logo-container">          <h1 
             className="logo"
             onClick={onToggleMinimize}
             role="button"
             tabIndex={0}
           >
             <span className="logo-icon">∞</span>
-            {!isMinimized && 'HRMS'}
+            <span className="logo-text">{!isMinimized && 'HRMS'}</span>
           </h1>
         </div>
 

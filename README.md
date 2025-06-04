@@ -50,9 +50,6 @@ A modern HR Management System frontend built with **React**, designed to streaml
 - ⚛️ React 18 + Vite  
 - 🎨 Tailwind CSS  
 - 🎞️ Framer Motion for animations  
-- 🔄 Axios for API communication  
-- 🎯 Context API for state management  
-
 
 
 ## 📦 Installation & Usage

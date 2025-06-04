@@ -4,13 +4,14 @@
   right: 0;
   left: 200px;
   height: 65px;
-  background-color: #27283C; /* Match sidebar dark background color */
+  background-color: var(--bg-primary);
   border-radius: 0;
   z-index: 999;
   padding: 0.5rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: all 0.3s ease;
 }
 
 /* Remove box shadow to match sidebar style */
@@ -34,6 +35,12 @@
 }
 
 .left-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.page-info {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -624,6 +631,27 @@
   box-shadow: none;
 }
 
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;  /* ซ่อนปุ่มเมนูโดยค่าเริ่มต้น */
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 1rem;
+}
+
+/* แสดงปุ่มเฉพาะบนหน้าจอมือถือ */
+@media screen and (max-width: 768px) {
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 /* Responsive Design */
 @media screen and (max-width: 1024px) {
   .topbar {
@@ -650,21 +678,10 @@
     padding: 0.5rem 1rem;
   }
 
-  [data-theme='minimized'] .topbar {
-    left: 0;
-  }
-
-  .search-container {
-    display: none;
-  }
-
-  .right-section {
-    gap: 1rem;
-  }
-
-  /* Add mobile menu toggle button */
   .mobile-menu-toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     color: var(--text-secondary);
@@ -672,10 +689,19 @@
     cursor: pointer;
     padding: 0.4rem;
     margin-right: 0.5rem;
+    transition: all 0.2s ease;
   }
 
   .mobile-menu-toggle:hover {
-    color: var(--primary);
+    color: #7152F3;
+  }
+
+  .mobile-menu-toggle:active {
+    transform: scale(0.95);
+  }
+
+  .page-info {
+    margin-left: 0.5rem;
   }
 
   .greeting {
@@ -686,17 +712,12 @@
     font-size: 0.8rem;
   }
 
-  .user-info {
+  .search-container {
     display: none;
   }
 
-  .user-profile {
-    padding: 0.2rem;
-    border: none;
-  }
-
-  .user-profile:hover {
-    background: none;
+  .right-section {
+    gap: 0.8rem;
   }
 }
 
