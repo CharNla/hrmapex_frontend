@@ -56,9 +56,10 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
   }, [isOpen])
   
   const menuItems = [
-    { icon: <FaUsers />, text: 'All Employees', path: '/employees' },
-    { icon: <FaFileAlt />, text: 'Disbursement', path: '/disbursement' },    { icon: <FaMoneyBillWave />, text: 'Payroll', path: '/payroll' },
     { icon: <FaEnvelope />, text: 'News', path: '/news' },
+    { icon: <FaUsers />, text: 'All Employees', path: '/employees' },
+    { icon: <FaFileAlt />, text: 'Disbursement', path: '/disbursement' },
+    { icon: <FaMoneyBillWave />, text: 'Payroll', path: '/payroll' },
     { icon: <FaCalendarAlt />, text: 'Leaves', path: '/leaves' },
     { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/holidays' },
     { icon: <FaUser />, text: 'Account', path: '/account' },

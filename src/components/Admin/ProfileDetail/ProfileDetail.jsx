@@ -50,7 +50,6 @@ const ProfileDetail = () => {
             Status: "Active",
             ImageUrl: "https://randomuser.me/api/portraits/men/85.jpg",
             DateOfBirth: "1990-01-01",
-            Age: 35,
             Gender: "Male",
             Nationality: "Thai",
             MaritalStatus: "Single",
@@ -112,7 +111,6 @@ const ProfileDetail = () => {
             Status: "Active",
             ImageUrl: "https://randomuser.me/api/portraits/men/1.jpg",
             DateOfBirth: "1995-05-15",
-            Age: 30,
             Gender: "Male",
             Nationality: "Thai",
             MaritalStatus: "Single",
@@ -158,7 +156,6 @@ const ProfileDetail = () => {
             Status: "Active",
             ImageUrl: "https://randomuser.me/api/portraits/women/1.jpg",
             DateOfBirth: "1992-08-20",
-            Age: 33,
             Gender: "Female",
             Nationality: "Thai",
             MaritalStatus: "Married",
@@ -397,22 +394,6 @@ const ProfileDetail = () => {
             )}
           </div>
           <div className="info-item">
-            <label>Age</label>
-            {isEditing ? (
-              <input
-                type="number"
-                name="Age"
-                value={editData.Age || ''}
-                onChange={handleInputChange}
-                className="edit-input"
-              />
-            ) : (
-              <span className="info-value">{employeeData?.Age || '-'}</span>
-            )}
-          </div>
-        </div>
-        <div className="info-row">
-          <div className="info-item">
             <label>Gender</label>
             {isEditing ? (
               <select
@@ -430,6 +411,8 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.Gender || '-'}</span>
             )}
           </div>
+        </div>
+        <div className="info-row">
           <div className="info-item">
             <label>Nationality</label>
             {isEditing ? (
@@ -444,8 +427,6 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.Nationality || '-'}</span>
             )}
           </div>
-        </div>
-        <div className="info-row">
           <div className="info-item">
             <label>Marital Status</label>
             {isEditing ? (
@@ -464,6 +445,8 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.MaritalStatus || '-'}</span>
             )}
           </div>
+        </div>
+        <div className="info-row">
           <div className="info-item">
             <label>Religion</label>
             {isEditing ? (
@@ -485,70 +468,172 @@ const ProfileDetail = () => {
             )}
           </div>
         </div>
-        <div className="info-row">
-          <div className="info-item">
-            <label>Address</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="Address"
-                value={editData.Address || ''}
-                onChange={handleInputChange}
-                className="edit-input"
-                style={{
-                  border: '1px solid #cbd5e1', // สีเทาอ่อน
-                  borderRadius: '10px',
-                  background: '#fff',
-                  boxSizing: 'border-box'
-                }}
-              />
-            ) : (
-              <span className="info-value">{employeeData?.Address || '-'}</span>
-            )}
+        <div className="info-section">
+          <h3>ที่อยู่ตามบัตรประชาชน</h3>
+          <div className="info-row">
+            <div className="info-item">
+              <label>ที่อยู่</label>
+              {isEditing ? (
+                <textarea
+                  name="idCardAddress"
+                  value={editData.idCardAddress || ''}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="edit-input"
+                  placeholder="กรุณากรอกที่อยู่ตามบัตรประชาชน"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.idCardAddress || '-'}</span>
+              )}
+            </div>
           </div>
-          <div className="info-item">
-            <label>City</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="City"
-                value={editData.City || ''}
-                onChange={handleInputChange}
-                className="edit-input"
-              />
-            ) : (
-              <span className="info-value">{employeeData?.City || '-'}</span>
-            )}
+          <div className="info-row">
+            <div className="info-item">
+              <label>แขวง/ตำบล</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="idCardSubdistrict"
+                  value={editData.idCardSubdistrict || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกแขวง/ตำบล"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.idCardSubdistrict || '-'}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>เขต/อำเภอ</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="idCardDistrict"
+                  value={editData.idCardDistrict || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกเขต/อำเภอ"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.idCardDistrict || '-'}</span>
+              )}
+            </div>
+          </div>
+          <div className="info-row">
+            <div className="info-item">
+              <label>จังหวัด</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="idCardProvince"
+                  value={editData.idCardProvince || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกจังหวัด"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.idCardProvince || '-'}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>รหัสไปรษณีย์</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="idCardZipCode"
+                  value={editData.idCardZipCode || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกรหัสไปรษณีย์"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.idCardZipCode || '-'}</span>
+              )}
+            </div>
           </div>
         </div>
-        <div className="info-row">
-          <div className="info-item">
-            <label>State</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="State"
-                value={editData.State || ''}
-                onChange={handleInputChange}
-                className="edit-input"
-              />
-            ) : (
-              <span className="info-value">{employeeData?.State || '-'}</span>
-            )}
+        <div className="info-section">
+          <h3>ที่อยู่ปัจจุบัน</h3>
+          <div className="info-row">
+            <div className="info-item">
+              <label>ที่อยู่</label>
+              {isEditing ? (
+                <textarea
+                  name="currentAddress"
+                  value={editData.currentAddress || ''}
+                  onChange={handleInputChange}
+                  rows="3"
+                  className="edit-input"
+                  placeholder="กรุณากรอกที่อยู่ปัจจุบัน"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.currentAddress || '-'}</span>
+              )}
+            </div>
           </div>
-          <div className="info-item">
-            <label>Zip Code</label>
-            {isEditing ? (
-              <input
-                type="text"
-                name="ZIPCode"
-                value={editData.ZIPCode || ''}
-                onChange={handleInputChange}
-                className="edit-input"
-              />
-            ) : (
-              <span className="info-value">{employeeData?.ZIPCode || '-'}</span>
-            )}
+          <div className="info-row">
+            <div className="info-item">
+              <label>แขวง/ตำบล</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="currentSubdistrict"
+                  value={editData.currentSubdistrict || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกแขวง/ตำบล"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.currentSubdistrict || '-'}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>เขต/อำเภอ</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="currentDistrict"
+                  value={editData.currentDistrict || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกเขต/อำเภอ"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.currentDistrict || '-'}</span>
+              )}
+            </div>
+          </div>
+          <div className="info-row">
+            <div className="info-item">
+              <label>จังหวัด</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="currentProvince"
+                  value={editData.currentProvince || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกจังหวัด"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.currentProvince || '-'}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>รหัสไปรษณีย์</label>
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="currentZipCode"
+                  value={editData.currentZipCode || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  placeholder="กรุณากรอกรหัสไปรษณีย์"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.currentZipCode || '-'}</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -564,112 +649,34 @@ const ProfileDetail = () => {
           <span className="info-value">{employeeData?.EmployeeId || '-'}</span>
         </div>
         <div className="info-item">
-          <label>Username</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="Username"
-              value={editData.Username || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            />
-          ) : (
-            <span className="info-value">{employeeData?.Username || '-'}</span>
-          )}
-        </div>
-        <div className="info-item">
           <label>Position</label>
-          {isEditing ? (
-            <input
-              type="text"
-              name="Position"
-              value={editData.Position || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            />
-          ) : (
-            <span className="info-value">{employeeData?.Position || '-'}</span>
-          )}
-        </div>
-        <div className="info-item">
-          <label>Type</label>
-          {isEditing ? (
-            <select
-              name="Type"
-              value={editData.Type || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            >
-              <option value="">Select Type</option>
-              <option value="Permanent">Permanent</option>
-              <option value="Contract">Contract</option>
-              <option value="Intern">Intern</option>
-              <option value="Freelance">Freelance</option>
-            </select>
-          ) : (
-            <span className="info-value">{employeeData?.Type || '-'}</span>
-          )}
+          <span className="info-value">{employeeData?.Position || '-'}</span>
         </div>
       </div>
       <div className="info-row">
         <div className="info-item">
-          <label>Salary</label>
-          {isEditing ? (
-            <input
-              type="number"
-              name="Salary"
-              value={editData.Salary || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            />
-          ) : (
-            <span className="info-value">
-              {employeeData?.Salary ? `฿${employeeData.Salary.toLocaleString()}` : '-'}
-            </span>
-          )}
+          <label>Type</label>
+          <span className="info-value">{employeeData?.Type || '-'}</span>
         </div>
+        <div className="info-item">
+          <label>Salary</label>
+          <span className="info-value">{employeeData?.Salary ? `฿${employeeData.Salary.toLocaleString()}` : '-'}</span>
+        </div>
+      </div>
+      <div className="info-row">
         <div className="info-item">
           <label>Start Date</label>
-          {isEditing ? (
-            <input
-              type="date"
-              name="StartDate"
-              value={editData.StartDate || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            />
-          ) : (
-            <span className="info-value">
-              {employeeData?.StartDate
-                ? new Date(employeeData.StartDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })
-                : '-'}
-            </span>
-          )}
+          <span className="info-value">{employeeData?.StartDate ? new Date(employeeData.StartDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</span>
         </div>
         <div className="info-item">
-          <label>Status</label>
-          {isEditing ? (
-            <select
-              name="Status"
-              value={editData.Status || ''}
-              onChange={handleInputChange}
-              className="edit-input"
-            >
-              <option value="">Select Status</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">InActive</option>
-            </select>
-          ) : (
-            <span className="info-value">
-              <span className={`status-badge ${employeeData?.Status?.toLowerCase() === 'active' ? 'on-time' : 'late'}`}>
-                {employeeData?.Status || '-'}
-              </span>
-            </span>
-          )}
+          <label>Probation End Date</label>
+          <span className="info-value">{employeeData?.StartDate ? new Date(new Date(employeeData.StartDate).setMonth(new Date(employeeData.StartDate).getMonth() + 4)).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</span>
+        </div>
+      </div>
+      <div className="info-row">
+        <div className="info-item">
+          <label>Employee Status</label>
+          <span className="info-value">{employeeData?.Status || '-'}</span>
         </div>
       </div>
     </div>
@@ -1291,7 +1298,7 @@ const ProfileDetail = () => {
                 </td>
               </tr>
             ))
-          ) : (
+           ) : (
             <tr>
               <td colSpan="6" style={{ textAlign: 'center', padding: '1rem', color: '#666' }}>
                 No attendance records found

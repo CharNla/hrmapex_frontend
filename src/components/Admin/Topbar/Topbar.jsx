@@ -81,6 +81,9 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
     setIsSideMenuOpen(!isSideMenuOpen)
   }
 
+  const currentPageTitle = "All Employees";
+  const currentPageSubtitle = "Manage employee information";
+
   return (
     <>
       <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />
@@ -90,8 +93,8 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
             <FiMenu />
           </button>
           <div className="page-info">
-            <h1 className="greeting mobile-disbursement-title">{pageTitle}</h1>
-            <p className="sub-greeting">{pageSubtitle || getGreeting()}</p>  
+            <h1 className="greeting mobile-disbursement-title">{currentPageTitle}</h1>
+            <p className="sub-greeting">{currentPageSubtitle}</p>
           </div>
         </div>
 

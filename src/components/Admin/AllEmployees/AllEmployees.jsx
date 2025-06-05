@@ -313,104 +313,84 @@ const AllEmployees = () => {
           className="content-wrapper"
           variants={itemVariants}
         >
-          <motion.div 
-            className="search-actions"
-            variants={itemVariants}
-          >
-            {isMobile ? (
-              <div className="search-filter-row">
-                <div className="search-box">
-                  <input
-                    type="text"
-                    placeholder={isMobile ? '' : "Search employees..."}
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    style={isMobile ? { paddingLeft: '2.2rem' } : {}}
-                  />
-                  {isMobile && (
-                    <span className="search-icon-mobile">
-                      <FiSearch size={20} />
-                    </span>
-                  )}
-                </div>
+          {/* MOBILE: Header with Filter Button */}
+          {isMobile && (
+            <header className="mobile-header">
+              <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
+                <FiFilter />
+              </button>
+            </header>
+          )}
+
+          {/* MOBILE: Search Box */}
+          {isMobile && (
+            <div className="search-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', gap: '1rem' }}>
+              <div className="search-box" style={{ flex: 1 }}>
+                <input
+                  type="text"
+                  placeholder="Search employees..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}
+                />
+              </div>
+              <button 
+                className="filter-btn" 
+                onClick={() => setIsFilterModalOpen(true)}
+                style={{ padding: '0.75rem', borderRadius: '8px', backgroundColor: '#6366f1', color: '#fff', border: 'none', cursor: 'pointer', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)' }}
+              >
+                <FiFilter />
+              </button>
+            </div>
+          )}
+
+          {/* DESKTOP: Search and Filter Section */}
+          {!isMobile && (
+            <motion.div className="search-actions" variants={itemVariants}>
+              <div className="search-box">
+                <input
+                  type="text"
+                  placeholder="Search employees..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+              <div className="action-buttons">
+                <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
+                  <FiPlus />
+                  <span>Add Employee</span>
+                </button>
                 <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
                   <FiFilter />
                   <span>Filter</span>
                 </button>
               </div>
-            ) : (
-              <>
-                <div className="search-box">
-                  <input
-                    type="text"
-                    placeholder="Search employees..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-                <div className="action-buttons">
-                  <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
-                    <FiPlus />
-                    <span>Add Employee</span>
-                  </button>
-                  <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
-                    <FiFilter />
-                    <span>Filter</span>
-                  </button>
-                </div>
-              </>
-            )}
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* MOBILE: Employee Card List */}
           {isMobile ? (
             <div className="employee-card-list">
               {currentEmployees.map((employee) => (
                 <div className="employee-card" key={employee.EmployeeId}>
-                  <div className="employee-card-avatar">
-                    <img
-                      className="employee-card-img"
-                      src={employee.ImageUrl || '/src/assets/profile.png'}
-                      alt={employee.FName}
-                      onError={e => { e.target.src = '/src/assets/profile.png' }}
-                    />
-                  </div>
+                  <img
+                    className="employee-card-img"
+                    src={employee.ImageUrl || '/src/assets/profile.png'}
+                    alt={employee.FName}
+                    onError={(e) => { e.target.src = '/src/assets/profile.png'; }}
+                  />
                   <div className="employee-card-info">
-                    <div className="employee-card-name-row">
-                      <span className="employee-card-name">{employee.FName} {employee.LName}</span>
-                      {employee.Nickname && (
-                        <span className="employee-card-nickname">({employee.Nickname})</span>
-                      )}
-                    </div>
-                    <div className="employee-card-details">
-                      <div className="employee-card-detail-row">
-                        <span className="employee-card-detail-label">
-                          <FiPhone style={{marginRight: '6px', color: '#b0b0b0'}} /> Phone
-                        </span>
-                        <span className="employee-card-detail-value">{employee.MobileNumber || '-'}</span>
-                      </div>
-                      <div className="employee-card-detail-row">
-                        <span className="employee-card-detail-label">
-                          <FiBriefcase style={{marginRight: '6px', color: '#b0b0b0'}} /> Type
-                        </span>
-                        <span className={`employee-card-detail-value type-badge type-${employee.Type?.toLowerCase()}`}>{employee.Type}</span>
-                      </div>
-                      <div className="employee-card-detail-row">
-                        <span className="employee-card-detail-label">
-                          <FiCheckCircle style={{marginRight: '6px', color: '#b0b0b0'}} /> Status
-                        </span>
-                        <span className={`employee-card-detail-value status ${employee.Status?.toLowerCase()}`}>{employee.Status}</span>
-                      </div>
-                    </div>
+                    <h2>{employee.FName} {employee.LName}</h2>
+                    <p>{employee.Position || 'No Position'}</p>
                   </div>
                   <div className="employee-card-actions">
-                    <button className="view-btn" onClick={() => navigate(`/employee/${employee.EmployeeId}`)} title="ดูข้อมูล">
+                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
                       <FiEye />
                     </button>
-                    <button className="edit-btn" onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)} title="แก้ไข">
+                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
                       <FiEdit2 />
                     </button>
-                    <button className="delete-btn" onClick={() => handleDeleteClick(employee)} title="ลบ">
+                    <button onClick={() => handleDeleteClick(employee)}>
                       <FiTrash2 />
                     </button>
                   </div>

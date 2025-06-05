@@ -723,6 +723,19 @@
   .profile-trigger .user-info {
     display: none;
   }
+
+  .notifications-dropdown {
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 340px;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -796,7 +809,7 @@
 
 @media screen and (max-width: 600px) {
   .mobile-disbursement-title::before {
-    content: 'Disbursement';
+    content: '';
     display: inline;
     margin-left: 0.2em;
   }

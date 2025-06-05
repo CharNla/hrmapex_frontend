@@ -107,7 +107,7 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', 'admin')
         localStorage.setItem('token', 'admin-token')
-        navigate('/all-employees')
+        navigate('/news'); // Redirect to News page
         return
       }
 
@@ -126,7 +126,7 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', 'user')
         localStorage.setItem('token', 'user-token')
-        navigate('/home') // Redirect to Home.jsx for user
+        navigate('/news'); // Redirect to News page
         return
       }
 
@@ -155,7 +155,7 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', data.user.role)
         localStorage.setItem('token', data.token)
-        navigate('/all-employees') // Admin will go to all-employees
+        navigate('/news'); // Redirect to News page
       } else {
         setError(data.message || 'Invalid email or password')
       }

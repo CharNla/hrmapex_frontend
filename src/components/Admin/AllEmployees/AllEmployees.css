@@ -59,7 +59,7 @@
 
 .search-box {
   flex: 1;
-  max-width: 450px;
+  max-width: 800px;
   position: relative;
 }
 
@@ -81,10 +81,10 @@
 .action-buttons {
   display: flex;
   gap: 0.75rem;
+  align-items: center; /* Ensure buttons align vertically */
 }
 
-.add-employee-btn,
-.filter-btn {
+.add-employee-btn, .filter-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -110,6 +110,11 @@
   background-color: #b2b3b4;
   color: #fff;
   border: 1px solid rgba(75, 85, 99, 0.2);
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
@@ -1074,5 +1079,102 @@
   }
   .search-box input {
     padding-left: 2.2rem;
+  }
+}
+
+/* Mobile Styles */
+.mobile-container {
+  padding: 1rem;
+  background-color: #f9f9f9;
+}
+
+.mobile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.mobile-header h1 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.search-box {
+  margin-bottom: 1rem;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.employee-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.employee-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.employee-card-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.employee-card-info h2 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.employee-card-info p {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.employee-card-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.employee-card-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6456F6;
+}
+
+.floating-add-btn {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #6456F6;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .filter-btn {
+    display: none;
   }
 }

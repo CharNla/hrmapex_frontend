@@ -186,3 +186,53 @@ input:checked + .slider:before {
 [data-theme='dark'] .checkbox-container:hover {
   background: rgba(99, 102, 241, 0.15);
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .settings-container {
+    flex-direction: column;
+    padding: 0.5rem;
+    margin-top: 2rem;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  .settings-sidebar {
+    flex: 0 0 auto;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .setting-tab {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .settings-content {
+    padding: 0.5rem;
+  }
+
+  .settings-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group input {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+
+  .theme-setting {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .checkbox-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
