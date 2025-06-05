@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FiEdit, FiTrash2, FiEye, FiPlus, FiPaperclip, FiSearch, FiClock, FiFile, FiDownload, FiStar, FiBell, FiActivity, FiTerminal, FiLock, FiUnlock } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiEye, FiPlus, FiPaperclip, FiSearch, FiClock, FiFile, FiDownload, FiStar, FiBell, FiActivity, FiTerminal, FiLock, FiUnlock, FiMoreVertical, FiChevronDown } from 'react-icons/fi';
 import './New.css';
 import './EditNewsModal.css';
 import SideMenu from "../SideMenu/Side_menu";
@@ -42,6 +42,7 @@ function New() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [hiddenNews, setHiddenNews] = useState(new Set());
   const [pinnedNews, setPinnedNews] = useState(new Set()); // Add pinnedNews state
+  const [openDropdownId, setOpenDropdownId] = useState(null);
 
   const categories = [
     { value: 'Announcement', label: 'Announcement' },
@@ -300,6 +301,26 @@ function New() {
     }
   };
 
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.action-dropdown')) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);  const toggleDropdown = (newsId, event) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    setOpenDropdownId(currentId => currentId === newsId ? null : newsId);
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-main">
@@ -326,11 +347,13 @@ function New() {
                 />
               </div>
               <button className="btn-add-news" onClick={handleAddNews}>
-                <FiPlus /> Add News
+                <FiPlus />
+                <span>Add News</span>
               </button>
             </div>
             
             <div className="news-list-table">
+              {/* Table layout and columns */}
               <table className="news-table">
                 <thead>
                   <tr>
@@ -342,7 +365,9 @@ function New() {
                 </thead>
                 <tbody>
                   {filteredNews.length === 0 ? (
-                    <tr><td colSpan="4" className="no-news">No news found</td></tr>
+                    <tr>
+                      <td colSpan="4" className="no-news">No news found</td>
+                    </tr>
                   ) : filteredNews.map(item => (
                     <tr 
                       key={item.NewsId} 
@@ -366,29 +391,110 @@ function New() {
                       </td>
                       <td>{item.CreatedAt ? new Date(item.CreatedAt).toLocaleDateString() : '-'}</td>
                       <td className="action-col">
-                        <button 
-                          className={`icon-btn action-pin ${pinnedNews.has(item.NewsId) ? 'pinned' : ''}`} 
-                          title={pinnedNews.has(item.NewsId) ? "Unpin" : "Pin"}
-                          onClick={() => handleTogglePin(item.NewsId)}
-                        >
-                          <FiStar />
-                        </button>
-                        <button className="icon-btn action-view" title="View" onClick={() => handleView(item)}>
-                          <FiEye />
-                        </button>
-                        <button className="icon-btn action-edit" title="Edit" onClick={() => handleOpenModal(item)}>
-                          <FiEdit />
-                        </button>
-                        <button 
-                          className={`icon-btn action-hide`} 
-                          title={hiddenNews.has(item.NewsId) ? "Show" : "Hide"}
-                          onClick={() => handleToggleVisibility(item.NewsId)}
-                        >
-                          {hiddenNews.has(item.NewsId) ? <FiUnlock /> : <FiLock />}
-                        </button>
-                        <button className="icon-btn action-delete" title="Delete" onClick={() => handleDelete(item.NewsId)}>
-                          <FiTrash2 />
-                        </button>
+                        <div className="desktop-actions">
+                          <button
+                            className={`icon-btn action-pin ${item.isPinned ? 'pinned' : ''}`}
+                            onClick={() => handleTogglePin(item.NewsId)}
+                            title={item.isPinned ? 'Unpin News' : 'Pin News'}
+                          >
+                            <FiStar />
+                          </button>
+                          <button 
+                            className="icon-btn action-view" 
+                            title="View" 
+                            onClick={() => handleView(item)}
+                          >
+                            <FiEye />
+                          </button>
+                          <button 
+                            className="icon-btn action-edit" 
+                            title="Edit" 
+                            onClick={() => handleOpenModal(item)}
+                          >
+                            <FiEdit />
+                          </button>
+                          <button 
+                            className="icon-btn action-hide" 
+                            title={hiddenNews.has(item.NewsId) ? "Show" : "Hide"}
+                            onClick={() => handleToggleVisibility(item.NewsId)}
+                          >
+                            {hiddenNews.has(item.NewsId) ? <FiUnlock /> : <FiLock />}
+                          </button>
+                          <button 
+                            className="icon-btn action-delete" 
+                            title="Delete" 
+                            onClick={() => handleDelete(item.NewsId)}
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </div>
+                        <div className="mobile-actions">
+                          <button 
+                            type="button"
+                            className="action-dropdown-toggle"
+                            onClick={(e) => toggleDropdown(item.NewsId, e)}
+                            title="Actions menu"
+                          >
+                            <FiMoreVertical size={20} />
+                          </button>
+                          <div className={`action-dropdown-content ${openDropdownId === item.NewsId ? 'show' : ''}`}>
+                            <button
+                              className="action-dropdown-item"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleTogglePin(item.NewsId);
+                                setOpenDropdownId(null);
+                              }}
+                            >
+                              <FiStar size={18} />
+                              {item.isPinned ? 'Unpin' : 'Pin'}
+                            </button>
+                            <button
+                              className="action-dropdown-item"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleView(item);
+                                setOpenDropdownId(null);
+                              }}
+                            >
+                              <FiEye size={18} />
+                              View
+                            </button>
+                            <button
+                              className="action-dropdown-item"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleOpenModal(item);
+                                setOpenDropdownId(null);
+                              }}
+                            >
+                              <FiEdit size={18} />
+                              Edit
+                            </button>
+                            <button
+                              className="action-dropdown-item"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleToggleVisibility(item.NewsId);
+                                setOpenDropdownId(null);
+                              }}
+                            >
+                              {hiddenNews.has(item.NewsId) ? <FiUnlock size={18} /> : <FiLock size={18} />}
+                              {hiddenNews.has(item.NewsId) ? 'Show' : 'Hide'}
+                            </button>
+                            <button
+                              className="action-dropdown-item delete"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(item.NewsId);
+                                setOpenDropdownId(null);
+                              }}
+                            >
+                              <FiTrash2 size={18} />
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </td>
                     </tr>
                   ))}

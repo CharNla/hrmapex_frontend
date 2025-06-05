@@ -64,6 +64,15 @@
   letter-spacing: -0.02em;
 }
 
+.disbursement-header h2 {
+  display: block;
+  color: #4b5563;
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
 .header-actions {
   display: flex;
   gap: 12px;
@@ -655,5 +664,193 @@
   .approve-button,
   .reject-button {
     flex: 1;
+  }
+}
+
+/* Responsive Design for Mobile (max-width: 600px) */
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1rem;
+    min-height: unset;
+  }
+  .content-wrapper {
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+  .disbursement-container {
+    padding: 10px;
+    min-height: unset;
+    max-width: 100%;
+  }
+  .disbursement-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    margin-top: 24px;
+  }
+  .header-actions {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+  .add-disbursement-button,
+  .filter-button {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+  }
+  .filter-panel {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+  .filter-panel select,
+  .filter-panel input {
+    min-width: unset;
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+  .disbursement-list {
+    gap: 10px;
+  }
+  .disbursement-item {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .disbursement-header-info {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+  .disbursement-header-info h3 {
+    font-size: 1rem;
+  }
+  .disbursement-details {
+    gap: 4px;
+  }
+  .detail-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .detail-label {
+    min-width: unset;
+    font-size: 0.95em;
+  }
+  .detail-value {
+    font-size: 1em;
+  }
+  .attachments-container {
+    padding: 8px;
+    gap: 4px;
+  }
+  .attachment-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    padding: 6px 8px;
+  }
+  .file-upload-label {
+    width: 100%;
+    justify-content: center;
+    font-size: 1em;
+    padding: 8px 0;
+  }
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    padding: 0;
+    margin-top: 10px;
+  }
+  .edit-button,
+  .save-button,
+  .approve-button {
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+  .reject-button {
+    width: 100%;
+    height: 40px;
+    font-size: 1rem;
+    padding: 10px 0;
+  }
+  .edit-input.status-select {
+    min-width: unset;
+    width: 100%;
+    font-size: 1em;
+    padding: 10px;
+  }
+  .popup-content {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 10px;
+  }
+  .popup-content textarea {
+    min-height: 80px;
+    font-size: 1em;
+    padding: 6px;
+  }
+  .popup-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .confirm-reject-button,
+  .cancel-reject-button {
+    width: 100%;
+    font-size: 1em;
+    padding: 10px 0;
+  }
+}
+
+/* Extra small devices (max-width: 480px) */
+@media (max-width: 480px) {
+  .main-content,
+  .content-wrapper,
+  .disbursement-container {
+    padding: 4px !important;
+  }
+  .disbursement-header h1,
+  .disbursement-header h2 {
+    font-size: 1.1rem;
+  }
+  .add-disbursement-button,
+  .filter-button {
+    font-size: 0.95rem;
+    padding: 8px 0;
+  }
+  .edit-button,
+  .save-button,
+  .approve-button,
+  .reject-button {
+    font-size: 0.95rem;
+    padding: 8px 0;
+    height: 36px;
+  }
+  .edit-input.status-select {
+    font-size: 0.95em;
+    padding: 8px;
+  }
+  .popup-content {
+    min-width: 98vw;
+    max-width: 100vw;
+    padding: 6px;
+  }
+  .disbursement-header {
+    margin-top: 30px;
+  }
+}
+
+/* Hide Disbursement Title on Mobile */
+@media (max-width: 600px) {
+  .disbursement-header h2 {
+    display: none !important;
   }
 }

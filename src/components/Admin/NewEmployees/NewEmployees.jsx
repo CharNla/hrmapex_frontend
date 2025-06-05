@@ -106,6 +106,8 @@ const NewEmployees = () => {
 
   const [errors, setErrors] = useState({})
   const [showSuccessPopup, setShowSuccessPopup] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [isMinimized, setIsMinimized] = useState(false)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -256,15 +258,14 @@ const NewEmployees = () => {
 
   return (
     <div className="dashboard-container">
+      <SideMenu
+        isMinimized={isMinimized}
+        onToggleMinimize={setIsMinimized}
+        mobileOpen={mobileOpen}
+        onCloseMobileMenu={() => setMobileOpen(false)}
+      />
       <div className="dashboard-main">
-        <ul className="circles">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((n) => (
-            <li key={n}></li>
-          ))}
-        </ul>
-        
-        <SideMenu />
-        <Topbar pageTitle="Add New Employee" pageSubtitle="Add New Employee Information" />
+        <Topbar onMobileMenuClick={() => setMobileOpen(true)} />
         
         <motion.div 
           className="dashboard-content"
@@ -1160,111 +1161,55 @@ const NewEmployees = () => {
               <div className="language-ability-section">
                 <h3>Language Ability</h3>
                 <div className="language-grid">
+                  {/* Speaking */}
                   <div className="language-row">
                     <div className="language-label">Speaking:</div>
-                    <div className="language-options">
-                      <label>
-                        <input
-                          type="radio"
-                          name="speaking"
-                          value="good"
-                          checked={formData.speaking === 'good'}
-                          onChange={handleChange}
-                        />
-                        Good
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="speaking"
-                          value="fair"
-                          checked={formData.speaking === 'fair'}
-                          onChange={handleChange}
-                        />
-                        Fair
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="speaking"
-                          value="poor"
-                          checked={formData.speaking === 'poor'}
-                          onChange={handleChange}
-                        />
-                        Poor
-                      </label>
+                    <div className="language-options responsive-language-select">
+                      <select
+                        name="speaking"
+                        value={formData.speaking}
+                        onChange={handleChange}
+                        className="language-select"
+                      >
+                        <option value="">Select</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                      </select>
                     </div>
                   </div>
-
+                  {/* Writing */}
                   <div className="language-row">
                     <div className="language-label">Writing:</div>
-                    <div className="language-options">
-                      <label>
-                        <input
-                          type="radio"
-                          name="writing"
-                          value="good"
-                          checked={formData.writing === 'good'}
-                          onChange={handleChange}
-                        />
-                        Good
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="writing"
-                          value="fair"
-                          checked={formData.writing === 'fair'}
-                          onChange={handleChange}
-                        />
-                        Fair
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="writing"
-                          value="poor"
-                          checked={formData.writing === 'poor'}
-                          onChange={handleChange}
-                        />
-                        Poor
-                      </label>
+                    <div className="language-options responsive-language-select">
+                      <select
+                        name="writing"
+                        value={formData.writing}
+                        onChange={handleChange}
+                        className="language-select"
+                      >
+                        <option value="">Select</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                      </select>
                     </div>
                   </div>
-
+                  {/* Reading */}
                   <div className="language-row">
                     <div className="language-label">Reading:</div>
-                    <div className="language-options">
-                      <label>
-                        <input
-                          type="radio"
-                          name="reading"
-                          value="good"
-                          checked={formData.reading === 'good'}
-                          onChange={handleChange}
-                        />
-                        Good
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="reading"
-                          value="fair"
-                          checked={formData.reading === 'fair'}
-                          onChange={handleChange}
-                        />
-                        Fair
-                      </label>
-                      <label>
-                        <input
-                          type="radio"
-                          name="reading"
-                          value="poor"
-                          checked={formData.reading === 'poor'}
-                          onChange={handleChange}
-                        />
-                        Poor
-                      </label>
+                    <div className="language-options responsive-language-select">
+                      <select
+                        name="reading"
+                        value={formData.reading}
+                        onChange={handleChange}
+                        className="language-select"
+                      >
+                        <option value="">Select</option>
+                        <option value="good">Good</option>
+                        <option value="fair">Fair</option>
+                        <option value="poor">Poor</option>
+                      </select>
                     </div>
                   </div>
                 </div>

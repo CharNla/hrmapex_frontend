@@ -28,6 +28,11 @@ const ProfileDetail = () => {
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen(!isSideMenuOpen);
+  };
 
   useEffect(() => {
     const fetchEmployeeData = async () => {

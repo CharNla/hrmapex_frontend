@@ -194,6 +194,7 @@ const Payroll = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [contextMenu, setContextMenu] = useState({ show: false, x: 0, y: 0, employeeId: null });
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const contextMenuRef = useRef(null);
 
   const formatMonthYear = (date) => {
@@ -276,7 +277,7 @@ const Payroll = () => {
 
   return (
     <div className="payroll__main-container">
-      <SideMenu />
+      <SideMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
       <div className="payroll__content-wrapper">
         <ul className="circles">
           {[...Array(25)].map((_, i) => (
@@ -288,7 +289,7 @@ const Payroll = () => {
             <li key={i}></li>
           ))}
         </ul>
-        <Topbar />
+        <Topbar onMobileMenuClick={() => setIsMobileMenuOpen(true)} />
         <div className="payroll__container">
           <div className="payroll__header">
             <div className="payroll__controls">

@@ -1462,3 +1462,145 @@ select.edit-input {
     opacity: 1;
   }
 }
+
+@media (max-width: 600px) {
+  .profile-detail {
+    padding: 8px;
+  }
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+  }
+  .profile-image {
+    width: 56px;
+    height: 56px;
+  }
+  .profile-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .profile-info h2 {
+    font-size: 18px;
+  }
+  .profile-main-content {
+    padding: 0;
+    border-radius: 8px;
+  }
+  .profile-tabs {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 8px 0 8px;
+    border-radius: 8px 8px 0 0;
+  }
+  .profile-tabs .tab {
+    width: 100%;
+    justify-content: flex-start;
+    font-size: 0.95rem;
+    padding: 10px 8px;
+  }
+  .profile-content {
+    padding: 12px 6px;
+    border-radius: 0 0 8px 8px;
+  }
+  .info-section, .info-container {
+    padding: 12px 6px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+  }
+  .info-row {
+    grid-template-columns: 1fr;
+    gap: 16px 0;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 15px;
+    padding-left: 8px;
+    margin-bottom: 12px;
+  }
+  .employee-brief {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 6px;
+  }
+  .brief-info h2 {
+    font-size: 18px;
+  }
+  .dashboard-main {
+    margin-left: 0;
+    padding: 70px 4px 8px 4px;
+  }
+  .profile-header-section {
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 8px 12px 8px;
+    min-height: unset;
+  }
+  .profile-header-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .profile-name {
+    font-size: 17px;
+  }
+  .edit-profile-btn, .edit-profile-btn.save, .edit-profile-btn.cancel {
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+    margin: 8px 0 0 0;
+    padding: 8px 0;
+    font-size: 15px;
+  }
+  .attendance-table-container {
+    padding: 8px 2px;
+  }
+  .attendance-table {
+    min-width: 400px;
+    font-size: 13px;
+  }
+  .profile-detail-table, .work-history-table {
+    margin: 10px 0;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .profile-detail_table th, .work-history-table th {
+    padding: 10px 8px;
+    font-size: 0.85rem;
+  }
+  .profile-detail-table td, .work-history-table td {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+  .documents-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .add-file-btn, .add-button {
+    width: 100%;
+    justify-content: center;
+    font-size: 13px;
+    padding: 8px 0;
+  }
+  .document-row {
+    padding: 8px 4px;
+  }
+  .document-item {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .document-actions {
+    width: 100%;
+    gap: 4px;
+  }
+  .button-view, .button-download, .button-delete {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px 0;
+    justify-content: center;
+  }
+}

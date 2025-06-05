@@ -31,6 +31,7 @@ const Disbursement = () => {
   const [showRejectPopup, setShowRejectPopup] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [selectedDisbursementId, setSelectedDisbursementId] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Mock data for demonstration
   const mockDisbursements = [
     {
@@ -354,9 +355,14 @@ const Disbursement = () => {
       <SideMenu 
         isMinimized={isMinimized} 
         onToggleMinimize={() => setIsMinimized(!isMinimized)}
+        mobileOpen={mobileMenuOpen}
+        onCloseMobileMenu={() => setMobileMenuOpen(false)}
       />
       <div className={`main-content ${isMinimized ? 'expanded' : ''}`}>
-        <Topbar />
+        <Topbar 
+          pageTitle="Dashboard" 
+          onMobileMenuClick={() => setMobileMenuOpen(true)}
+        />
         
         {/* Add circles animation */}
         <ul className="circles">

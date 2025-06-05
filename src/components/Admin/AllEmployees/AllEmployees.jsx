@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FiEye, FiEdit2, FiTrash2, FiPlus, FiFilter } from 'react-icons/fi'
+import { FiEye, FiEdit2, FiTrash2, FiPlus, FiFilter, FiPhone, FiBriefcase, FiCheckCircle, FiSearch } from 'react-icons/fi'
 import axios from 'axios'
 import SideMenu from '../SideMenu/Side_menu'
 import Topbar from '../Topbar/Topbar'
@@ -317,22 +317,49 @@ const AllEmployees = () => {
             className="search-actions"
             variants={itemVariants}
           >
-            <div className="search-box">
-              <input
-                type="text"
-                placeholder="Search employees..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            <div className="action-buttons">              <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
-                <FiPlus />
-                <span>Add Employee</span>
-              </button>              <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
-                <FiFilter />
-                <span>Filter</span>
-              </button>
-            </div>
+            {isMobile ? (
+              <div className="search-filter-row">
+                <div className="search-box">
+                  <input
+                    type="text"
+                    placeholder={isMobile ? '' : "Search employees..."}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={isMobile ? { paddingLeft: '2.2rem' } : {}}
+                  />
+                  {isMobile && (
+                    <span className="search-icon-mobile">
+                      <FiSearch size={20} />
+                    </span>
+                  )}
+                </div>
+                <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
+                  <FiFilter />
+                  <span>Filter</span>
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="search-box">
+                  <input
+                    type="text"
+                    placeholder="Search employees..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
+                <div className="action-buttons">
+                  <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
+                    <FiPlus />
+                    <span>Add Employee</span>
+                  </button>
+                  <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
+                    <FiFilter />
+                    <span>Filter</span>
+                  </button>
+                </div>
+              </>
+            )}
           </motion.div>
 
           {/* MOBILE: Employee Card List */}
@@ -340,26 +367,50 @@ const AllEmployees = () => {
             <div className="employee-card-list">
               {currentEmployees.map((employee) => (
                 <div className="employee-card" key={employee.EmployeeId}>
-                  <img
-                    className="employee-card-img"
-                    src={employee.ImageUrl || '/src/assets/profile.png'}
-                    alt={employee.FName}
-                    onError={e => { e.target.src = '/src/assets/profile.png' }}
-                  />
+                  <div className="employee-card-avatar">
+                    <img
+                      className="employee-card-img"
+                      src={employee.ImageUrl || '/src/assets/profile.png'}
+                      alt={employee.FName}
+                      onError={e => { e.target.src = '/src/assets/profile.png' }}
+                    />
+                  </div>
                   <div className="employee-card-info">
-                    <div className="employee-card-name">{employee.FName} {employee.LName}</div>
-                    {employee.Nickname && (
-                      <div className="employee-card-nickname">({employee.Nickname})</div>
-                    )}
+                    <div className="employee-card-name-row">
+                      <span className="employee-card-name">{employee.FName} {employee.LName}</span>
+                      {employee.Nickname && (
+                        <span className="employee-card-nickname">({employee.Nickname})</span>
+                      )}
+                    </div>
+                    <div className="employee-card-details">
+                      <div className="employee-card-detail-row">
+                        <span className="employee-card-detail-label">
+                          <FiPhone style={{marginRight: '6px', color: '#b0b0b0'}} /> Phone
+                        </span>
+                        <span className="employee-card-detail-value">{employee.MobileNumber || '-'}</span>
+                      </div>
+                      <div className="employee-card-detail-row">
+                        <span className="employee-card-detail-label">
+                          <FiBriefcase style={{marginRight: '6px', color: '#b0b0b0'}} /> Type
+                        </span>
+                        <span className={`employee-card-detail-value type-badge type-${employee.Type?.toLowerCase()}`}>{employee.Type}</span>
+                      </div>
+                      <div className="employee-card-detail-row">
+                        <span className="employee-card-detail-label">
+                          <FiCheckCircle style={{marginRight: '6px', color: '#b0b0b0'}} /> Status
+                        </span>
+                        <span className={`employee-card-detail-value status ${employee.Status?.toLowerCase()}`}>{employee.Status}</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="employee-card-actions">
-                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)} title="ดูข้อมูล">
+                    <button className="view-btn" onClick={() => navigate(`/employee/${employee.EmployeeId}`)} title="ดูข้อมูล">
                       <FiEye />
                     </button>
-                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)} title="แก้ไข">
+                    <button className="edit-btn" onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)} title="แก้ไข">
                       <FiEdit2 />
                     </button>
-                    <button onClick={() => handleDeleteClick(employee)} title="ลบ">
+                    <button className="delete-btn" onClick={() => handleDeleteClick(employee)} title="ลบ">
                       <FiTrash2 />
                     </button>
                   </div>
@@ -439,14 +490,12 @@ const AllEmployees = () => {
             variants={itemVariants}
           >
             <div className="items-per-page">
-              <span>Show</span>
               <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))}>
                 <option value={10}>10</option>
                 <option value={20}>20</option>
                 <option value={30}>30</option>
                 <option value={50}>50</option>
               </select>
-              <span>entries</span>
             </div>
 
             <div className="pagination">
@@ -491,6 +540,17 @@ const AllEmployees = () => {
           onConfirm={handleConfirmDelete}
           employeeName={`${employeeToDelete?.FName} ${employeeToDelete?.LName}`}
         />
+      )}
+
+      {/* Floating Add Button for Mobile - only render ONCE at the root */}
+      {isMobile && (
+        <button 
+          className="floating-add-btn" 
+          onClick={() => navigate('/new-employee')} 
+          aria-label="Add Employee"
+        >
+          <FiPlus size={28} />
+        </button>
       )}
     </div>
   );

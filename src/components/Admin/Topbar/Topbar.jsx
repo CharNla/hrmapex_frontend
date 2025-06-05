@@ -4,12 +4,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { FiSearch, FiBell, FiChevronDown, FiUser, FiLogOut, FiFileText, FiDollarSign, FiMenu } from 'react-icons/fi'
 import './Topbar.css'
 import userImage from '../../../assets/profile.png'
+import SideMenu from '../SideMenu/Side_menu'
 
 function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick }) {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const currentHour = new Date().getHours()
   
   const userInfo = {
@@ -75,15 +77,20 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
     console.log('Notification clicked:', notificationId)
   }
 
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen(!isSideMenuOpen)
+  }
+
   return (
     <>
+      <SideMenu isOpen={isSideMenuOpen} onClose={() => setIsSideMenuOpen(false)} />
       <div className="topbar">
         <div className="left-section">
-          <button className="mobile-menu-toggle" onClick={onMobileMenuClick}>
+          <button className="mobile-menu-toggle" onClick={toggleSideMenu}>
             <FiMenu />
           </button>
           <div className="page-info">
-            <h1 className="greeting">{pageTitle}</h1>
+            <h1 className="greeting mobile-disbursement-title">{pageTitle}</h1>
             <p className="sub-greeting">{pageSubtitle || getGreeting()}</p>  
           </div>
         </div>

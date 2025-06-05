@@ -1109,7 +1109,6 @@
 .upload-label p {
   color: #6b7280;
   margin: 0.5rem 0;
-  font-size: 0.9rem;
 }
 
 .choose-text {
@@ -1573,3 +1572,349 @@
   border-color: #8b5cf6;
   background: #8b5cf6;
 }
+
+/* Responsive Design for Mobile Devices */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+  .dashboard-main {
+    margin-left: 0 !important;
+    margin-top: 56px !important;
+    width: 100vw !important;
+    min-height: calc(100vh - 56px);
+    padding: 1rem !important;
+    border-radius: 0;
+  }
+  .dashboard-content {
+    padding: 1rem;
+  }
+  .employee-form {
+    max-width: 100vw;
+    margin: 0;
+    padding: 0;
+  }
+  .form-section,
+  .file-upload-section,
+  .family-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    box-shadow: none;
+  }
+  .form-grid,
+  .form-grid.three-columns {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .addresses-container,
+  .documents-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  .profile-upload {
+    width: 90px;
+    height: 90px;
+    margin: 1rem auto;
+  }
+  .form-group input,
+  .form-group select,
+  .work-history-table td input,
+  .work-history-table td select {
+    font-size: 1rem;
+    padding: 0.65rem 0.8rem;
+    height: 40px;
+  }
+  .form-group label {
+    font-size: 0.95rem;
+  }
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem 0.5rem;
+    gap: 0.5rem;
+    margin: 1rem 0 0 0;
+  }
+  .btn-cancel,
+  .btn-submit,
+  .btn-next,
+  .btn-back {
+    width: 100%;
+    min-width: unset;
+    font-size: 1rem;
+    padding: 0.9rem 0;
+  }
+  .tabs-container {
+    padding: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .tab {
+    min-width: unset;
+    width: 100%;
+    justify-content: flex-start;
+    padding: 0.75rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e6e1fe;
+    font-size: 1rem;
+  }
+  .tab:last-child {
+    border-bottom: none;
+  }
+  .address-section {
+    padding: 1rem;
+  }
+  .work-history-table th,
+  .work-history-table td {
+    padding: 0.5rem;
+    font-size: 0.95rem;
+  }
+  .work-history-table .work-description {
+    min-height: 60px;
+    font-size: 0.95rem;
+    padding: 0.7rem;
+  }
+  .btn-add-row {
+    width: 100%;
+    padding: 0.7rem 0;
+    font-size: 1rem;
+  }
+  .btn-remove-row {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+  .document-upload-card {
+    padding: 1rem;
+  }
+  .upload-area-doc {
+    padding: 1rem 0.5rem;
+  }
+  .success-popup {
+    min-width: 90vw;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-main {
+    margin-top: 48px !important;
+    padding: 0.5rem !important;
+  }
+  .form-section,
+  .file-upload-section,
+  .family-section {
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+  .profile-upload {
+    width: 64px;
+    height: 64px;
+  }
+  .form-group label {
+    font-size: 0.9rem;
+  }
+  .form-group input,
+  .form-group select {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+    height: 36px;
+  }
+  .btn-cancel,
+  .btn-submit,
+  .btn-next,
+  .btn-back {
+    font-size: 0.95rem;
+    padding: 0.7rem 0;
+  }
+  .success-popup {
+    min-width: 98vw;
+    padding: 0.5rem;
+  }
+}
+
+/* Language Ability Styles */
+.language-select {
+  width: 100%;
+  min-width: 90px;
+  max-width: 180px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  color: #374151;
+  transition: all 0.2s;
+}
+
+.language-select:focus {
+  border-color: #7152f3;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(113, 82, 243, 0.08);
+}
+
+@media (max-width: 768px) {
+  .responsive-language-select {
+    width: 100%;
+  }
+  .language-select {
+    width: 100%;
+    min-width: unset;
+    max-width: unset;
+    font-size: 1rem;
+    padding: 0.6rem 0.8rem;
+  }
+  .language-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .language-label {
+    padding-right: 0;
+    border-right: none;
+    margin-bottom: 0.25rem;
+    text-align: left !important;
+    width: 100%;
+    justify-content: flex-start;
+    font-size: 1rem;
+  }
+  .language-options {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-select {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+  }
+}
+
+/* ซ่อนข้อความคำถามใน section ประวัติทางกฎหมายและการปฏิบัติงานต่างจังหวัดบนมือถือ ให้เหลือแค่ตัวเลือก เคย, ไม่เคย, ได้, ไม่ได้ เท่านั้น */
+@media (max-width: 768px) {
+  .criminal-record-question p,
+  .relocation-container p {
+    display: none !important;
+  }
+  .criminal-options,
+  .relocation-options {
+    margin-top: 0 !important;
+  }
+  .criminal-options label,
+  .relocation-options label {
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.5rem 0 0;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .criminal-options input[type="radio"],
+  .relocation-options input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    margin: 0 4px 0 0;
+  }
+}
+@media (max-width: 480px) {
+  .criminal-options input[type="radio"],
+  .relocation-options input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+  .criminal-options label,
+  .relocation-options label {
+    font-size: 0.95rem;
+    padding: 0.15rem 0.3rem;
+  }
+}
+
+/* Responsive Work History & Education History for mobile */
+@media (max-width: 600px) {
+  .work-history-table,
+  .work-history-table thead,
+  .work-history-table tbody,
+  .work-history-table tr,
+  .work-history-table th,
+  .work-history-table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .work-history-table thead {
+    display: none;
+  }
+  .work-history-table tr {
+    margin-bottom: 18px;
+    border-radius: 8px;
+    background: #fafbfc;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    padding: 12px 10px 6px 10px;
+  }
+  .work-history-table td {
+    padding: 0 0 12px 0;
+    border: none;
+    position: relative;
+  }
+  .work-history-table td:before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.95em;
+    color: #666;
+    margin-bottom: 3px;
+    font-weight: 500;
+  }
+  .work-history-table input,
+  .work-history-table select,
+  .work-history-table textarea {
+    width: 100%;
+    min-width: 0;
+    font-size: 1em;
+    margin-bottom: 0;
+  }
+  .work-history-table .btn-remove-row {
+    display: block;
+    width: 32px;
+    height: 32px;
+    margin: 8px auto 0 auto;
+    font-size: 1.3em;
+    background: #fff0f0;
+    border-radius: 50%;
+    border: none;
+    color: #d00;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .work-history-table .btn-remove-row:active {
+    background: #ffeaea;
+  }
+  .work-history-section .btn-add-row,
+  .education-section .btn-add-row {
+    width: 100%;
+    margin-top: 8px;
+    font-size: 1em;
+    padding: 10px 0;
+  }
+  .work-history-table .description-row td {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .btn-add-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Add data-labels to table cells via JS/JSX for mobile accessibility */

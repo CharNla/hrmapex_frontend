@@ -32,8 +32,11 @@ const EditAccount = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
+  const [status, setStatus] = useState('Active');
+  const [role, setRole] = useState('user');
   const [message, setMessage] = useState({ type: '', text: '' });
   const [userData, setUserData] = useState(null);
+  const [createDate] = useState(new Date().toISOString().split('T')[0]); // เพิ่ม create date
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -61,10 +64,10 @@ const EditAccount = () => {
     e.preventDefault();
     try {
       // Simulate API success
-      setMessage({ type: 'success', text: 'Username updated successfully!' });
+      setMessage({ type: 'success', text: 'Account updated successfully!' });
       setTimeout(() => navigate('/account'), 1500);
     } catch (error) {
-      setMessage({ type: 'error', text: 'Failed to update username' });
+      setMessage({ type: 'error', text: 'Failed to update account' });
     }
   };
 
@@ -109,68 +112,117 @@ const EditAccount = () => {
           <Topbar pageTitle="Account Settings" pageSubtitle="Manage your account security" />
           
           <div className="security-container">
-            <div className="security-section">
+            {/* Information Section - Centered at top */}
+            <div className="security-section information-section">
               <h3>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Edit Account for {userData.FName} {userData.LName}
+                Information
               </h3>
-              <form onSubmit={handleUsernameSubmit} className="security-form">
-                <div className="form-group">
-                  <label>New Username</label>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Enter new username"
-                    required
-                  />
+              <div className="information-content">
+                <div className="info-item">
+                  <span className="info-label">ID:</span>
+                  <span className="info-value">{userData?.EmployeeId}</span>
                 </div>
-                <button type="submit">Update Username</button>
-              </form>
+                <div className="info-item">
+                  <span className="info-label">Create Date:</span>
+                  <span className="info-value">{createDate}</span>
+                </div>
+              </div>
             </div>
 
-            <div className="security-section">
-              <h3>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Password
-              </h3>
-              <form onSubmit={handlePasswordSubmit} className="security-form">
-                <div className="form-group">
-                  <label>Current Password</label>
-                  <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="Enter current password"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>New Password</label>
-                  <input
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Confirm Password</label>
-                  <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    required
-                  />
-                </div>
-                <button type="submit">Update Password</button>
-              </form>
+            {/* Container for Edit Account and Password sections */}
+            <div className="account-password-container">
+              {/* Edit Account Section */}
+              <div className="security-section">
+                <h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Edit Account for {userData.FName} {userData.LName}
+                </h3>
+                <form onSubmit={handleUsernameSubmit} className="security-form">
+                  <div className="form-group">
+                    <label>New Username</label>
+                    <input
+                      type="text"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Enter new username"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Role</label>
+                    <select 
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="status-select"
+                    >
+                      <option value="" disabled>Select Role</option>
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Status</label>
+                    <select 
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="status-select"
+                    >
+                      <option value="" disabled>Select Status</option>
+                      <option value="Active">Active</option>
+                      <option value="Inactive">InActive</option>
+                    </select>
+                  </div>
+                  <button type="submit">Update Username</button>
+                </form>
+              </div>
+
+              {/* Password Section */}
+              <div className="security-section">
+                <h3>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  Password
+                </h3>
+                <form onSubmit={handlePasswordSubmit} className="security-form">
+                  <div className="form-group">
+                    <label>Current Password</label>
+                    <input
+                      type="password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      placeholder="Enter current password"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>New Password</label>
+                    <input
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Confirm Password</label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                      required
+                    />
+                  </div>
+                  <button type="submit">Update Password</button>
+                </form>
+              </div>
             </div>
 
             {message.text && (

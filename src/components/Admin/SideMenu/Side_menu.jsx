@@ -16,48 +16,44 @@ import { BiSun, BiMoon } from 'react-icons/bi'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { useTheme } from '../../../context/ThemeContext'
 import './Side_menu.css'
+import PropTypes from 'prop-types';
 
-const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, mobileOpen }) => {
-  const { isDark, toggleTheme } = useTheme()
-  const location = useLocation()
-  const [touchStart, setTouchStart] = useState(0)
-  const [touchEnd, setTouchEnd] = useState(0)
+// ปรับ props ให้รองรับ mobile overlay
+const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) => {
+  const { isDark, toggleTheme } = useTheme();
+  const location = useLocation();
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const handleTouchStart = (e) => {
-    setTouchStart(e.touches[0].clientX)
-  }
+    setTouchStart(e.touches[0].clientX);
+  };
 
   const handleTouchMove = (e) => {
-    setTouchEnd(e.touches[0].clientX)
-  }
+    setTouchEnd(e.touches[0].clientX);
+  };
 
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
+    if (!touchStart || !touchEnd) return;
 
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    if (isLeftSwipe) onClose();
 
-    if (isLeftSwipe) {
-      onToggleMinimize(true)
-    } else if (isRightSwipe) {
-      onToggleMinimize(false)
-    }
-
-    setTouchStart(0)
-    setTouchEnd(0)
-  }
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden'
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [mobileOpen])
+      document.body.style.overflow = '';
+    };
+  }, [isOpen])
   
   const menuItems = [
     { icon: <FaUsers />, text: 'All Employees', path: '/employees' },
@@ -96,28 +92,35 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, mobileOpen }) => {
   }
 
   return (
-    <>
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            className="menu-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => onToggleMinimize(true)}
-          />
-        )}
-      </AnimatePresence>
-
-      <motion.div 
-        className={`side-menu ${isMinimized ? 'minimized' : ''} ${hasPopup ? 'has-popup' : ''} ${isDark ? 'dark' : ''} ${mobileOpen ? 'mobile-open' : ''}`}
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="menu-overlay"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        />
+      )}
+      <motion.div
+        className={`side-menu${isMinimized ? ' minimized' : ''}${hasPopup ? ' has-popup' : ''}${isOpen ? ' mobile-open' : ''}`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <div className="logo-container">          <h1 
             className="logo"
-            onClick={onToggleMinimize}
+            onClick={() => {
+              if (window.innerWidth <= 768) {
+                if (typeof onClose === 'function') {
+                  onClose(); // ปิดเมนูมือถือจริง
+                } else if (typeof onToggleMinimize === 'function') {
+                  onToggleMinimize(true); // fallback
+                }
+              } else {
+                onToggleMinimize(); // Toggle minimize on desktop
+              }
+            }}
             role="button"
             tabIndex={0}
           >
@@ -165,8 +168,16 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, mobileOpen }) => {
           </div>
         )}
       </motion.div>
-    </>
-  )
-}
+    </AnimatePresence>
+  );
+};
 
-export default SideMenu
+SideMenu.propTypes = {
+  isMinimized: PropTypes.bool,
+  onToggleMinimize: PropTypes.func,
+  hasPopup: PropTypes.bool,
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default SideMenu;

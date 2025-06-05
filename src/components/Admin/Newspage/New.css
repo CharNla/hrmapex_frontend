@@ -16,8 +16,13 @@
   max-width: 100%;
 }
 
-/* Card & News Content */
-.news-card {
+@media screen and (max-width: 430px) {
+  .dashboard-content {
+    padding: 1rem 1rem;
+  }
+}
+
+/* Card & News Content */  .news-card {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 2px;
   box-shadow: 0 4px 24px rgba(99, 102, 241, 0.12);
@@ -29,6 +34,13 @@
   animation: fadeIn 0.5s ease;
   border: 1px solid rgba(99, 102, 241, 0.1);
   overflow-x: hidden;
+}
+
+@media screen and (max-width: 430px) {
+  .news-card {
+    padding: 1rem 1.25rem;
+    margin-top: 0.5rem;
+  }
 }
 
 .news-toolbar {
@@ -321,6 +333,51 @@
 
   .news-search-wrap {
     width: 100%;
+  }
+}
+
+@media (max-width: 430px) {
+  .dashboard-content {
+    padding: 2rem 1rem !important;
+  }
+
+  .news-card {
+    padding: 2rem 1.25rem !important;
+    margin-top: 1rem !important;
+  }
+
+  .news-toolbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 1rem !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    padding: 0 !important;
+  }
+
+  .news-search-wrap {
+    flex: 1 !important;
+    width: auto !important;
+    margin: 0 !important;
+  }
+
+  .btn-add-news {
+    height: 38px;
+    padding: 0 1rem;
+    white-space: nowrap;
+  }
+
+  .btn-add-news span {
+    display: none;
+  }
+
+  /* Hide category and created columns on mobile */
+  .news-table th:nth-child(2),
+  .news-table td:nth-child(2),
+  .news-table th:nth-child(3),
+  .news-table td:nth-child(3) {
+    display: none;
   }
 }
 
@@ -890,34 +947,6 @@
   padding: 24px;
 }
 
-.delete-cancel-btn {
-  background: #f3f0ff;
-  color: #6c47ff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 22px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.delete-cancel-btn:hover {
-  background: #e6e0ff;
-}
-
-.delete-confirm-btn {
-  background: #e53935;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 22px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.delete-confirm-btn:hover {
-  background: #c62828;
-}
-
 /* Remove top border and background from delete modal actions */
 .delete-modal-actions,
 .modern-delete-modal .modal-actions {
@@ -929,4 +958,110 @@
 
 .dashboard-main .circles {
   z-index: 1;
+}
+
+/* Desktop & Mobile Actions */
+.desktop-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mobile-actions {
+  display: none;
+}
+
+/* Media Queries for Mobile */
+@media screen and (max-width: 430px) {
+  .desktop-actions {
+    display: none;
+  }
+
+  .mobile-actions {
+    display: block;
+  }
+
+  .action-dropdown {
+    position: relative;
+  }
+
+  .action-dropdown-toggle {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .action-dropdown-toggle:hover {
+    color: #6366f1;
+  }
+
+  .action-dropdown-content {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: -100%;
+    background: white;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+
+  .action-dropdown-content::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    margin: 0 auto 1rem;
+  }
+
+  .action-dropdown-content.show {
+    bottom: 0;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .action-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    width: 100%;
+    border: none;
+    background: none;
+    color: #374151;
+    font-size: 1rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .action-dropdown-item:active {
+    background: rgba(99, 102, 241, 0.08);
+  }
+
+  .action-dropdown-item.delete {
+    color: #ef4444;
+  }
+
+  .action-dropdown-item.delete:active {
+    background: rgba(239, 68, 68, 0.08);
+  }
+
+  /* Add overlay when dropdown is open */
+  .action-dropdown.show::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
 }
