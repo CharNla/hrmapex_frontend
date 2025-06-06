@@ -24,6 +24,8 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
   const location = useLocation();
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const userRole = localStorage.getItem('userRole');
+  const employeeId = localStorage.getItem('employeeId');
 
   const handleTouchStart = (e) => {
     setTouchStart(e.touches[0].clientX);
@@ -57,12 +59,19 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
   
   const menuItems = [
     { icon: <FaEnvelope />, text: 'News', path: '/news' },
-    { icon: <FaUsers />, text: 'All Employees', path: '/employees' },
-    { icon: <FaFileAlt />, text: 'Disbursement', path: '/disbursement' },
-    { icon: <FaMoneyBillWave />, text: 'Payroll', path: '/payroll' },
+    { 
+      icon: <FaUsers />, 
+      text: userRole === 'user' ? 'My Profile' : 'All Employees', 
+      path: userRole === 'user' ? `/employee/${employeeId}` : '/employees'
+    },    { icon: <FaFileAlt />, text: 'Disbursement', path: '/disbursement' },
+    { 
+      icon: <FaMoneyBillWave />, 
+      text: 'Payroll', 
+      path: userRole === 'user' ? `/payroll-detail/${employeeId}` : '/payroll' 
+    },
     { icon: <FaCalendarAlt />, text: 'Leaves', path: '/leaves' },
     { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/holidays' },
-    { icon: <FaUser />, text: 'Account', path: '/account' },
+    ...(userRole !== 'user' ? [{ icon: <FaUser />, text: 'Account', path: '/account' }] : []),
     { icon: <FaCog />, text: 'Settings', path: '/settings' },
   ]
 

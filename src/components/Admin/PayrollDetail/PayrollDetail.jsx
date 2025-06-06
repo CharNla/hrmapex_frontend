@@ -18,6 +18,21 @@ const PayrollDetail = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
+  const [userRole, setUserRole] = useState('');  useEffect(() => {
+    // ดึง userRole จาก localStorage
+    const role = localStorage.getItem('userRole') || '';
+    
+    // เช็คว่าเป็น admin หรือไม่
+    if (role === 'admin') {
+      setUserRole('admin');
+    } else {
+      setUserRole('user');
+    }
+    
+    // แสดง role ที่กำลังใช้งาน
+    console.log('Current role:', role);
+  }, []);
+
   const [employeeData, setEmployeeData] = useState({
     id: id,
     name: "John Doe",
@@ -354,68 +369,70 @@ const PayrollDetail = () => {
           <div className="payroll-detail__tab-content">
             <div className="payroll-detail__card">
               <div className="payroll-detail__document-section">
-                <div className="payroll-detail__document-item">
-                  <h4>แบบ ภ.ง.ด.1 (N550)</h4>
-                  <div className="payroll-detail__upload-area">
-                    <div className="payroll-detail__file-input">
-                      <input 
-                        type="file" 
-                        accept=".pdf,.doc,.docx" 
-                        id="n550" 
-                        multiple
-                        onChange={(e) => handleFileChange(e, 'n550')} 
-                      />
-                      <label htmlFor="n550" className="payroll-detail__upload-button">
-                        <FiFile /> อัพโหลดเอกสาร
-                      </label>
-                    </div>
+                <div className="payroll-detail__document-item">                  <h4>แบบ ภ.ง.ด.1 (N550)</h4>
+                  <div className="payroll-detail__upload-area">                    {userRole === 'admin' && (
+                      <div className="payroll-detail__file-input">
+                        <input 
+                          type="file" 
+                          accept=".pdf,.doc,.docx" 
+                          id="n550" 
+                          multiple
+                          onChange={(e) => handleFileChange(e, 'n550')} 
+                        />
+                        <label htmlFor="n550" className="payroll-detail__upload-button">
+                          <FiFile /> อัพโหลดเอกสาร
+                        </label>
+                      </div>
+                    )}
                     {employeeData.documents.n550.length > 0 && (
                       <div className="payroll-detail__file-list">                        {employeeData.documents.n550.map((file, index) => (
                           <div key={index} className="payroll-detail__file-item">
                             <div className="file-info">
                               <FiFile /> {file.name}
-                            </div>
-                            <button 
-                              className="payroll-detail__delete-file" 
-                              onClick={() => handleDeleteFile('n550', index)}
-                              title="ลบไฟล์"
-                            >
-                              <FiX />
-                            </button>
+                            </div>                            {userRole === 'admin' && (
+                              <button 
+                                className="payroll-detail__delete-file" 
+                                onClick={() => handleDeleteFile('n550', index)}
+                                title="ลบไฟล์"
+                              >
+                                <FiX />
+                              </button>
+                            )}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
                 </div>
-                <div className="payroll-detail__document-item">
-                  <h4>สลิปเงินเดือน</h4>
-                  <div className="payroll-detail__upload-area">
-                    <div className="payroll-detail__file-input">
-                      <input 
-                        type="file" 
-                        accept=".pdf" 
-                        id="payslip" 
-                        multiple
-                        onChange={(e) => handleFileChange(e, 'paySlip')} 
-                      />
-                      <label htmlFor="payslip" className="payroll-detail__upload-button">
-                        <FiFile /> อัพโหลดเอกสาร
-                      </label>
-                    </div>
+                <div className="payroll-detail__document-item">                  <h4>สลิปเงินเดือน</h4>
+                  <div className="payroll-detail__upload-area">                    {userRole === 'admin' && (
+                      <div className="payroll-detail__file-input">
+                        <input 
+                          type="file" 
+                          accept=".pdf" 
+                          id="payslip" 
+                          multiple
+                          onChange={(e) => handleFileChange(e, 'paySlip')} 
+                        />
+                        <label htmlFor="payslip" className="payroll-detail__upload-button">
+                          <FiFile /> อัพโหลดเอกสาร
+                        </label>
+                      </div>
+                    )}
                     {employeeData.documents.paySlip.length > 0 && (
                       <div className="payroll-detail__file-list">                        {employeeData.documents.paySlip.map((file, index) => (
                           <div key={index} className="payroll-detail__file-item">
                             <div className="file-info">
                               <FiFile /> {file.name}
-                            </div>
-                            <button 
-                              className="payroll-detail__delete-file" 
-                              onClick={() => handleDeleteFile('paySlip', index)}
-                              title="ลบไฟล์"
-                            >
-                              <FiX />
-                            </button>
+                            </div>                            {userRole === 'user' && (
+                              <button 
+                                className="payroll-detail__delete-file" 
+                                onClick={() => handleDeleteFile('paySlip', index)}
+                                title="ลบไฟล์"
+                              >
+                                <FiX />
+                              </button>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -456,8 +473,7 @@ const PayrollDetail = () => {
         <div className="payroll-detail__main">
           <div className="payroll-detail__header">
             <h2>รายละเอียดเงินเดือนของ {employeeData.name}</h2>
-            <div className="payroll-detail__actions">
-              {isEditing ? (
+            <div className="payroll-detail__actions">              {isEditing ? (
                 <>
                   <button onClick={handleSave} className="payroll-detail__button save">
                     <FiSave /> บันทึก
@@ -465,11 +481,12 @@ const PayrollDetail = () => {
                   <button onClick={handleCancel} className="payroll-detail__button cancel">
                     <FiX /> ยกเลิก
                   </button>
-                </>
-              ) : (
-                <button onClick={handleEdit} className="payroll-detail__button edit">
-                  <FiEdit2 /> แก้ไข
-                </button>
+                </>              ) : (
+                userRole === 'admin' && (
+                  <button onClick={handleEdit} className="payroll-detail__button edit">
+                    <FiEdit2 /> แก้ไข
+                  </button>
+                )
               )}
               <div className="payroll-detail__total">
                 ฿{calculateTotal(isEditing ? editData : employeeData).toLocaleString()}

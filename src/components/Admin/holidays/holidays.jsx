@@ -5,11 +5,11 @@ import SideMenu from '../SideMenu/Side_menu';
 import Topbar from '../Topbar/Topbar';
 import './holidays.css';
 
-const Holidays = () => {
-  const navigate = useNavigate();
+const Holidays = () => {  const navigate = useNavigate();
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [showPopup, setShowPopup] = useState(false);
   const [displayIndexes, setDisplayIndexes] = useState({});
+  const userRole = localStorage.getItem('userRole');
 
   const holidays = [
     {
@@ -220,16 +220,17 @@ const Holidays = () => {
                           <FiCalendar />
                           <h3>{month}</h3>
                         </div>
-                        <div className="month-header-right">
-                          <span className="month-total">
+                        <div className="month-header-right">                          <span className="month-total">
                             Total: {groupedHolidays[index]?.length || 0}
                           </span>
-                          <button 
-                            className="add-holiday-btn"
-                            onClick={() => handleAddHoliday(index)}
-                          >
-                            + Add
-                          </button>
+                          {userRole !== 'user' && (
+                            <button 
+                              className="add-holiday-btn"
+                              onClick={() => handleAddHoliday(index)}
+                            >
+                              + Add
+                            </button>
+                          )}
                         </div>
                       </div>
                       <div className="month-content">

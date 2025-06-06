@@ -14,9 +14,10 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const currentHour = new Date().getHours()
   
+  const userRole = localStorage.getItem('userRole')
   const userInfo = {
-    name: 'Admin',
-    role: 'Administrator',
+    name: userRole === 'admin' ? 'Admin' : userRole === 'superadmin' ? 'Superadmin' : 'User',
+    role: userRole === 'admin' ? 'Administrator' : userRole === 'superadmin' ? 'Superadmin' : 'User',
     avatar: userImage,
     employeeId: 'EMP2025044861'
   }

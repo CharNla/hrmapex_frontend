@@ -136,13 +136,12 @@ function Login() {
         } else {
           localStorage.removeItem('rememberedEmail')
           localStorage.removeItem('rememberedPassword')
-        }
-
-        // Store login status and auth info for user
+        }        // Store login status and auth info for user
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', 'user')
         localStorage.setItem('token', 'user-token')
-        navigate('/news'); // Redirect to News page
+        localStorage.setItem('employeeId', '1') // Use first mock employee ID
+        navigate('/news')
         return
       }
 

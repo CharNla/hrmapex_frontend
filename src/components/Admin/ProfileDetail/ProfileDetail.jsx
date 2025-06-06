@@ -30,6 +30,7 @@ const ProfileDetail = () => {
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const currentEmployeeId = localStorage.getItem('employeeId');
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -1035,7 +1036,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -2325,7 +2326,7 @@ const ProfileDetail = () => {
         </ul>
 
         <Topbar 
-          pageTitle={`All Employees > ${employeeData?.FName || ''} ${employeeData?.LName || ''}`} 
+          pageTitle={id === currentEmployeeId ? 'My Profile' : `All Employees > ${employeeData?.FName || ''} ${employeeData?.LName || ''}`}
           pageSubtitle="" 
         />
         <div className="profile-header-section">
@@ -2380,9 +2381,8 @@ const ProfileDetail = () => {
               <button className="edit-profile-btn cancel" onClick={handleCancelEdit} type="button">
                 Cancel
               </button>
-            </div>
-          ) : (
-            userRole !== 'admin' && (
+            </div>          ) : (
+            userRole === 'superadmin' && (
               <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
                 <FiEdit2 className="edit-icon" />
                 Edit Profile

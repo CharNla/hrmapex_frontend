@@ -13,6 +13,8 @@ const Disbursement = () => {
   const navigate = useNavigate();
   const [isMinimized, setIsMinimized] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const userRole = localStorage.getItem('userRole');
+  const employeeId = localStorage.getItem('employeeId');
   const [filterCriteria, setFilterCriteria] = useState({
     category: '',
     status: '',
@@ -200,6 +202,10 @@ const Disbursement = () => {
   };
 
   const filteredDisbursements = disbursements.filter(item => {
+    // For user role, only show their own disbursements
+    if (userRole === 'user' && item.employeeId !== employeeId) return false;
+    
+    // Apply other filters
     if (filterCriteria.category && item.category !== filterCriteria.category) return false;
     if (filterCriteria.status && item.status !== filterCriteria.status) return false;
     if (filterCriteria.date && item.date !== filterCriteria.date) return false;
@@ -378,9 +384,11 @@ const Disbursement = () => {
             <div className="disbursement-header">
               <h2>Disbursement</h2>
               <div className="header-actions">
-                <button className="add-disbursement-button" onClick={handleAddDisbursement}>
-                  <FiPlus style={{ marginRight: '5px' }} /> Add
-                </button>
+                {userRole !== 'user' && (
+                  <button className="add-disbursement-button" onClick={handleAddDisbursement}>
+                    <FiPlus style={{ marginRight: '5px' }} /> Add
+                  </button>
+                )}
                 <button className="filter-button" onClick={toggleFilter}>
                   <FiFilter style={{ marginRight: '5px' }} /> Filter
                 </button>
@@ -562,35 +570,39 @@ const Disbursement = () => {
                   </div>
                   
                   <div className="action-buttons">
-                    {editingId === item.id ? (
-                      <button 
-                        className="save-button"
-                        onClick={() => handleSave(item.id)}
-                      >
-                        <FiSave style={{ marginRight: '5px' }} /> Save
-                      </button>
-                    ) : (
-                      <button 
-                        className="edit-button"
-                        onClick={() => handleEdit(item.id)}
-                      >
-                        <FiEdit style={{ marginRight: '5px' }} /> Edit
-                      </button>
-                    )}
-                    {item.status === 'Pending' && !editingId && (
+                    {userRole !== 'user' && (
                       <>
-                        <button 
-                          className="approve-button"
-                          onClick={() => handleApprove(item.id)}
-                        >
-                          <FiCheck style={{ marginRight: '5px' }} /> Approve
-                        </button>
-                        <button 
-                          className="reject-button"
-                          onClick={() => openRejectPopup(item.id)}
-                        >
-                          <FiX />
-                        </button>
+                        {editingId === item.id ? (
+                          <button 
+                            className="save-button"
+                            onClick={() => handleSave(item.id)}
+                          >
+                            <FiSave style={{ marginRight: '5px' }} /> Save
+                          </button>
+                        ) : (
+                          <button 
+                            className="edit-button"
+                            onClick={() => handleEdit(item.id)}
+                          >
+                            <FiEdit style={{ marginRight: '5px' }} /> Edit
+                          </button>
+                        )}
+                        {item.status === 'Pending' && !editingId && (
+                          <>
+                            <button 
+                              className="approve-button"
+                              onClick={() => handleApprove(item.id)}
+                            >
+                              <FiCheck style={{ marginRight: '5px' }} /> Approve
+                            </button>
+                            <button 
+                              className="reject-button"
+                              onClick={() => openRejectPopup(item.id)}
+                            >
+                              <FiX />
+                            </button>
+                          </>
+                        )}
                       </>
                     )}
                   </div>

@@ -15,8 +15,9 @@ const leaveTypesDefault = [
 
 const leaveListMock = [
   {
-    name: "John Smith",
+    name: "John Doe",
     nickname: "John",
+    employeeId: "1",
     date: "2025-05-01",
     days: 2,
     type: "Sick Leave",
@@ -143,7 +144,8 @@ const mockYearlyReport = [
 // Mock data for employee leave reports
 const employeeLeaveReports = {  "2025-05": [
     {      id: 1,
-      name: "John Smith",
+      employeeId: "1",
+      name: "John Doe",
       nickname: "John",
       position: "Programmer",
       leaveData: {
@@ -308,8 +310,9 @@ const employeeLeaveReports = {  "2025-05": [
   ]
 };
 
-function Leaves() {
-  const [tab, setTab] = useState(0);
+function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
+  const employeeId = localStorage.getItem('employeeId');
+  const [tab, setTab] = useState(userRole === 'user' ? 1 : 0);
   const [leaveTypes, setLeaveTypes] = useState(leaveTypesDefault);
   const [newType, setNewType] = useState("");
   const [newDays, setNewDays] = useState(1);
@@ -358,9 +361,11 @@ function Leaves() {
 
   // Add status options
   const statusOptions = ["all", "Approved", "Pending", "Rejected"];
-
   // Updated filter function
   const filteredLeaveList = leaveList.filter(leave => {
+    // For user role, only show their own leaves
+    if (userRole === 'user' && leave.employeeId !== employeeId) return false;
+    
     const searchLower = searchQuery.toLowerCase();
     const matchName = leave.name.toLowerCase().includes(searchLower);
     const matchNickname = leave.nickname.toLowerCase().includes(searchLower);
@@ -470,15 +475,17 @@ function Leaves() {
         });
       }
     });
-    
-    // Filter reports based on search query
+      // Filter reports based on user role and search query
     return Object.values(combined).filter(employee => {
+      // For user role, only show their own report
+      if (userRole === 'user' && employee.id.toString() !== employeeId) return false;
+      
       if (!reportSearchQuery) return true;
       const searchTerm = reportSearchQuery.toLowerCase();
       return (
         employee.name.toLowerCase().includes(searchTerm) ||
         employee.nickname.toLowerCase().includes(searchTerm) ||
-        employee.department.toLowerCase().includes(searchTerm)
+        employee.position.toLowerCase().includes(searchTerm)
       );
     });
   };
@@ -528,9 +535,10 @@ function Leaves() {
 
         <div className="dashboard-content">
           <Topbar pageTitle="Leave Management" pageSubtitle="Manage leave types and records" />
-          <div className="leaves-container">
-            <div className="leaves-tabs">
-              <button className={tab===0?"active":""} onClick={()=>setTab(0)}>Create Leave Types</button>
+          <div className="leaves-container">            <div className="leaves-tabs">
+              {userRole !== 'user' && (
+                <button className={tab===0?"active":""} onClick={()=>setTab(0)}>Create Leave Types</button>
+              )}
               <button className={tab===1?"active":""} onClick={()=>setTab(1)}>All Leave Records</button>
               <button className={tab===2?"active":""} onClick={()=>setTab(2)}>Leave Reports</button>
             </div>

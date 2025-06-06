@@ -5,18 +5,15 @@ import Topbar from '../Topbar/Topbar';
 import { useTheme } from '../../../context/ThemeContext';
 import './setting.css';
 
-const Setting = () => {
-  const { isDark, toggleTheme } = useTheme();
-  const [activeTab, setActiveTab] = useState('account');
+const Setting = () => {  const { isDark, toggleTheme } = useTheme();
+  const [activeTab, setActiveTab] = useState('security');
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
   const settingTabs = [
-    { id: 'account', label: 'Account Settings', icon: <FiUser /> },
     { id: 'security', label: 'Security', icon: <FiLock /> },
     { id: 'appearance', label: 'Appearance', icon: <FiMonitor /> },
     { id: 'notifications', label: 'Notifications', icon: <FiBell /> },
@@ -66,28 +63,7 @@ const Setting = () => {
               ))}
             </div>
 
-            <div className="settings-content">
-              {activeTab === 'account' && (
-                <div className="settings-section">
-                  <h2>Account Settings</h2>
-                  <div className="settings-form">
-                    <div className="form-group">
-                      <label>Full Name</label>
-                      <input type="text" placeholder="John Doe" />
-                    </div>
-                    <div className="form-group">
-                      <label>Email</label>
-                      <input type="email" placeholder="john@example.com" />
-                    </div>
-                    <div className="form-group">
-                      <label>Position</label>
-                      <input type="text" placeholder="Software Developer" />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === 'appearance' && (
+            <div className="settings-content">              {activeTab === 'appearance' && (
                 <div className="settings-section">
                   <h2>Appearance Settings</h2>
                   <div className="settings-form">
