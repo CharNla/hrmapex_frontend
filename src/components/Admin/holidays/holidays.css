@@ -429,3 +429,163 @@
     box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
   }
 }
+
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
+  .holidays-container {
+    padding: 0.5rem;
+  }
+
+  .holidays-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .year-selector {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .year-selector h2 {
+    font-size: 1.8rem;
+  }
+
+  .year-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 1.8rem;
+  }
+
+  .holiday-summary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .summary-item {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+
+  .holidays-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .month-card {
+    margin: 0;
+    border-radius: 12px;
+  }
+
+  .month-header {
+    padding: 1rem;
+  }
+
+  .month-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .month-header-right {
+    gap: 8px;
+  }
+
+  .add-holiday-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+
+  .holiday-item {
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .holiday-item h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .holiday-type {
+    padding: 0.35rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .holiday-date {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .holiday-details {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .holiday-counter {
+    padding: 4px 12px;
+    font-size: 0.9rem;
+    border-radius: 16px;
+  }
+
+  .no-holidays {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Touch-friendly improvements */
+  .holiday-item.clickable {
+    position: relative;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .holiday-item.clickable:active {
+    transform: scale(0.98);
+    background-color: #f1f5f9;
+  }
+
+  .month-total {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* Improved touch targets */
+  .add-holiday-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .year-nav {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Additional optimizations for very small screens */
+@media screen and (max-width: 380px) {
+  .month-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .month-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .year-selector h2 {
+    font-size: 1.5rem;
+  }
+
+  .holiday-item h4 {
+    font-size: 1rem;
+  }
+
+  .holiday-date,
+  .holiday-details {
+    font-size: 0.95rem;
+  }
+}

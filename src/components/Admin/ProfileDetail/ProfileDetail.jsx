@@ -394,6 +394,10 @@ const ProfileDetail = () => {
             )}
           </div>
           <div className="info-item">
+            <label>Age</label>
+            <span className="info-value">{employeeData?.DateOfBirth ? new Date().getFullYear() - new Date(employeeData.DateOfBirth).getFullYear() : '-'}</span>
+          </div>
+          <div className="info-item">
             <label>Gender</label>
             {isEditing ? (
               <select
@@ -411,8 +415,6 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.Gender || '-'}</span>
             )}
           </div>
-        </div>
-        <div className="info-row">
           <div className="info-item">
             <label>Nationality</label>
             {isEditing ? (
@@ -427,6 +429,8 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.Nationality || '-'}</span>
             )}
           </div>
+        </div>
+        <div className="info-row">
           <div className="info-item">
             <label>Marital Status</label>
             {isEditing ? (
@@ -445,8 +449,6 @@ const ProfileDetail = () => {
               <span className="info-value">{employeeData?.MaritalStatus || '-'}</span>
             )}
           </div>
-        </div>
-        <div className="info-row">
           <div className="info-item">
             <label>Religion</label>
             {isEditing ? (
@@ -465,6 +467,23 @@ const ProfileDetail = () => {
               </select>
             ) : (
               <span className="info-value">{employeeData?.Religion || '-'}</span>
+            )}
+          </div>
+        </div>
+        <div className="info-row">
+          <div className="info-item">
+            <label>Address</label>
+            {isEditing ? (
+              <textarea
+                name="Address"
+                value={editData.Address || ''}
+                onChange={handleInputChange}
+                rows="3"
+                className="edit-input"
+                placeholder="Enter your address"
+              />
+            ) : (
+              <span className="info-value">{employeeData?.Address || '-'}</span>
             )}
           </div>
         </div>
@@ -1033,7 +1052,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -1051,7 +1070,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -1071,7 +1090,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"

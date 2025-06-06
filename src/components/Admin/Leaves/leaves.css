@@ -1271,10 +1271,88 @@ td[data-amount^="+"] {
   margin-right: 8px;
 }
 
-@media (max-width: 768px) {
-  .leave-detail-popup {
-    width: 95%;
-    margin: 10px;
-    max-height: 90vh;
+/* Mobile Responsive Styles */
+@media screen and (max-width: 480px) {
+  /* ปรับฟอร์มสร้าง LeaveType ให้แนวตั้งและเต็มจอ */
+  .leave-type-form-modern {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 16px 8px;
+    background: #f8fafc;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    margin-bottom: 18px;
+  }
+  .leave-type-form-modern input {
+    font-size: 1rem;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .leave-type-form-modern button {
+    font-size: 1rem;
+    padding: 12px 0;
+    border-radius: 8px;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.10);
+  }
+  /* ปรับหัวตาราง LeaveType */
+  .leave-type-header-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 12px 8px;
+    border-radius: 12px 12px 0 0;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+  }
+  .leave-type-header-name,
+  .leave-type-header-days,
+  .leave-type-header-actions {
+    text-align: left;
+    font-size: 0.85rem;
+    padding: 2px 0;
+  }
+  /* ปรับรายการ LeaveType เป็น Card แนวตั้ง */
+  .leave-type-list-modern {
+    gap: 10px;
+    padding: 0 2px;
+  }
+  .leave-type-list-modern li {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
+    margin-bottom: 2px;
+    min-width: 0;
+  }
+  .leave-type-name {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  .leave-type-days {
+    font-size: 0.95rem;
+    min-width: 0;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f5f5ff;
+    margin-bottom: 2px;
+  }
+  .leave-type-actions {
+    gap: 8px;
+    padding: 0;
+    justify-content: flex-end;
+  }
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.10);
+  }
+  
+  /* ซ่อนหัวข้อตาราง LeaveType เฉพาะมือถือ */
+  .leave-type-header-row {
+    display: none !important;
   }
 }
