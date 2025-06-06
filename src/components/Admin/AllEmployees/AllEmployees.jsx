@@ -35,6 +35,7 @@ const AllEmployees = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [userRole, setUserRole] = useState('')
 
   const navigate = useNavigate()
   const isMobile = useIsMobile(768)
@@ -43,11 +44,14 @@ const AllEmployees = () => {
     // ตรวจสอบ authentication
     const token = localStorage.getItem('token')
     const isLoggedIn = localStorage.getItem('isLoggedIn')
+    const role = localStorage.getItem('userRole')
     
     if (!isLoggedIn || !token) {
       navigate('/login')
       return
     }
+
+    setUserRole(role)
 
     const fetchEmployees = async () => {      try {
         setIsLoading(true)
@@ -356,10 +360,12 @@ const AllEmployees = () => {
                 />
               </div>
               <div className="action-buttons">
-                <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
-                  <FiPlus />
-                  <span>Add Employee</span>
-                </button>
+                {userRole !== 'admin' && (
+                  <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
+                    <FiPlus />
+                    <span>Add Employee</span>
+                  </button>
+                )}
                 <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
                   <FiFilter />
                   <span>Filter</span>
@@ -387,12 +393,16 @@ const AllEmployees = () => {
                     <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
                       <FiEye />
                     </button>
-                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
-                      <FiEdit2 />
-                    </button>
-                    <button onClick={() => handleDeleteClick(employee)}>
-                      <FiTrash2 />
-                    </button>
+                    {userRole !== 'admin' && (
+                      <>
+                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
+                          <FiEdit2 />
+                        </button>
+                        <button onClick={() => handleDeleteClick(employee)}>
+                          <FiTrash2 />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
@@ -405,8 +415,7 @@ const AllEmployees = () => {
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-              >
-                <thead>
+              >                <thead>
                   <tr>
                     <th>Employee</th>
                     <th>Email</th>
@@ -414,14 +423,15 @@ const AllEmployees = () => {
                     <th>Position</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    {userRole !== 'admin' && <th>Actions</th>}
                   </tr>
                 </thead>
                 <tbody>
-                  {currentEmployees.map((employee) => (
-                    <motion.tr 
+                  {currentEmployees.map((employee) => (                    <motion.tr 
                       key={employee.EmployeeId}
                       variants={itemVariants}
+                      onClick={() => userRole === 'admin' && navigate(`/employee/${employee.EmployeeId}`)}
+                      style={{ cursor: userRole === 'admin' ? 'pointer' : 'default' }}
                     >
                       <td className="employee-name">
                         <img
@@ -446,18 +456,19 @@ const AllEmployees = () => {
                         <span className={`status ${employee.Status?.toLowerCase()}`}>
                           {employee.Status}
                         </span>
-                      </td>
-                      <td className="actions">
-                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
-                          <FiEye />
-                        </button>
-                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
-                          <FiEdit2 />
-                        </button>
-                        <button onClick={() => handleDeleteClick(employee)}>
-                          <FiTrash2 />
-                        </button>
-                      </td>
+                      </td>                      {userRole !== 'admin' && (
+                        <td className="actions">
+                          <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
+                            <FiEye />
+                          </button>
+                          <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
+                            <FiEdit2 />
+                          </button>
+                          <button onClick={() => handleDeleteClick(employee)}>
+                            <FiTrash2 />
+                          </button>
+                        </td>
+                      )}
                     </motion.tr>
                   ))}
                 </tbody>
@@ -522,8 +533,8 @@ const AllEmployees = () => {
         />
       )}
 
-      {/* Floating Add Button for Mobile - only render ONCE at the root */}
-      {isMobile && (
+      {/* Floating Add Button for Mobile - only render ONCE at the root and only for non-admin users */}
+      {isMobile && userRole !== 'admin' && (
         <button 
           className="floating-add-btn" 
           onClick={() => navigate('/new-employee')} 

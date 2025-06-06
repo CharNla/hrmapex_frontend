@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiUser, FiUpload, FiFile, FiCheck, FiBriefcase, FiUsers, FiMoreHorizontal } from 'react-icons/fi'
 import SideMenu from '../SideMenu/Side_menu'
@@ -110,6 +110,21 @@ const NewEmployees = () => {
   const [isMinimized, setIsMinimized] = useState(false)
   const [activeTab, setActiveTab] = useState('personal')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Role-based access control
+    const role = localStorage.getItem('userRole')
+    if (!role) {
+      navigate('/login')
+      return
+    }
+    
+    // Restrict access for admin users
+    if (role === 'admin') {
+      navigate('/employees')
+      return
+    }
+  }, [navigate])
 
   const handleChange = (e) => {
     const { name, value } = e.target

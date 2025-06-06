@@ -29,12 +29,23 @@ const ProfileDetail = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
+  const [userRole, setUserRole] = useState('');
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
 
   useEffect(() => {
+    // Check user role
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+    
+    // If admin and trying to edit, redirect to view mode
+    if (role === 'admin' && location.search.includes('edit=true')) {
+      window.location.href = `/employee/${id}`;
+      return;
+    }
+
     const fetchEmployeeData = async () => {
       try {        const mockEmployeeData = {
           "EMP2025044861": {
@@ -2371,10 +2382,12 @@ const ProfileDetail = () => {
               </button>
             </div>
           ) : (
-            <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
-              <FiEdit2 className="edit-icon" />
-              Edit Profile
-            </button>
+            userRole !== 'admin' && (
+              <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
+                <FiEdit2 className="edit-icon" />
+                Edit Profile
+              </button>
+            )
           )}
         </div>
         <div className="profile-main-content">
