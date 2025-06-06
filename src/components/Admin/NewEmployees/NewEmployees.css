@@ -708,6 +708,324 @@
   background: #7c4dff;
 }
 
+/* Experience & Education Background */
+.experience-education-bg {
+  background: #f4f7ff;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px 0 rgba(80, 112, 255, 0.07);
+}
+
+@media (max-width: 768px) {
+  .experience-education-bg {
+    padding: 1rem 0.5rem;
+    border-radius: 8px;
+  }
+}
+
+/* ปรับ profile upload */
+.profile-upload {
+  margin: 2rem auto;
+  width: 120px;
+  height: 120px;
+}
+
+.upload-area {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #e6e1fe;
+  background: #f8f7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.04);
+}
+
+.upload-area img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ปรับ document upload section */
+.document-upload {
+  margin-bottom: 0.75rem;
+  background: #f9fafb;
+  padding: 1.5rem 1.5rem 0.25rem 1.5rem; /* ลด padding ด้านล่างให้น้อยลงอีก */
+  /* margin-bottom: 0; */
+  border-radius: 8px 8px 0 0;
+}
+
+.document-upload h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.upload-box {
+  width: 100%;
+}
+
+.upload-area-doc {
+  border: 2px dashed #e5e7eb;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0; /* ลบ margin ทั้งหมด */
+}
+
+.upload-area-doc:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-color);
+  background-color: rgba(113, 82, 243, 0.02);
+}
+
+.upload-icon {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, #7152f3, #5e41d9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: white !important;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 20px rgba(113, 82, 243, 0.25);
+}
+
+.upload-label {
+  cursor: pointer;
+}
+
+.upload-label p {
+  color: var(--text-secondary);
+  margin: 0.5rem 0;
+}
+
+.choose-text {
+  color: #8b5cf6;
+  text-decoration: underline;
+}
+
+.supported-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* จัดการ grid สำหรับ document uploads */
+.documents-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* ปรับขนาด form fields */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-grid.three-columns {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.75rem 1rem;
+  height: 45px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.form-group select {
+  appearance: none;
+  padding-right: 2rem;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 1em;
+}
+
+.form-group select:hover {
+  border-color: var(--accent-color);
+  background-color: rgba(113, 82, 243, 0.02);
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: var(--accent-color);
+  background-color: #ffffff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(113, 82, 243, 0.1);
+  outline: none;
+  transform: translateY(-2px);
+  background-color: #ffffff;
+}
+
+/* เพิ่ม styles สำหรับ error */
+.error-message {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.error-text {
+  color: #dc3545;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: #dc3545;
+}
+
+.form-group input.error:focus,
+.form-group select.error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* ปรับสไตล์ error text */
+.error-text {
+  color: #ff4444; /* สีแดงสว่าง */
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ปรับ input ที่มี error */
+.form-group input.error,
+.form-group select.error {
+  border-color: #ff4444;
+}
+
+.form-group input.error:focus,
+.form-group select.error:focus {
+  border-color: #ff4444;
+  box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+}
+
+/* ปรับ form actions ให้อยู่ด้านล่างเสมอ */
+.form-actions {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background-color: var(--bg-primary);
+}
+
+/* Dark mode - ลบสีพื้นหลังเช่นกัน */
+[data-theme='dark'] .form-actions {
+  background: transparent;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-cancel {
+  padding: 0.75rem 1.5rem;
+  background: #f3f4f6;
+  color: #4b5563;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-next,
+.btn-submit {
+  padding: 0.75rem 1.5rem;
+  background: #8b5cf6;
+  color: white;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-back {
+  padding: 0.75rem 1.5rem;
+  background: #f3f4f6;
+  color: #4b5563;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover,
+.btn-back:hover {
+  background: #e5e7eb;
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+  background: #7c4dff;
+}
+
+/* Experience & Education Background */
+.experience-education-bg {
+  background: #f4f7ff;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px 0 rgba(80, 112, 255, 0.07);
+}
+
+@media (max-width: 768px) {
+  .experience-education-bg {
+    padding: 1rem 0.5rem;
+    border-radius: 8px;
+  }
+}
+
 /* Dark mode styles */
 [data-theme='dark'] .form-section {
   background: #1f2937;
