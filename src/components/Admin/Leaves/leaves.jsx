@@ -310,9 +310,10 @@ const employeeLeaveReports = {  "2025-05": [
   ]
 };
 
-function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
+function Leaves() {
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
   const employeeId = localStorage.getItem('employeeId');
-  const [tab, setTab] = useState(userRole === 'user' ? 1 : 0);
+  const [tab, setTab] = useState(0); // Initialize to 0 instead of depending on userRole
   const [leaveTypes, setLeaveTypes] = useState(leaveTypesDefault);
   const [newType, setNewType] = useState("");
   const [newDays, setNewDays] = useState(1);
@@ -329,19 +330,31 @@ function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getIt
     from: new Date().toISOString().slice(0, 7),
     to: new Date().toISOString().slice(0, 7)
   });
-
+  const [newLeave, setNewLeave] = useState({
+    type: '',
+    date: '',
+    days: 1,
+    reason: ''
+  });
+  const [currentEmployee, setCurrentEmployee] = useState({
+    name: '',
+    nickname: '',
+    position: ''
+  });
   const handleContextMenu = (e, index) => {
     e.preventDefault();
-    setContextMenu({
-      visible: true,
-      x: e.pageX,
-      y: e.pageY,
-      leaveIndex: index
-    });
+    if (userRole !== 'user') {
+      setContextMenu({
+        visible: true,
+        x: e.pageX,
+        y: e.pageY,
+        leaveIndex: index
+      });
+    }
   };
 
   const handleStatusChange = (newStatus) => {
-    if (contextMenu.leaveIndex !== -1) {
+    if (contextMenu.leaveIndex !== -1 && userRole !== 'user') {
       const updatedLeaves = [...leaveList];
       updatedLeaves[contextMenu.leaveIndex] = {
         ...updatedLeaves[contextMenu.leaveIndex],
@@ -504,7 +517,8 @@ function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getIt
 
   // เพิ่มฟังก์ชันใหม่สำหรับ mobile
   const handleMobileNameClick = (e, index) => {
-    if (!isMobile) return;
+    if (!isMobile || userRole === 'user') return;
+    
     // หาตำแหน่งของ cell เพื่อวาง context menu ใต้ cell
     const rect = e.target.getBoundingClientRect();
     setContextMenu({
@@ -516,6 +530,66 @@ function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getIt
     });
     e.stopPropagation();
   };
+
+  // Fetch current employee details on component mount
+  useEffect(() => {
+    if (userRole === 'user') {
+      // In a real app, this would be an API call
+      // For now, we'll use mock data
+      const employee = leaveListMock.find(l => l.employeeId === employeeId) || {};
+      setCurrentEmployee({
+        name: employee.name || '',
+        nickname: employee.nickname || '',
+        position: employee.position || ''
+      });
+    }
+  }, [userRole, employeeId]);
+
+  const handleNewLeaveSubmit = (e) => {
+    e.preventDefault();
+    // In a real app, this would be an API call
+    const newLeaveRequest = {
+      id: Math.random().toString(36).substr(2, 9),
+      employeeId: employeeId,
+      name: currentEmployee.name,
+      nickname: currentEmployee.nickname,
+      position: currentEmployee.position,
+      type: newLeave.type,
+      date: newLeave.date,
+      days: parseInt(newLeave.days),
+      status: 'Pending',
+      approver: '',
+      reason: newLeave.reason
+    };
+
+    setLeaveList(prev => [newLeaveRequest, ...prev]);
+    setNewLeave({
+      type: '',
+      date: '',
+      days: 1,
+      reason: ''
+    });
+    setTab(1); // Switch to All Leave Records tab after submission
+  };
+
+  // Add this useEffect to handle initialization
+  useEffect(() => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+      // Redirect to login if not logged in
+      window.location.href = '/login';
+      return;
+    }
+
+    const role = localStorage.getItem('userRole');
+    setUserRole(role);
+    
+    // Set initial tab based on role
+    if (role === 'user') {
+      setTab(0);
+    }
+  }, []); // Empty dependency array means this runs once on component mount
 
   return (
     <div className="dashboard-container">
@@ -539,11 +613,123 @@ function Leaves() {  const [userRole, setUserRole] = useState(localStorage.getIt
               {userRole !== 'user' && (
                 <button className={tab===0?"active":""} onClick={()=>setTab(0)}>Create Leave Types</button>
               )}
+              {userRole === 'user' && (
+                <button className={tab===0?"active":""} onClick={()=>setTab(0)}>Add Leave</button>
+              )}
               <button className={tab===1?"active":""} onClick={()=>setTab(1)}>All Leave Records</button>
               <button className={tab===2?"active":""} onClick={()=>setTab(2)}>Leave Reports</button>
-            </div>
-            <div className="leaves-content">
-              {tab === 0 && (
+            </div>            <div className="leaves-content">              {tab === 0 && userRole === 'user' && (
+                <div className="add-leave-section">
+                  <div className="add-leave-card">
+                    <div className="add-leave-header">
+                      <h2>Submit Leave Request</h2>
+                      <p className="subtitle">Please fill in the details below to submit your leave request</p>
+                    </div>
+                    <form className="add-leave-form" onSubmit={handleNewLeaveSubmit}>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Name</label>
+                          <div className="input-with-icon">
+                            <i className="fas fa-user"></i>
+                            <input
+                              type="text"
+                              value={currentEmployee.name}
+                              disabled
+                              className="form-input disabled"
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label>Nickname</label>
+                          <div className="input-with-icon">
+                            <i className="fas fa-smile"></i>
+                            <input
+                              type="text"
+                              value={currentEmployee.nickname}
+                              disabled
+                              className="form-input disabled"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Leave Type</label>
+                          <div className="input-with-icon">
+                            <i className="fas fa-calendar-check"></i>
+                            <select
+                              value={newLeave.type}
+                              onChange={(e) => setNewLeave({...newLeave, type: e.target.value})}
+                              required
+                              className="form-input"
+                            >
+                              <option value="">Select Leave Type</option>
+                              {leaveTypes.map(type => (
+                                <option key={type.id} value={type.name}>{type.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="form-group">
+                          <label>Number of Days</label>
+                          <div className="input-with-icon">
+                            <i className="fas fa-clock"></i>
+                            <input
+                              type="number"
+                              min="1"
+                              max="365"
+                              value={newLeave.days}
+                              onChange={(e) => setNewLeave({...newLeave, days: e.target.value})}
+                              required
+                              className="form-input"
+                              placeholder="Enter number of days"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="form-group full-width">
+                        <label>Leave Date</label>
+                        <div className="input-with-icon">
+                          <i className="fas fa-calendar-alt"></i>
+                          <input
+                            type="date"
+                            value={newLeave.date}
+                            onChange={(e) => setNewLeave({...newLeave, date: e.target.value})}
+                            required
+                            className="form-input"
+                            min={new Date().toISOString().split('T')[0]}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group full-width">
+                        <label>Reason for Leave</label>
+                        <div className="input-with-icon textarea-container">
+                          <i className="fas fa-comment-alt"></i>
+                          <textarea
+                            value={newLeave.reason}
+                            onChange={(e) => setNewLeave({...newLeave, reason: e.target.value})}
+                            required
+                            className="form-input"
+                            rows="4"
+                            placeholder="Please provide a detailed reason for your leave request"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-actions">
+                        <button type="submit" className="submit-button">
+                          <i className="fas fa-paper-plane"></i>
+                          Submit Leave Request
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+              {tab === 0 && userRole !== 'user' && (
                 <div className="leaves-type-section">
                   <form className="leave-type-form-modern" onSubmit={editingId ? handleUpdate : handleAddType}>
                     <input 

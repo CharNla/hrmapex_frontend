@@ -480,25 +480,7 @@ const ProfileDetail = () => {
             ) : (
               <span className="info-value">{employeeData?.Religion || '-'}</span>
             )}
-          </div>
-        </div>
-        <div className="info-row">
-          <div className="info-item">
-            <label>Address</label>
-            {isEditing ? (
-              <textarea
-                name="Address"
-                value={editData.Address || ''}
-                onChange={handleInputChange}
-                rows="3"
-                className="edit-input"
-                placeholder="Enter your address"
-              />
-            ) : (
-              <span className="info-value">{employeeData?.Address || '-'}</span>
-            )}
-          </div>
-        </div>
+          </div>        </div>
         <div className="info-section">
           <h3>ที่อยู่ตามบัตรประชาชน</h3>
           <div className="info-row">
@@ -2371,8 +2353,7 @@ const ProfileDetail = () => {
                 {employeeData.Email || '-'}
               </span>
             </div>
-          </div>
-          {isEditing ? (
+          </div>          {isEditing ? (
             <div className="edit-action-group">
               <button className="edit-profile-btn save" onClick={handleSave} type="button">
                 <FiSave className="save-icon" />
@@ -2382,7 +2363,7 @@ const ProfileDetail = () => {
                 Cancel
               </button>
             </div>          ) : (
-            userRole === 'superadmin' && (
+            (userRole === 'superadmin' || id === currentEmployeeId) && (
               <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
                 <FiEdit2 className="edit-icon" />
                 Edit Profile
