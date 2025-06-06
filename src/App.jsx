@@ -18,7 +18,6 @@ import Setting from './components/Admin/Layout/setting'
 import Holidays from './components/Admin/holidays/holidays'
 import NewHoliday from './components/Admin/holidays/newholiday'
 import { ThemeProvider } from './context/ThemeContext'
-import Home from './components/User/Home/Home'
 import './styles/global.css'
 import EditAccount from './components/Admin/Account/EditAccount'
 import Notification from './components/Admin/Notifications/Notification'
@@ -32,7 +31,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/home" element={<Home />} />
           <Route path="/all-employees" element={<AllEmployees />} />
           <Route path="/employees" element={<Navigate to="/all-employees" />} />
           <Route path="/new-employee" element={<NewEmployees />} />
