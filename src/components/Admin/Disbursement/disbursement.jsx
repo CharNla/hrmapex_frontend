@@ -168,7 +168,13 @@ const Disbursement = () => {
   ];
   useEffect(() => {
     // ใช้ mock data แทนการเรียก API
-    setDisbursements(mockDisbursements);
+    let data = mockDisbursements;
+    const role = localStorage.getItem('userRole');
+    const employeeId = localStorage.getItem('employeeId');
+    if (role === 'user' && employeeId) {
+      data = mockDisbursements.filter(item => String(item.employeeId) === String(employeeId));
+    }
+    setDisbursements(data);
   }, []);
 
   const handleApprove = (id) => {
