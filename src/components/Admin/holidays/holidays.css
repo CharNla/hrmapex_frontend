@@ -2,6 +2,10 @@
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeIn 0.5s ease-out forwards;
+  background: linear-gradient(135deg, #fbfbfb, #f0f0f0);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .holidays-header {
@@ -24,7 +28,7 @@
 .year-selector h2 {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #27283C;
+  color: #27283c;
   margin: 0;
   transition: all 0.3s ease;
 }
@@ -172,7 +176,7 @@
 
 .holiday-item.clickable:hover {
   transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .holiday-item:hover {
@@ -188,7 +192,7 @@
   position: absolute;
   bottom: 8px;
   right: 8px;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.8em;
@@ -242,7 +246,7 @@
 
 .holiday-item h4 {
   margin: 0 0 0.5rem 0;
-  color: #27283C;
+  color: #27283c;
   font-size: 1rem;
   font-weight: 500;
 }
@@ -397,8 +401,13 @@
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 @keyframes slideInRight {
@@ -413,7 +422,8 @@
 }
 
 @keyframes floatAnimation {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -422,7 +432,8 @@
 }
 
 @keyframes glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(99, 102, 241, 0.2);
   }
   50% {

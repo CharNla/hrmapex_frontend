@@ -111,6 +111,22 @@ function Login() {
         return
       }
 
+      // Check superadmin credentials
+      if (email === 'superadmin@gmail.com' && password === '111111') {
+        if (rememberMe) {
+          localStorage.setItem('rememberedEmail', email)
+          localStorage.setItem('rememberedPassword', password)
+        } else {
+          localStorage.removeItem('rememberedEmail')
+          localStorage.removeItem('rememberedPassword')
+        }
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('userRole', 'superadmin')
+        localStorage.setItem('token', 'superadmin-token')
+        navigate('/news'); // Redirect to News page
+        return
+      }
+
       // Check for user credentials
       if (email === 'user@gmail.com' && password === '111111') {
         // Handle Remember Me

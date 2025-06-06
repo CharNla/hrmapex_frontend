@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiUser, FiUpload, FiFile, FiCheck } from 'react-icons/fi'
+import { FiUser, FiUpload, FiFile, FiCheck, FiBriefcase, FiUsers, FiMoreHorizontal } from 'react-icons/fi'
 import SideMenu from '../SideMenu/Side_menu'
 import Topbar from '../Topbar/Topbar'
 import './NewEmployees.css'
@@ -259,11 +259,31 @@ const NewEmployees = () => {
 
   // Tab configuration
   const tabs = [
-    { key: 'personal', label: 'Personal Information', icon: <FiUser /> },
-    { key: 'family', label: 'Family Information', icon: <FiFile /> },
-    { key: 'experience', label: 'Experience & Education', icon: <FiFile /> },
-    { key: 'documents', label: 'Documents', icon: <FiFile /> },
-    { key: 'other', label: 'Other', icon: <FiFile /> },
+    {
+      key: 'personal',
+      label: 'Personal Info',
+      icon: <FiUser />
+    },
+    {
+      key: 'experience',
+      label: 'Experience',
+      icon: <FiBriefcase />
+    },
+    {
+      key: 'family',
+      label: 'Family Info',
+      icon: <FiUsers />
+    },
+    {
+      key: 'documents',
+      label: 'Documents',
+      icon: <FiFile />
+    },
+    {
+      key: 'other',
+      label: 'Other Info',
+      icon: <FiMoreHorizontal />
+    }
   ];
 
   return (
@@ -285,7 +305,8 @@ const NewEmployees = () => {
                 onClick={() => setActiveTab(tab.key)}
                 type="button"
               >
-                {tab.icon} <span>{tab.label}</span>
+                {tab.icon}
+                <span>{tab.label}</span>
               </button>
             ))}
           </div>

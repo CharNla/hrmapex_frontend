@@ -395,7 +395,7 @@ const ProfileDetail = () => {
           </div>
           <div className="info-item">
             <label>Age</label>
-            <span className="info-value">{employeeData?.DateOfBirth ? new Date().getFullYear() - new Date(employeeData.DateOfBirth).getFullYear() : '-'}</span>
+            <span className="info-value">{employeeData?.DateOfBirth ? calculateAge(employeeData.DateOfBirth) : '-'}</span>
           </div>
           <div className="info-item">
             <label>Gender</label>
@@ -2196,6 +2196,19 @@ const ProfileDetail = () => {
     if (j == 2 && k != 12) return "nd";
     if (j == 3 && k != 13) return "rd";
     return "th";
+  };
+
+  // Define the calculateAge function
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return '-';
+    const dob = new Date(dateOfBirth);
+    const today = new Date('2025-06-06'); // Use current date
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
   };
 
   // Add the Other tab case in renderActiveTabContent
