@@ -717,6 +717,15 @@
   letter-spacing: 0.01em;
 }
 
+.content-box p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.content-box p:last-child {
+  margin-bottom: 0;
+}
+
 .attachment-section {
   padding: 1.5rem 2rem; /* ลดจาก 2rem 2.5rem */
   background: #ffffff;
@@ -765,19 +774,23 @@
 .attachment-link {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  background: #f8fafc;
+  padding: 12px 16px;
+  background: rgba(113, 82, 243, 0.1);
+  border-radius: 8px;
   color: #7152f3;
   text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: 1px solid #e2e8f0;
+  transition: background-color 0.2s ease;
 }
 
 .attachment-link:hover {
-  background: #f1f5f9;
-  border-color: #7152f3;
+  background: rgba(113, 82, 243, 0.15);
+}
+
+.filename {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .modal-actions {
@@ -1064,4 +1077,23 @@
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
   }
+}
+
+/* User role specific styles */
+[data-user-role="user"] .news-table tr {
+  transition: background-color 0.2s ease;
+}
+
+[data-user-role="user"] .news-table tr:hover {
+  background-color: rgba(113, 82, 243, 0.05);
+}
+
+[data-user-role="user"] .news-table td {
+  padding: 16px 20px;
+}
+
+[data-user-role="user"] .pinned td:first-child::before {
+  content: "📌";
+  margin-right: 8px;
+  opacity: 0.7;
 }
