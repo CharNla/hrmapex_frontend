@@ -1463,6 +1463,17 @@ select.edit-input {
   }
 }
 
+.experience-section {
+  background-color: rgba(255, 255, 255, 0.8); /* Optional overlay for better readability */
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.work-history-section {
+  background: transparent; /* Ensure table background does not override section background */
+}
+
 @media (max-width: 600px) {
   .profile-detail {
     padding: 8px;

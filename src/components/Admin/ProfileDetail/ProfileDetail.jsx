@@ -1527,21 +1527,9 @@ const ProfileDetail = () => {
                               border: '1px solid #e2e8f0',
                               resize: 'vertical',
                               minHeight: '80px',
-                              background: '#fff'
                             }}
                           />
-                        ) : (
-                          <div style={{
-                            whiteSpace: 'pre-wrap',
-                            padding: '8px',
-                            fontSize: '0.9em',
-                            lineHeight: '1.4',
-                            color: '#4a5568'
-                          }}>
-                            {row.jobDescription || '-'}
-                          </div>
-                        )}
-                      </td>
+                        ) : row.jobDescription || '-'}</td>
                     </tr>
                   </React.Fragment>
                 ))}

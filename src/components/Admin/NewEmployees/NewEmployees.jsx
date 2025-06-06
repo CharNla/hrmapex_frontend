@@ -616,7 +616,7 @@ const NewEmployees = () => {
 
             {/* Work History */}
             {activeTab === 'experience' && (
-              <div className="work-history-section">
+              <div className="work-history-section experience-bg" style={{ backgroundImage: 'url(/src/assets/bgdashboard.png)', backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', padding: '24px 16px', marginBottom: '24px', backgroundColor: 'rgba(255,255,255,0.85)' }}>
                 <h3>Work History</h3>
                 <table className="work-history-table">
                   <thead>
@@ -705,7 +705,7 @@ const NewEmployees = () => {
 
             {/* Education History */}
             {activeTab === 'experience' && (
-              <div className="education-section">
+              <div className="education-section experience-bg" style={{ backgroundImage: 'url(/src/assets/bgdashboard.png)', backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', padding: '24px 16px', marginBottom: '24px', backgroundColor: 'rgba(255,255,255,0.85)' }}>
                 <h3>Education History</h3>
                 <table className="work-history-table">
                   <thead>
