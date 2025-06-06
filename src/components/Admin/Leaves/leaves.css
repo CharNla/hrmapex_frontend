@@ -1271,88 +1271,684 @@ td[data-amount^="+"] {
   margin-right: 8px;
 }
 
-/* Mobile Responsive Styles */
+/* ปรับแต่ง UI สำหรับมือถือ */
 @media screen and (max-width: 480px) {
-  /* ปรับฟอร์มสร้าง LeaveType ให้แนวตั้งและเต็มจอ */
+  .leaves-container {
+    padding: 12px;
+    margin: 8px auto 0;
+  }
+
+  .leaves-header {
+    font-size: 1.5rem;
+    margin: 12px 0 16px;
+  }
+
   .leave-type-form-modern {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 16px 8px;
-    background: #f8fafc;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
-    margin-bottom: 18px;
-  }
-  .leave-type-form-modern input {
-    font-size: 1rem;
-    padding: 10px 12px;
-    border-radius: 8px;
-  }
-  .leave-type-form-modern button {
-    font-size: 1rem;
-    padding: 12px 0;
-    border-radius: 8px;
-    margin-top: 4px;
-    box-shadow: 0 2px 8px rgba(99,102,241,0.10);
-  }
-  /* ปรับหัวตาราง LeaveType */
-  .leave-type-header-row {
     grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 12px 8px;
-    border-radius: 12px 12px 0 0;
-    font-size: 0.95rem;
-    margin-bottom: 0;
+    gap: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
   }
+
+  .leave-type-form-modern input {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .leave-type-form-modern button {
+    width: 100%;
+    height: 40px;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+
+  .leave-type-header-row {
+    padding: 16px;
+    grid-template-columns: 1fr 80px 80px;
+    gap: 12px;
+  }
+
+  .leave-type-list-modern {
+    padding: 4px 8px;
+  }
+
+  .leave-type-list-modern li {
+    grid-template-columns: 1fr 80px 80px;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .leave-type-name {
+    font-size: 0.9rem;
+  }
+
+  .leave-type-days {
+    min-width: 70px;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+
   .leave-type-header-name,
   .leave-type-header-days,
   .leave-type-header-actions {
-    text-align: left;
+    font-size: 0.8rem;
+  }
+
+  .search-filters {
+    margin-bottom: 16px;
+    flex-direction: column;
+  }
+
+  .filter-container {
+    width: 100%;
+  }
+
+  .filter-select {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .search-input {
+    padding: 8px 12px;
+  }
+}
+
+/* ปรับแต่ง UI สำหรับ All Leave Record บนมือถือ */
+@media screen and (max-width: 480px) {
+  /* ปรับแต่งตารางให้เหมาะกับมือถือ */
+  .leaves-table {
+    margin: 8px -12px;
+    width: calc(100% + 24px);
     font-size: 0.85rem;
-    padding: 2px 0;
   }
-  /* ปรับรายการ LeaveType เป็น Card แนวตั้ง */
-  .leave-type-list-modern {
-    gap: 10px;
-    padding: 0 2px;
+
+  /* ปรับขนาดและระยะห่างของหัวตาราง */
+  .leaves-table th {
+    padding: 12px 8px;
+    font-size: 0.8rem;
+    line-height: 1.2;
+    height: auto;
+    white-space: normal;
   }
-  .leave-type-list-modern li {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 14px 10px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(99,102,241,0.08);
-    margin-bottom: 2px;
-    min-width: 0;
+
+  /* ปรับขนาดและระยะห่างของเซลล์ในตาราง */
+  .leaves-table td {
+    padding: 10px 8px;
+    font-size: 0.85rem;
   }
-  .leave-type-name {
-    font-size: 1rem;
-    margin-bottom: 2px;
+
+  /* ปรับแต่งส่วนควบคุมการค้นหาและกรอง */
+  .report-controls {
+    padding: 16px;
+    gap: 12px;
+    margin-bottom: 16px;
   }
-  .leave-type-days {
-    font-size: 0.95rem;
-    min-width: 0;
-    padding: 6px 10px;
-    border-radius: 8px;
-    background: #f5f5ff;
-    margin-bottom: 2px;
+
+  /* ปรับขนาดของช่องค้นหา */
+  .search-control input {
+    padding: 8px 12px;
+    font-size: 0.85rem;
   }
-  .leave-type-actions {
-    gap: 8px;
-    padding: 0;
-    justify-content: flex-end;
+
+  /* ปรับการแสดงผลของตัวเลือกวันที่ */
+  .date-range-control {
+    flex-direction: flex;
+    align-items: center;
+    width: 100%;
   }
-  .action-btn {
+
+  .date-range-control input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+
+  }
+  /* ปรับแต่งการแสดงชื่อพนักงาน */
+  .employee-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .employee-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  .employee-nickname {
+    font-size: 0.8rem;
+    color: #6b7280;
+  }
+
+  /* ปรับแต่งการแสดงสถานะ */
+  .status-cell {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    min-width: 70px;
+  }
+
+  /* ปรับขนาดของ wrapper */
+  .table-wrapper {
+    margin: 0 -16px;
+    border-radius: 0;
+  }
+
+  /* ปรับแต่งการแสดงผลของแผนก */
+  [class^="department-"] {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+
+  /* ปรับแต่งการแสดงผลของตำแหน่ง */
+  [class^="position-"] {
+    padding: 3px 6px;
+    font-size: 0.75rem;
+  }
+
+  /* เพิ่มการเลื่อนตารางแนวนอน */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  /* เพิ่มเงาเพื่อบ่งบอกว่าสามารถเลื่อนได้ */
+  .table-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, transparent, rgba(0,0,0,0.05));
+    pointer-events: none;
+  }
+
+  /* ปรับแต่ง popup รายละเอียดการลา */
+  .leave-detail-popup {
+    width: 95%;
+    padding: 16px;
+    margin: 8px;
+  }
+
+  .leave-detail-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .leave-detail-content {
+    font-size: 0.9rem;
+  }
+
+  /* ปรับแต่งปุ่มต่างๆให้ใหญ่ขึ้นบนมือถือ */
+  .action-btn,
+  .month-nav-btn {
     width: 36px;
     height: 36px;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    box-shadow: 0 1px 4px rgba(99,102,241,0.10);
+    padding: 8px;
   }
-  
-  /* ซ่อนหัวข้อตาราง LeaveType เฉพาะมือถือ */
+
+
+/* ซ่อนทุกคอลัมน์ยกเว้น NAME และ STATUS */
+@media screen and (max-width: 480px) {
+  .leaves-table th:not(:nth-child(1)):not(:nth-child(6)),
+  .leaves-table td:not(:nth-child(1)):not(:nth-child(6)) {
+    display: none;
+  }
+
+  /* จัดการ layout หลัก */
+  .leaves-table {
+    margin: 0;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ปรับแต่งส่วนหัวตาราง */
+  .leaves-table th {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: #6366f1;
+    color: white;
+  }
+
+  .leaves-table th:first-child {
+    text-align: left;
+    width: 65%;
+  }
+
+  .leaves-table th:nth-child(6) {
+    text-align: center;
+    width: 35%;
+  }
+
+  /* ปรับแต่งเซลล์ในตาราง */
+  .leaves-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  /* จัดการข้อมูลพนักงาน */
+  .employee-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 4px 0;
+  }
+
+  .employee-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1f2937;
+  }
+
+  .employee-nickname {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  /* จัดการสถานะ */
+  .status-cell {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    min-width: 100px;
+  }
+
+  /* ส่วนค้นหาและฟิลเตอร์ */
+  .search-filters {
+    padding: 12px;
+    margin: 0 0 12px 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* เพิ่ม feedback เมื่อกดที่แถว */
+  .leaves-table tr {
+    transition: background-color 0.2s ease;
+  }
+
+  .leaves-table tr:active {
+    background-color: #f8fafc;
+  }
+
+  /* จัดการ container และ wrapper */
+  .leaves-container {
+    padding: 16px;
+    background: #f8fafc;
+  }
+
+  .table-wrapper {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* ซ่อน popup ที่ไม่จำเป็น */
+  .leave-detail-popup .reason-section {
+    display: none;
+  }
+}
+
+/* Mobile-specific styles for Create Leave Types tab */
+@media screen and (max-width: 480px) {
+  .leaves-container {
+    padding: 8px;
+    margin: 0;
+    background-color: #f8fafc;
+  }
+
+  .leaves-tabs {
+    margin: 0;
+    padding: 0 4px;
+    background: transparent;
+    border: none;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    box-shadow: none;
+  }
+
+  .leaves-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .leaves-tabs button {
+    min-width: 110px;
+    padding: 10px 10px;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    flex: none;
+    background: #fff;
+    margin: 0 2px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .leaves-tabs button.active {
+    background: #6366f1;
+    color: #fff;
+  }
+
+  .leave-type-form-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    margin: 8px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: none;
+  }
+
+  .leave-type-form-modern input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+
+  .leave-type-form-modern input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+  }
+
+  .leave-type-form-modern button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    background: #6366f1;
+    color: white;
+    border: none;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+  }
+
   .leave-type-header-row {
-    display: none !important;
+    margin: 8px;
+    padding: 12px 16px;
+    grid-template-columns: 2fr 1fr auto;
+    border-radius: 8px;
+    background: #6366f1;
+  }
+
+  .leave-type-list-modern {
+    margin: 8px;
+    padding: 0;
+  }
+
+  .leave-type-list-modern li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+
+  .leave-type-list-modern li:hover {
+    transform: none;
+  }
+
+  .leave-type-list-modern li:active {
+    transform: scale(0.98);
+    background-color: #f8fafc;
+  }
+
+  .leave-type-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1f2937;
+  }
+
+  .leave-type-days {
+    font-size: 0.85rem;
+    color: #6366f1;
+    text-align: left;
+    background: #f5f5ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+    min-width: 70px;
+  }
+
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+
+  .action-btn.edit {
+    color: #6366f1;
+  }
+
+  .action-btn.delete {
+    color: #ef4444;
+  }
+}
+
+/* Mobile-specific styles for Leave Reports tab */
+@media screen and (max-width: 480px) {
+  /* เฉพาะ Leave Reports tab */
+  .leaves-report-section {
+    padding: 0;
+    margin: 0;
+  }
+
+  .report-container {
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    margin: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .report-header {
+    margin-bottom: 16px;
+  }
+
+  .month-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .date-range-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .date-range-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: white;
+  }
+
+  .date-range-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+
+  /* Table styles */
+  .report-table {
+    width: 100%;
+    min-width: initial;
+    margin-top: 16px;
+  }
+
+  .report-table thead tr {
+    background: #6366f1;
+  }
+
+  .report-table th {
+    color: white;
+    font-size: 0.9rem;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: 500;
+  }
+
+  .report-table tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .report-table td {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  /* Scroll indicator */
+  .table-wrapper::after {
+    content: '⬅ Scroll horizontally';
+    display: block;
+    text-align: center;
+    padding: 8px;
+    font-size: 0.8rem;
+    color: #6b7280;
+    background: #f8fafc;
+  }
+}
+
+/* Mobile-specific styles for top tabs */
+@media screen and (max-width: 480px) {
+  .leaves-tabs {
+    background: white;
+    margin: 8px;
+    padding: 4px;
+    border-radius: 12px;
+    display: flex;
+    width: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .leaves-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .leaves-tabs button {
+    flex: 1;
+    min-width: max-content;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    color: #6b7280;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .leaves-tabs button.active {
+    background: #6366f1;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(99, 102, 241, 0.2);
+  }
+
+  .leaves-tabs button:not(.active):hover {
+    background: #f1f5f9;
+    color: #6366f1;
+  }
+
+  .leaves-tabs button::after {
+    display: none;
+  }
+}
+
+/* ปรับตารางรายงานลาไม่ให้ทะลุจอและขยับเข้ามาในกรอบ */
+@media screen and (max-width: 480px) {
+  .leaves-report-section .table-wrapper {
+    margin: 0 8px;
+    padding: 0 2px;
+    background: transparent;
+    border-radius: 8px;
+    box-shadow: none;
+    overflow-x: auto;
+    width: auto;
+    max-width: 100vw;
+  }
+  .leaves-report-section .report-table {
+    min-width: 380px;
+    width: 100%;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .leaves-report-section .report-table th,
+  .leaves-report-section .report-table td {
+    padding-left: 6px;
+    padding-right: 6px;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+  .leaves-report-section .report-table th {
+    background: #6366f1;
+    color: #fff;
+    font-weight: 600;
+  }
+  .leaves-report-section .report-table td {
+    background: #fff;
+  }
+  .leaves-report-section .report-table th:first-child,
+  .leaves-report-section .report-table td:first-child {
+    width: 30%;
+    min-width: 90px;
+    padding-left: 8px;
+  }
+  .leaves-report-section .report-table th:nth-child(2),
+  .leaves-report-section .report-table td:nth-child(2) {
+    width: 16%;
+    min-width: 60px;
+  }
+  .leaves-report-section .report-table th:nth-child(n+3):nth-child(-n+8),
+  .leaves-report-section .report-table td:nth-child(n+3):nth-child(-n+8) {
+    width: 10%;
+    min-width: 40px;
+  }
+  .leaves-report-section .report-table th:last-child,
+  .leaves-report-section .report-table td:last-child {
+    width: 8%;
+    min-width: 40px;
+  }
+  .leaves-report-section .table-wrapper::after {
+    content: '';
+    display: none;
   }
 }

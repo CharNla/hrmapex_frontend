@@ -491,6 +491,25 @@ function Leaves() {
     
     return matchName || matchNickname || matchPosition;
   });
+
+  // ฟังก์ชันช่วยตรวจสอบว่าเป็น mobile หรือไม่
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 480;
+
+  // เพิ่มฟังก์ชันใหม่สำหรับ mobile
+  const handleMobileNameClick = (e, index) => {
+    if (!isMobile) return;
+    // หาตำแหน่งของ cell เพื่อวาง context menu ใต้ cell
+    const rect = e.target.getBoundingClientRect();
+    setContextMenu({
+      visible: true,
+      // ให้ context menu อยู่ชิดซ้ายของ cell และอยู่ใต้ cell
+      x: rect.left + window.scrollX,
+      y: rect.bottom + window.scrollY + 4, // ขยับลงมานิดหน่อย
+      leaveIndex: index
+    });
+    e.stopPropagation();
+  };
+
   return (
     <div className="dashboard-container">
       <SideMenu />
@@ -618,7 +637,11 @@ function Leaves() {
                       </tr>
                     </thead>                      <tbody>
                       {filteredLeaveList.map((l,i)=>(
-                        <tr key={i} onContextMenu={(e) => handleContextMenu(e, i)}>                          <td>
+                        <tr key={i} onContextMenu={(e) => handleContextMenu(e, i)}>                          <td
+                            onClick={isMobile ? (e) => handleMobileNameClick(e, i) : undefined}
+                            onContextMenu={!isMobile ? (e) => handleContextMenu(e, i) : undefined}
+                            style={{ cursor: 'pointer' }}
+                          >
                             {l.name}
                           </td>
                           <td onClick={() => handleLeaveDetailClick(l)} style={{ cursor: 'pointer' }}>{l.nickname}</td>
@@ -639,16 +662,13 @@ function Leaves() {
                   {contextMenu.visible && (
                     <div className="context-menu" style={{ top: contextMenu.y, left: contextMenu.x }}>
                       <button onClick={() => handleStatusChange('Approved')}>
-                        <FiCheck style={{ marginRight: '8px', color: '#22c55e' }} />
-                        Approve
+                        <span style={{ color: '#15803d', marginRight: 8 }}>✓</span> Approve
                       </button>
                       <button onClick={() => handleStatusChange('Pending')}>
-                        <FiClock style={{ marginRight: '8px', color: '#eab308' }} />
-                        Pending
+                        <span style={{ color: '#eab308', marginRight: 8 }}>⏰</span> Pending
                       </button>
                       <button onClick={() => handleStatusChange('Rejected')}>
-                        <FiX style={{ marginRight: '8px', color: '#ef4444' }} />
-                        Reject
+                        <span style={{ color: '#ef4444', marginRight: 8 }}>✗</span> Reject
                       </button>
                     </div>
                   )}
