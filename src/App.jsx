@@ -10,6 +10,8 @@ import News from './components/Admin/Newspage/New'
 import News_user from './components/User/News_user/News_user'
 import AddNew from './components/Admin/Newspage/AddNews/Addnew'
 import Leaves from './components/Admin/Leaves/leaves'
+import AdminDisbursement from './components/Admin/Disbursement/disbursement'
+import UserDisbursement from './components/User/Disbursement/disbursement'
 import Payroll from './components/Admin/Payroll/Payroll'
 import PayrollDetail from './components/Admin/PayrollDetail/PayrollDetail'
 import Disbursement from './components/Admin/Disbursement/disbursement'
@@ -29,10 +31,13 @@ function App() {
     const userRole = localStorage.getItem('userRole');
     return userRole === 'admin' || userRole === 'superadmin';
   };
-
-  // Component to conditionally render based on user role
+  // Components to conditionally render based on user role
   const NewsRouter = () => {
     return isAdmin() ? <News /> : <News_user />;
+  };
+
+  const DisbursementRouter = () => {
+    return isAdmin() ? <AdminDisbursement /> : <UserDisbursement />;
   };
 
   return (
@@ -50,10 +55,9 @@ function App() {
           <Route path="/news" element={<NewsRouter />} />
           <Route path="/addnews" element={<AddNew />} />
           <Route path="/leaves" element={<Leaves />} />
-          <Route path="/leaves/detail/:empId" element={<LeaveDetail />} />
-          <Route path="/payroll" element={<Payroll />} />
+          <Route path="/leaves/detail/:empId" element={<LeaveDetail />} />          <Route path="/payroll" element={<Payroll />} />
           <Route path="/payroll-detail/:id" element={<PayrollDetail />} />
-          <Route path="/disbursement" element={<Disbursement />} />
+          <Route path="/disbursement" element={<DisbursementRouter />} />
           <Route path="/adddisburse" element={<Adddisburse />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/holidays" element={<Holidays />} />

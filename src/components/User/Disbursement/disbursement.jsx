@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiPlus, FiFilter, FiArrowLeft, FiEdit, FiCheck, FiX, FiSave, FiUpload } from 'react-icons/fi';
 import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import Topbar from '../../Admin/Topbar/Topbar';
 import './disbursement.css';
-import '../AnimationCircles/AnimationCircles.css';
+import '../../Admin/AnimationCircles/AnimationCircles.css';
 import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/disbursements`;
 
-const Disbursement = () => {
-  const navigate = useNavigate();  const [isMinimized, setIsMinimized] = useState(false);
+const Disbursement = () => {  const navigate = useNavigate();
+  const [isMinimized, setIsMinimized] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
   const [filterCriteria, setFilterCriteria] = useState({
     category: '',
     status: '',
@@ -26,11 +25,7 @@ const Disbursement = () => {
     status: '',
     date: '',
     newAttachments: []
-  });
-  const [disbursements, setDisbursements] = useState([]);
-  const [showRejectPopup, setShowRejectPopup] = useState(false);
-  const [rejectReason, setRejectReason] = useState('');
-  const [selectedDisbursementId, setSelectedDisbursementId] = useState(null);
+  });  const [disbursements, setDisbursements] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Mock data for demonstration
   const mockDisbursements = [
@@ -165,33 +160,27 @@ const Disbursement = () => {
       details: 'ค่าเดินทางไปพบลูกค้าต่างจังหวัด',
       attachments: []
     }
-  ];
-  useEffect(() => {
-    // ใช้ mock data แทนการเรียก API
-    let data = mockDisbursements;
-    const role = localStorage.getItem('userRole');
-    const employeeId = localStorage.getItem('employeeId');
-    if (role === 'user' && employeeId) {
-      data = mockDisbursements.filter(item => String(item.employeeId) === String(employeeId));
+  ];  useEffect(() => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
     }
-    setDisbursements(data);
-  }, []);
 
-  const handleApprove = (id) => {
-    setDisbursements(prevDisbursements =>
-      prevDisbursements.map(item =>
-        item.id === id ? { ...item, status: 'Approved' } : item
-      )
-    );
-  };
+    // For user view, only show their own disbursements
+    const employeeId = localStorage.getItem('employeeId');
+    if (!employeeId) {
+      navigate('/login'); // redirect to login if no employeeId
+      return;
+    }
 
-  const handleReject = (id) => {
-    setDisbursements(prevDisbursements =>
-      prevDisbursements.map(item =>
-        item.id === id ? { ...item, status: 'Rejected' } : item
-      )
+    const userDisbursements = mockDisbursements.filter(item => 
+      String(item.employeeId) === String(employeeId)
     );
-  };
+    setDisbursements(userDisbursements);
+  }, [navigate]);
+
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -210,18 +199,22 @@ const Disbursement = () => {
     if (filterCriteria.status && item.status !== filterCriteria.status) return false;
     if (filterCriteria.date && item.date !== filterCriteria.date) return false;
     return true;
-  });
-  const handleEdit = (id) => {
+  });  const handleEdit = (id) => {
     const disbursementToEdit = disbursements.find(item => item.id === id);
-    setEditingId(id);
-    setEditData({
-      category: disbursementToEdit.category,
-      amount: disbursementToEdit.amount,
-      details: disbursementToEdit.details,
-      status: disbursementToEdit.status,
-      date: disbursementToEdit.date,
-      newAttachments: []
-    });
+    const currentEmployeeId = localStorage.getItem('employeeId');
+    
+    // Only allow editing if this disbursement belongs to the current user
+    if (String(disbursementToEdit.employeeId) === String(currentEmployeeId)) {
+      setEditingId(id);
+      setEditData({
+        category: disbursementToEdit.category,
+        amount: disbursementToEdit.amount,
+        details: disbursementToEdit.details,
+        status: disbursementToEdit.status,
+        date: disbursementToEdit.date,
+        newAttachments: []
+      });
+    }
   };
 
   const handleEditChange = (e) => {
@@ -284,76 +277,8 @@ const Disbursement = () => {
     );
     setEditingId(null);
   };
-
   const handleAddDisbursement = () => {
     navigate('/adddisburse');
-  };
-
-  const openRejectPopup = (id) => {
-    setSelectedDisbursementId(id);
-    setShowRejectPopup(true);
-  };
-
-  const handleRejectClick = (id) => {
-    setSelectedDisbursementId(id);
-    setShowRejectPopup(true);
-  };
-  const handleRejectConfirm = async () => {
-    if (!rejectReason.trim()) {
-      alert('กรุณากรอกเหตุผลในการ Reject');
-      return;
-    }
-
-    // หา disbursement ที่จะ reject
-    const disbursement = disbursements.find(item => item.id === selectedDisbursementId);
-    if (!disbursement) return;
-
-    try {
-      // ส่ง email แจ้งเตือน
-      const response = await fetch('http://localhost:3001/api/disbursement/reject-notification', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          employeeName: disbursement.employeeName,
-          category: disbursement.category,
-          amount: disbursement.amount,
-          rejectReason: rejectReason,
-          employeeEmail: disbursement.email || 'test@example.com' // ในกรณีที่ยังไม่มี email ในข้อมูล
-        }),
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        // อัพเดทสถานะ
-        setDisbursements(prevDisbursements =>
-          prevDisbursements.map(item =>
-            item.id === selectedDisbursementId 
-              ? { ...item, status: 'Rejected', rejectReason: rejectReason }
-              : item
-          )
-        );
-
-        alert('ปฏิเสธการเบิกจ่ายและส่งอีเมลแจ้งเตือนเรียบร้อยแล้ว');
-      } else {
-        alert('เกิดข้อผิดพลาดในการส่งอีเมล: ' + result.message);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('เกิดข้อผิดพลาดในการส่งอีเมล');
-    }
-
-    setShowRejectPopup(false);
-    setRejectReason('');
-    setSelectedDisbursementId(null);
-  };
-
-  const handleRejectCancel = () => {
-    setShowRejectPopup(false);
-    setRejectReason('');
-    setSelectedDisbursementId(null);
   };
 
   return (
@@ -583,22 +508,6 @@ const Disbursement = () => {
                         <FiEdit style={{ marginRight: '5px' }} /> Edit
                       </button>
                     )}
-                    {userRole !== 'user' && item.status === 'Pending' && !editingId && (
-                      <>
-                        <button 
-                          className="approve-button"
-                          onClick={() => handleApprove(item.id)}
-                        >
-                          <FiCheck style={{ marginRight: '5px' }} /> Approve
-                        </button>
-                        <button 
-                          className="reject-button"
-                          onClick={() => openRejectPopup(item.id)}
-                        >
-                          <FiX />
-                        </button>
-                      </>
-                    )}
                   </div>
                 </div>
               ))}
@@ -606,25 +515,6 @@ const Disbursement = () => {
           </div>
         </div>
       </div>
-
-      {showRejectPopup && (
-        <div className="reject-popup">          <div className="popup-content">
-            <h3>Rejection Reason</h3>
-            <textarea
-              value={rejectReason}
-              onChange={(e) => setRejectReason(e.target.value)}
-              placeholder="Please enter rejection reason here"
-            ></textarea>
-            <div className="popup-actions">              <button className="confirm-reject-button" onClick={handleRejectConfirm}>
-                Confirm
-              </button>
-              <button className="cancel-reject-button" onClick={handleRejectCancel}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

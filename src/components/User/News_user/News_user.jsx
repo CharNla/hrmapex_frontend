@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiClock, FiFile, FiDownload, FiStar, FiBell, FiActivity, FiTerminal } from 'react-icons/fi';
 import axios from 'axios';
 import SideMenu from "../SideMenu/Side_menu";
-import Topbar from "../Topbar/Topbar";
+import Topbar from "../../Admin/Topbar/Topbar";
 import './News_user.css';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/news`;

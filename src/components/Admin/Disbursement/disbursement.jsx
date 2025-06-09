@@ -9,10 +9,9 @@ import axios from 'axios';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/disbursements`;
 
-const Disbursement = () => {
-  const navigate = useNavigate();  const [isMinimized, setIsMinimized] = useState(false);
+const Disbursement = () => {  const navigate = useNavigate();
+  const [isMinimized, setIsMinimized] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
   const [filterCriteria, setFilterCriteria] = useState({
     category: '',
     status: '',
@@ -165,16 +164,9 @@ const Disbursement = () => {
       details: 'ค่าเดินทางไปพบลูกค้าต่างจังหวัด',
       attachments: []
     }
-  ];
-  useEffect(() => {
-    // ใช้ mock data แทนการเรียก API
-    let data = mockDisbursements;
-    const role = localStorage.getItem('userRole');
-    const employeeId = localStorage.getItem('employeeId');
-    if (role === 'user' && employeeId) {
-      data = mockDisbursements.filter(item => String(item.employeeId) === String(employeeId));
-    }
-    setDisbursements(data);
+  ];  useEffect(() => {
+    // For admin view, show all disbursements
+    setDisbursements(mockDisbursements);
   }, []);
 
   const handleApprove = (id) => {
@@ -582,8 +574,7 @@ const Disbursement = () => {
                       >
                         <FiEdit style={{ marginRight: '5px' }} /> Edit
                       </button>
-                    )}
-                    {userRole !== 'user' && item.status === 'Pending' && !editingId && (
+                    )}                    {item.status === 'Pending' && !editingId && (
                       <>
                         <button 
                           className="approve-button"
