@@ -6,7 +6,8 @@ import ResetPassword from './components/Admin/ResetPassword/ResetPassword'
 import AllEmployees from './components/Admin/AllEmployees/AllEmployees'
 import NewEmployees from './components/Admin/NewEmployees/NewEmployees'
 import ProfileDetail from './components/Admin/ProfileDetail/ProfileDetail'
-import New from './components/Admin/Newspage/New'
+import News from './components/Admin/Newspage/New'
+import News_user from './components/User/News_user/News_user'
 import AddNew from './components/Admin/Newspage/AddNews/Addnew'
 import Leaves from './components/Admin/Leaves/leaves'
 import Payroll from './components/Admin/Payroll/Payroll'
@@ -23,6 +24,17 @@ import EditAccount from './components/Admin/Account/EditAccount'
 import Notification from './components/Admin/Notifications/Notification'
 
 function App() {
+  // Function to check if user has admin role
+  const isAdmin = () => {
+    const userRole = localStorage.getItem('userRole');
+    return userRole === 'admin' || userRole === 'superadmin';
+  };
+
+  // Component to conditionally render based on user role
+  const NewsRouter = () => {
+    return isAdmin() ? <News /> : <News_user />;
+  };
+
   return (
     <ThemeProvider>
       <HashRouter>
@@ -35,7 +47,7 @@ function App() {
           <Route path="/employees" element={<Navigate to="/all-employees" />} />
           <Route path="/new-employee" element={<NewEmployees />} />
           <Route path="/employee/:id" element={<ProfileDetail />} />
-          <Route path="/news" element={<New />} />
+          <Route path="/news" element={<NewsRouter />} />
           <Route path="/addnews" element={<AddNew />} />
           <Route path="/leaves" element={<Leaves />} />
           <Route path="/leaves/detail/:empId" element={<LeaveDetail />} />

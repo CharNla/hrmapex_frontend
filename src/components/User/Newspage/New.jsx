@@ -6,6 +6,7 @@ import './New.css';
 import './EditNewsModal.css';
 import SideMenu from "../SideMenu/Side_menu";
 import Topbar from "../Topbar/Topbar";
+import News_user from "../../User/News_user/News_user";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/news`;
 
@@ -18,30 +19,13 @@ function mapApiNewsData(apiData) {
     Content: item.content,
     CreatedAt: item.created_at,
     Attachment: item.attachment,
-    isPinned: item.isPinned === true || item.isPinned === 1 ? 1 : 0,
+    isPinned: item.isPinned === true || item.isPinned === 1 ? 1 : 0, // Ensure isPinned is always 0 or 1
     Hidenews: item.Hidenews === true || item.Hidenews === 1 ? 1 : 0
   }));
 }
 
 function New() {
   const navigate = useNavigate();
-  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || '');
-  
-  useEffect(() => {
-    // Check if user is logged in
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
-
-    // If user role is not admin, redirect to user news page
-    if (userRole !== 'admin') {
-      navigate('/news');
-      return;
-    }
-  }, [navigate, userRole]);
-
   const [news, setNews] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -60,7 +44,22 @@ function New() {
   const [hiddenNews, setHiddenNews] = useState(new Set());
   const [pinnedNews, setPinnedNews] = useState(new Set());
   const [openDropdownId, setOpenDropdownId] = useState(null);
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole') || '');
   
+  useEffect(() => {
+    // Check if user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+      navigate('/login');
+      return;
+    }
+  }, [navigate]);
+
+  // If user role is "user", render the News_user component
+  if (userRole === 'user') {
+    return <News_user />;
+  }
+
   const categories = [
     { value: 'Announcement', label: 'Announcement' },
     { value: 'Activity', label: 'Activity' },
@@ -158,6 +157,7 @@ function New() {
         isPinned: !isCurrentlyPinned ? 1 : 0
       });
       if (response.data.success) {
+        // Always refetch news to sync state with DB
         await fetchNews();
       } else {
         throw new Error(response.data.message || 'Failed to update pin status');
@@ -165,23 +165,6 @@ function New() {
     } catch (error) {
       console.error('Error toggling pin status:', error);
       alert(error.response?.data?.error || error.message || 'Failed to update pin status. Please try again.');
-    }
-  };
-
-  const handleToggleVisibility = async (newsId) => {
-    try {
-      const isCurrentlyHidden = hiddenNews.has(newsId);
-      const response = await axios.put(`${API_URL}/${newsId}/toggle-visibility`, {
-        Hidenews: !isCurrentlyHidden ? 1 : 0
-      });
-      if (response.data.success) {
-        await fetchNews();
-      } else {
-        throw new Error(response.data.message || 'Failed to update visibility');
-      }
-    } catch (error) {
-      console.error('Error toggling visibility:', error);
-      alert(error.response?.data?.error || error.message || 'Failed to update visibility. Please try again.');
     }
   };
 
@@ -220,7 +203,6 @@ function New() {
       setForm(f => ({ ...f, [name]: value }));
     }
   };
-
   const handleSubmit = async e => {
     e.preventDefault();
     try {
@@ -236,12 +218,14 @@ function New() {
       };
 
       if (editItem) {
+        // Update existing news
         setNews(prevNews => 
           prevNews.map(item => 
             item.NewsId === editItem.NewsId ? newNewsItem : item
           )
         );
       } else {
+        // Add new news
         setNews(prevNews => [...prevNews, newNewsItem]);
       }
       handleCloseModal();
@@ -254,48 +238,43 @@ function New() {
   const handleDelete = async (id) => {
     setSelectedNews(id);
     setDeleteModalOpen(true);
-  };
-
-  const confirmDelete = async () => {
+  };  const confirmDelete = async () => {
     try {
+      // เรียก API เพื่อลบข่าวจาก Render database
       const response = await axios.delete(`${API_URL}/${selectedNews}`);
+      
+      // ตรวจสอบการตอบกลับจาก API
       if (response.status === 200) {
+        // ลบข้อมูลออกจาก state ในแอพ
         setNews(prevNews => prevNews.filter(item => item.NewsId !== selectedNews));
+        
+        // ลบออกจากรายการที่ปักหมุดถ้ามี
         setPinnedNews(prev => {
           const newSet = new Set(prev);
           newSet.delete(selectedNews);
           return newSet;
         });
+        
+        // ลบออกจากรายการที่ซ่อนถ้ามี
         setHiddenNews(prev => {
           const newSet = new Set(prev);
           newSet.delete(selectedNews);
           return newSet;
         });
+        
+        // ปิด modal และล้างค่าที่เลือก
         setDeleteModalOpen(false);
         setSelectedNews(null);
+        
+        // แจ้งเตือนว่าลบสำเร็จ
       } else {
         throw new Error('Failed to delete news');
       }
     } catch (error) {
       console.error('Error deleting news:', error);
+      // แสดงข้อความ error ที่ได้จาก server หรือข้อความ default
       alert(error.response?.data?.error || error.response?.data?.message || 'Failed to delete news. Please try again.');
     }
-  };
-
-  const handleView = (item) => {
-    setSelectedItem(item);
-    setViewModalOpen(true);
-  };
-
-  const isImageFile = (filename) => {
-    if (!filename) return false;
-    const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
-    return extensions.some(ext => filename.toLowerCase().endsWith(ext));
-  };
-
-  const toggleDropdown = (id, e) => {
-    e.stopPropagation();
-    setOpenDropdownId(prev => prev === id ? null : id);
   };
 
   const filteredNews = news.filter(item => 
@@ -305,7 +284,7 @@ function New() {
   );
 
   return (
-    <div className="dashboard-container" data-user-role="admin">
+    <div className="dashboard-container" data-user-role={userRole}>
       <div className="dashboard-main">
         <ul className="circles">
           {[...Array(15)].map((_, i) => (
@@ -315,7 +294,7 @@ function New() {
         
         <SideMenu />
         <div className="dashboard-content">
-          <Topbar pageTitle="News Management" pageSubtitle="Manage Company News & Announcements" />
+          <Topbar pageTitle="News" pageSubtitle="Company News & Announcements" />
           
           <div className="news-card">
             <div className="news-toolbar">
@@ -324,12 +303,12 @@ function New() {
                 <input
                   className="news-search"
                   type="text"
-                  placeholder="Search news..."
+                  placeholder="Search"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
               </div>
-              <button className="btn-add-news" onClick={() => handleOpenModal(null)}>
+              <button className="btn-add-news" onClick={handleAddNews}>
                 <FiPlus />
                 <span>Add News</span>
               </button>
@@ -342,7 +321,7 @@ function New() {
                     <th>Title</th>
                     <th>Category</th>
                     <th>Created</th>
-                    <th className="action-col">Actions</th>
+                    <th className="action-col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -353,7 +332,10 @@ function New() {
                   ) : filteredNews.map(item => (
                     <tr 
                       key={item.NewsId} 
-                      className={`${pinnedNews.has(item.NewsId) ? 'pinned' : ''} ${hiddenNews.has(item.NewsId) ? 'hidden-row' : ''}`}
+                      className={`
+                        ${pinnedNews.has(item.NewsId) ? 'pinned' : ''} 
+                        ${hiddenNews.has(item.NewsId) ? 'hidden-row' : ''}
+                      `}
                     >
                       <td>{item.Title}</td>
                       <td>
@@ -365,7 +347,7 @@ function New() {
                           ) : (
                             <FiTerminal className="category-icon" />
                           )}
-                          <span className="label">{item.Category}</span>
+                          <span className="lable">{item.Category}</span>
                         </div>
                       </td>
                       <td>{item.CreatedAt ? new Date(item.CreatedAt).toLocaleDateString() : '-'}</td>
@@ -607,8 +589,8 @@ function New() {
                   ) : (
                     <FiTerminal className="category-icon" />
                   )}
-                  <span className="label">{selectedItem.Category}</span>
-                  {selectedItem.isPinned === 1 && (
+                  <span className="lable">{selectedItem.Category}</span>
+                  {userRole !== 'user' && selectedItem.isPinned === 1 && (
                     <FiStar style={{ marginLeft: '8px', color: '#F59E0B' }} />
                   )}
                 </div>
@@ -670,6 +652,20 @@ function New() {
                       </a>
                     )}
                   </div>
+                </div>
+              )}
+
+              {userRole !== 'user' && (
+                <div className="view-actions">
+                  <button 
+                    className="edit-btn"
+                    onClick={() => {
+                      setViewModalOpen(false);
+                      handleOpenModal(selectedItem);
+                    }}
+                  >
+                    <FiEdit /> Edit
+                  </button>
                 </div>
               )}
             </div>

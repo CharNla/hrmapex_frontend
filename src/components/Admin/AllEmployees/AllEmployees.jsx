@@ -6,6 +6,7 @@ import axios from 'axios'
 import SideMenu from '../SideMenu/Side_menu'
 import Topbar from '../Topbar/Topbar'
 import FilterModal from '../FilterModal/FilterModal'
+import ProfileDetail from '../../User/ProfileDetail/ProfileDetail';
 import './AllEmployees.css'
 import '../AnimationCircles/AnimationCircles.css'
 
@@ -291,6 +292,11 @@ const AllEmployees = () => {
         mass: 0.5
       }
     }
+  }
+
+  // Instead of rendering the user role-specific UI here, render the ProfileDetail component
+  if (userRole === 'user') {
+    return <ProfileDetail />;
   }
 
   return (
