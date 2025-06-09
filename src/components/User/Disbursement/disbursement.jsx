@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiPlus, FiFilter, FiArrowLeft, FiEdit, FiCheck, FiX, FiSave, FiUpload } from 'react-icons/fi';
-import SideMenu from '../SideMenu/Side_menu';
+import SideMenu from '../SideMenu/Side_menu_user';
 import Topbar from '../../Admin/Topbar/Topbar';
 import './disbursement.css';
 import '../../Admin/AnimationCircles/AnimationCircles.css';
