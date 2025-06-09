@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import SideMenu from '../SideMenu/Side_menu_user';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
 import Topbar from '../../Admin/Topbar/Topbar';
 import { FiEdit2, FiUser, FiBriefcase, FiFileText, FiLock, FiUserCheck, FiCalendar, FiFolder, FiFile, FiCreditCard, FiEye, FiDownload, FiSave, FiMoreHorizontal, FiUpload, FiX } from 'react-icons/fi';
 import { getEmployees } from '../../../database/employeeData';
@@ -980,7 +980,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -998,7 +998,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"

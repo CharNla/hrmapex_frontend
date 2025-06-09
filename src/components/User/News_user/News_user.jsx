@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiSearch, FiClock, FiFile, FiDownload, FiStar, FiBell, FiActivity, FiTerminal } from 'react-icons/fi';
 import axios from 'axios';
-import SideMenu from "../SideMenu/Side_menu_user";
+import SideMenu from "../../Admin/SideMenu/Side_menu";
 import Topbar from "../../Admin/Topbar/Topbar";
 import './News_user.css';
 
