@@ -1,0 +1,108 @@
+.attachments-section {
+  margin-top: 1rem;
+  border: 2px dashed #e5e7eb;
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.attachments-section:hover {
+  border-color: #6366f1;
+  background-color: #f3f4f6;
+}
+
+.attachments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.attachment-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-color: #6366f1;
+}
+
+.attachment-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.attachment-item svg {
+  width: 24px;
+  height: 24px;
+  color: #6366f1;
+}
+
+.attachment-item span {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #4b5563;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.attachment-item .remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.attachment-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.attachment-item .remove-btn:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+/* Dark mode support */
+[data-theme='dark'] .attachments-section {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme='dark'] .attachment-item {
+  background-color: #374151;
+  border-color: #4b5563;
+}
+
+[data-theme='dark'] .attachment-item span {
+  color: #e5e7eb;
+}
+
+[data-theme='dark'] .attachment-item:hover {
+  border-color: #6366f1;
+}

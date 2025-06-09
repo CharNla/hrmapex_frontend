@@ -6,6 +6,7 @@ import './New.css';
 import './EditNewsModal.css';
 import SideMenu from "../SideMenu/Side_menu";
 import Topbar from "../Topbar/Topbar";
+import { EditNewsModal } from './AddNews/EditNewsModal';
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/news`;
 
@@ -46,14 +47,13 @@ function New() {
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedNews, setSelectedNews] = useState(null);
-  const [editItem, setEditItem] = useState(null);
-  const [form, setForm] = useState({
+  const [editItem, setEditItem] = useState(null);  const [form, setForm] = useState({
     title: '',
     category: '',
     content: '',
-    attachment: null
+    attachments: []
   });
-  const [preview, setPreview] = useState(null);
+  const [previews, setPreviews] = useState([]);
   const [search, setSearch] = useState("");
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -183,23 +183,39 @@ function New() {
       console.error('Error toggling visibility:', error);
       alert(error.response?.data?.error || error.message || 'Failed to update visibility. Please try again.');
     }
-  };
-
-  const handleOpenModal = (item = null) => {
+  };  const handleOpenModal = (item = null) => {
     setEditItem(item);
     if (item) {
       setForm({
         title: item.Title,
         category: item.Category,
         content: item.Content,
-        attachment: null
+        attachments: item.Attachments || []
       });
-      setPreview(item.Attachment ? `/uploads/${item.Attachment}` : null);
     } else {
-      setForm({ title: '', category: '', content: '', attachment: null });
-      setPreview(null);
+      setForm({ title: '', category: '', content: '', attachments: [] });
     }
     setModalOpen(true);
+  };
+  const handleAddAttachments = (files) => {
+    const newAttachments = Array.from(files).map(file => ({
+      file: file,
+      filename: file.name,
+      preview: URL.createObjectURL(file)
+    }));
+    
+    setForm(prev => ({
+      ...prev,
+      attachments: [...prev.attachments, ...newAttachments]
+    }));
+  };
+
+  const handleRemoveAttachment = (index) => {
+    setForm(prev => ({
+      ...prev,
+      attachments: prev.attachments.filter((_, i) => i !== index)
+    }));
+    setPreviews(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleCloseModal = () => {
@@ -207,15 +223,29 @@ function New() {
     setEditItem(null);
     setForm({ title: '', category: '', content: '', attachment: null });
     setPreview(null);
+    // Cleanup any existing preview URLs
+    previews.forEach(preview => {
+      if (preview.startsWith('blob:')) {
+        URL.revokeObjectURL(preview);
+      }
+    });
+    setPreviews([]);
   };
-
   const handleChange = e => {
     const { name, value, type, checked, files } = e.target;
     if (type === 'checkbox') {
       setForm(f => ({ ...f, [name]: checked }));
     } else if (type === 'file') {
-      setForm(f => ({ ...f, attachment: files[0] }));
-      setPreview(URL.createObjectURL(files[0]));
+      const newFiles = Array.from(files).map(file => ({
+        file,
+        filename: file.name,
+        preview: URL.createObjectURL(file)
+      }));
+      setForm(f => ({ 
+        ...f, 
+        attachments: [...f.attachments, ...newFiles]
+      }));
+      setPreviews(prev => [...prev, ...newFiles.map(f => f.preview)]);
     } else {
       setForm(f => ({ ...f, [name]: value }));
     }
@@ -223,14 +253,16 @@ function New() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    try {
-      const newNewsItem = {
+    try {      const newNewsItem = {
         NewsId: editItem ? editItem.NewsId : `NEWS${Date.now()}`,
         Title: form.title,
         Category: form.category,
         Content: form.content,
         CreatedAt: new Date().toISOString(),
-        Attachment: form.attachment ? form.attachment.name : null,
+        Attachments: form.attachments.map(att => ({
+          filename: att.filename,
+          url: att.preview
+        })),
         isPinned: 0,
         Hidenews: 0
       };
@@ -482,95 +514,18 @@ function New() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Edit/Add Modal */}
-      {modalOpen && (
-        <div className="modal-overlay">
-          <div className="edit-modal">
-            <div className="edit-modal-header">
-              <h3>{editItem ? 'Edit News' : 'Add News'}</h3>
-              <button className="edit-close-btn" onClick={handleCloseModal}>×</button>
-            </div>
-            <form onSubmit={handleSubmit} className="edit-news-form">
-              <div className="edit-form-group">
-                <label>Title</label>
-                <input 
-                  name="title" 
-                  value={form.title} 
-                  onChange={handleChange} 
-                  required 
-                  placeholder="Enter news title"
-                />
-              </div>
-              <div className="edit-form-group">
-                <label>Category</label>
-                <select
-                  name="category"
-                  value={form.category}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select category</option>
-                  {categories.map(cat => (
-                    <option key={cat.value} value={cat.value}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="edit-form-group">
-                <label>Content</label>
-                <textarea 
-                  name="content" 
-                  value={form.content} 
-                  onChange={handleChange} 
-                  required 
-                  placeholder="Enter news content"
-                  rows="6"
-                />
-              </div>
-              <div className="edit-form-group">
-                <label>Attachment</label>
-                <div className="edit-file-input-wrapper">
-                  <input 
-                    type="file" 
-                    name="attachment" 
-                    onChange={handleChange} 
-                    accept=".pdf,.jpg,.jpeg,.png" 
-                    id="file-upload"
-                    style={{ display: 'none' }}
-                  />
-                  <label htmlFor="file-upload" className="edit-file-upload-label">
-                    <FiPaperclip /> {form.attachment ? 'Change file' : 'Choose a file'}
-                  </label>
-                  {form.attachment && (
-                    <div className="selected-file">
-                      <FiFile /> {form.attachment.name}
-                    </div>
-                  )}
-                </div>
-                {preview && (
-                  <div className="edit-file-preview">
-                    <a href={preview} target="_blank" rel="noopener noreferrer">
-                      <FiFile />
-                      <span>Current attachment - Click to preview</span>
-                    </a>
-                  </div>
-                )}
-              </div>
-              <div className="edit-modal-actions">
-                <button type="button" onClick={handleCloseModal} className="edit-modal-btn edit-btn-cancel">
-                  Cancel
-                </button> 
-                <button type="submit" className="edit-modal-btn edit-btn-save">
-                  {editItem ? 'Update' : 'Save'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      </div>      {/* Edit/Add Modal */}      <EditNewsModal
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+        form={form}
+        editItem={editItem}
+        categories={categories}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleRemoveAttachment={handleRemoveAttachment}
+        handleAddAttachments={handleAddAttachments}
+        isImageFile={isImageFile}
+      />
 
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && (
