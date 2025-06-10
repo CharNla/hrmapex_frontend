@@ -370,12 +370,10 @@ const AllEmployees = () => {
                 />
               </div>
               <div className="action-buttons">
-                {userRole !== 'admin' && (
-                  <button className="add-employee-btn" onClick={() => navigate('/new-employee')}>
-                    <FiPlus />
-                    <span>Add Employee</span>
-                  </button>
-                )}
+                <button className="add-employee-btn" onClick={() => navigate('/admin/new-employee')}>
+                  <FiPlus />
+                  <span>Add Employee</span>
+                </button>
                 <button className="filter-btn" onClick={() => setIsFilterModalOpen(true)}>
                   <FiFilter />
                   <span>Filter</span>
@@ -400,19 +398,17 @@ const AllEmployees = () => {
                     <p>{employee.Position || 'No Position'}</p>
                   </div>
                   <div className="employee-card-actions">
-                    <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
+                    <button onClick={() => navigate(`/admin/employee/${employee.EmployeeId}`)}>
                       <FiEye />
                     </button>
-                    {userRole !== 'admin' && (
                       <>
-                        <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
+                        <button onClick={() => navigate(`/admin/employee/${employee.EmployeeId}?edit=true`)}>
                           <FiEdit2 />
                         </button>
                         <button onClick={() => handleDeleteClick(employee)}>
                           <FiTrash2 />
                         </button>
                       </>
-                    )}
                   </div>
                 </div>
               ))}
@@ -433,7 +429,7 @@ const AllEmployees = () => {
                     <th>Position</th>
                     <th>Type</th>
                     <th>Status</th>
-                    {userRole !== 'admin' && <th>Actions</th>}
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -468,19 +464,18 @@ const AllEmployees = () => {
                         <span className={`status ${employee.Status?.toLowerCase()}`}>
                           {employee.Status}
                         </span>
-                      </td>                      {userRole !== 'admin' && (
+                      </td>                      
                         <td className="actions">
-                          <button onClick={() => navigate(`/employee/${employee.EmployeeId}`)}>
+                          <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/employee/${employee.EmployeeId}`) }}>
                             <FiEye />
                           </button>
-                          <button onClick={() => navigate(`/employee/${employee.EmployeeId}?edit=true`)}>
+                          <button onClick={(e) => { e.stopPropagation(); navigate(`/admin/employee/${employee.EmployeeId}?edit=true`) }}>
                             <FiEdit2 />
                           </button>
-                          <button onClick={() => handleDeleteClick(employee)}>
+                          <button onClick={(e) => { e.stopPropagation(); handleDeleteClick(employee)}}>
                             <FiTrash2 />
                           </button>
                         </td>
-                      )}
                     </motion.tr>
                   ))}
                 </tbody>
@@ -546,10 +541,10 @@ const AllEmployees = () => {
       )}
 
       {/* Floating Add Button for Mobile - only render ONCE at the root and only for non-admin users */}
-      {isMobile && userRole !== 'admin' && (
+      {isMobile && (
         <button 
           className="floating-add-btn" 
-          onClick={() => navigate('/new-employee')} 
+          onClick={() => navigate('/admin/new-employee')} 
           aria-label="Add Employee"
         >
           <FiPlus size={28} />
