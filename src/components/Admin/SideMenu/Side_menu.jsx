@@ -27,6 +27,17 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
   const userRole = localStorage.getItem('userRole');
   const employeeId = localStorage.getItem('employeeId');
 
+  const getAccountPath = () => {
+    if (userRole === 'superadmin') {
+      return '/superadmin/account';
+    }
+    if (userRole === 'admin') {
+      return '/admin/account';
+    }
+    // Default or other roles
+    return '/admin/account'; 
+  };
+
   const handleTouchStart = (e) => {
     setTouchStart(e.touches[0].clientX);
   };
@@ -64,7 +75,7 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
     { icon: <FaMoneyBillWave />, text: 'Payroll', path: '/admin/payroll' },
     { icon: <FaCalendarAlt />, text: 'Leaves', path: '/admin/leaves' },
     { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/admin/holidays' },
-    { icon: <FaUser />, text: 'Account', path: '/admin/account' },
+    { icon: <FaUser />, text: 'Account', path: getAccountPath() },
     { icon: <FaCog />, text: 'Settings', path: '/admin/settings' },
   ];
 
@@ -109,7 +120,9 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
       return true;
     }
     if ((location.pathname.startsWith('/admin/account') ||
-        location.pathname.startsWith('/admin/edit-account')) && path.includes('account')) {
+        location.pathname.startsWith('/admin/edit-account') ||
+        location.pathname.startsWith('/superadmin/account') ||
+        location.pathname.startsWith('/superadmin/edit-account')) && path.includes('account')) {
       return true;
     }
 

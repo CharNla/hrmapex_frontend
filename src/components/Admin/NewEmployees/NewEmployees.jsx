@@ -31,6 +31,11 @@ const NewEmployees = () => {
     religion: '',
     maritalStatus: '',
     nationality: '',
+    idCardNumber: '',
+    idCardIssueDate: '',
+    idCardExpirationDate: '',
+    personalEmail: '',
+    lineId: '',
     currentAddress: '',
     currentSubdistrict: '',
     currentDistrict: '',
@@ -412,12 +417,24 @@ const NewEmployees = () => {
                   </div>
 
                   <div className="form-group">
-                    <label>Gender</label>
+                    <label>Gender <span className="required">*</span></label>
                     <select name="gender" value={formData.gender} onChange={handleChange}>
                       <option value="">Select gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Religion</label>
+                    <select name="religion" value={formData.religion} onChange={handleChange}>
+                      <option value="">Select religion</option>
+                      <option value="พุทธศาสนา">พุทธศาสนา</option>
+                      <option value="คริสต์ศาสนา">คริสต์ศาสนา</option>
+                      <option value="อิสลาม">อิสลาม</option>
+                      <option value="ศาสนาฮินดู">ศาสนาฮินดู</option>
+                      <option value="Other">Other</option>
                     </select>
                   </div>
 
@@ -429,17 +446,82 @@ const NewEmployees = () => {
                       <option value="married">Married</option>
                       <option value="divorced">Divorced</option>
                     </select>
-                  </div>              </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Nationality</label>
+                    <input
+                      type="text"
+                      name="nationality"
+                      placeholder="Enter nationality"
+                      value={formData.nationality}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>ID Card Number</label>
+                    <input
+                      type="text"
+                      name="idCardNumber"
+                      placeholder="Enter ID card number"
+                      value={formData.idCardNumber}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Issue Date</label>
+                    <input
+                      type="date"
+                      name="idCardIssueDate"
+                      value={formData.idCardIssueDate}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Expiration Date</label>
+                    <input
+                      type="date"
+                      name="idCardExpirationDate"
+                      value={formData.idCardExpirationDate}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Personal Email</label>
+                    <input
+                      type="email"
+                      name="personalEmail"
+                      placeholder="Enter personal email"
+                      value={formData.personalEmail}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Line ID</label>
+                    <input
+                      type="text"
+                      name="lineId"
+                      placeholder="Enter Line ID"
+                      value={formData.lineId}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
                 
                 <div className="form-group full-width">
                   <div className="addresses-container">
                     <div className="address-section">
-                      <h3>ที่อยู่ตามบัตรประชาชน</h3>
+                      <h3>ID Card Address</h3>
                       <div className="form-group full-width">
-                        <label>ที่อยู่</label>
+                        <label>Address</label>
                         <textarea
                           name="idCardAddress"
-                          placeholder="กรุณากรอกที่อยู่ตามบัตรประชาชน"
+                          placeholder="Enter ID card address"
                           value={formData.idCardAddress}
                           onChange={handleChange}
                           rows="3"
@@ -447,41 +529,41 @@ const NewEmployees = () => {
                       </div>
                       <div className="form-grid">
                         <div className="form-group">
-                          <label>แขวง/ตำบล</label>
+                          <label>Subdistrict</label>
                           <input
                             type="text"
                             name="idCardSubdistrict"
-                            placeholder="กรุณากรอกแขวง/ตำบล"
+                            placeholder="Enter subdistrict"
                             value={formData.idCardSubdistrict}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>เขต/อำเภอ</label>
+                          <label>District</label>
                           <input
                             type="text"
                             name="idCardDistrict"
-                            placeholder="กรุณากรอกเขต/อำเภอ"
+                            placeholder="Enter district"
                             value={formData.idCardDistrict}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>จังหวัด</label>
+                          <label>Province</label>
                           <input
                             type="text"
                             name="idCardProvince"
-                            placeholder="กรุณากรอกจังหวัด"
+                            placeholder="Enter province"
                             value={formData.idCardProvince}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>รหัสไปรษณีย์</label>
+                          <label>Zip Code</label>
                           <input
                             type="text"
                             name="idCardZipCode"
-                            placeholder="กรุณากรอกรหัสไปรษณีย์"
+                            placeholder="Enter zip code"
                             value={formData.idCardZipCode}
                             onChange={handleChange}
                           />
@@ -490,12 +572,12 @@ const NewEmployees = () => {
                     </div>
 
                     <div className="address-section">
-                      <h3>ที่อยู่ปัจจุบัน</h3>
+                      <h3>Current Address</h3>
                       <div className="form-group full-width">
-                        <label>ที่อยู่</label>
+                        <label>Address</label>
                         <textarea
                           name="currentAddress"
-                          placeholder="กรุณากรอกที่อยู่ปัจจุบัน"
+                          placeholder="Enter current address"
                           value={formData.currentAddress}
                           onChange={handleChange}
                           rows="3"
@@ -503,41 +585,41 @@ const NewEmployees = () => {
                       </div>
                       <div className="form-grid">
                         <div className="form-group">
-                          <label>แขวง/ตำบล</label>
+                          <label>Subdistrict</label>
                           <input
                             type="text"
                             name="currentSubdistrict"
-                            placeholder="กรุณากรอกแขวง/ตำบล"
+                            placeholder="Enter subdistrict"
                             value={formData.currentSubdistrict}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>เขต/อำเภอ</label>
+                          <label>District</label>
                           <input
                             type="text"
                             name="currentDistrict"
-                            placeholder="กรุณากรอกเขต/อำเภอ"
+                            placeholder="Enter district"
                             value={formData.currentDistrict}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>จังหวัด</label>
+                          <label>Province</label>
                           <input
                             type="text"
                             name="currentProvince"
-                            placeholder="กรุณากรอกจังหวัด"
+                            placeholder="Enter province"
                             value={formData.currentProvince}
                             onChange={handleChange}
                           />
                         </div>
                         <div className="form-group">
-                          <label>รหัสไปรษณีย์</label>
+                          <label>Zip Code</label>
                           <input
                             type="text"
                             name="currentZipCode"
-                            placeholder="กรุณากรอกรหัสไปรษณีย์"
+                            placeholder="Enter zip code"
                             value={formData.currentZipCode}
                             onChange={handleChange}
                           />
@@ -726,12 +808,12 @@ const NewEmployees = () => {
                             onChange={e => handleEducationChange(idx, 'level', e.target.value)}
                           >
                             <option value="">Select Level</option>
-                            <option value="high_school">มัธยมตอนปลาย</option>
-                            <option value="vocational">ปวช.</option>
-                            <option value="high_vocational">ปวท. / ปวส.</option>
-                            <option value="bachelor">ปริญญาตรี</option>
-                            <option value="master">ปริญญาโท</option>
-                            <option value="doctorate">ปริญญาเอก</option>
+                            <option value="high_school">High School</option>
+                            <option value="vocational">Vocational Certificate</option>
+                            <option value="high_vocational">Higher Vocational Certificate</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="doctorate">Doctorate's Degree</option>
                           </select>
                         </td>
                         <td>
@@ -814,7 +896,7 @@ const NewEmployees = () => {
                     <input
                       type="text"
                       name="accountNumber"
-                      placeholder="Enter account number"
+                      placeholder="Enter account number (10-12digits)"
                       value={formData.accountNumber}
                       onChange={handleChange}
                     />
@@ -998,7 +1080,7 @@ const NewEmployees = () => {
                   <div className="documents-grid">                  {/* Job Application */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> ใบสมัครงาน
+                        <FiFile /> Job Application
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1013,8 +1095,8 @@ const NewEmployees = () => {
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, DOC, DOCX</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, DOC, DOCX</p>
                         </label>
                       </div>
                       {formData.jobApplication && formData.jobApplication.length > 0 && (
@@ -1037,7 +1119,7 @@ const NewEmployees = () => {
                     </div>                  {/* Certificate */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> วุฒิบัตร
+                        <FiFile /> Certificate
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1052,8 +1134,8 @@ const NewEmployees = () => {
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, JPG, JPEG</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, JPG, JPEG</p>
                         </label>
                       </div>
                       {formData.certificate && formData.certificate.length > 0 && (
@@ -1078,7 +1160,7 @@ const NewEmployees = () => {
                     {/* National ID */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> สำเนาบัตรประชาชน
+                        <FiFile /> Copy of National ID Card
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1087,23 +1169,31 @@ const NewEmployees = () => {
                           accept=".pdf,.jpg,.jpeg"
                           onChange={(e) => handleFileUpload(e, 'nationalId')}
                           hidden
+                          multiple
                         />
                         <label htmlFor="national-id" className="upload-label">
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, JPG, JPEG</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, JPG, JPEG</p>
                         </label>
                       </div>
-                      {formData.nationalId && (
+                      {formData.nationalId && formData.nationalId.length > 0 && (
                         <div className="uploaded-files">
-                          <div className="uploaded-file">
-                            <FiFile />
-                            <span title={formData.nationalId.name}>
-                              {truncateFileName(formData.nationalId.name)}
-                            </span>
-                          </div>
+                          {formData.nationalId.map((file, index) => (
+                            <div key={index} className="uploaded-file">
+                              <FiFile />
+                              <span title={file.name}>{truncateFileName(file.name)}</span>
+                              <button
+                                type="button"
+                                className="remove-file"
+                                onClick={() => handleRemoveFile('nationalId', index)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -1111,7 +1201,7 @@ const NewEmployees = () => {
                     {/* House Registration */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> สำเนาทะเบียนบ้าน
+                        <FiFile /> Copy of House Registration
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1120,23 +1210,31 @@ const NewEmployees = () => {
                           accept=".pdf,.jpg,.jpeg"
                           onChange={(e) => handleFileUpload(e, 'householdRegistration')}
                           hidden
+                          multiple
                         />
                         <label htmlFor="house-registration" className="upload-label">
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, JPG, JPEG</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, JPG, JPEG</p>
                         </label>
                       </div>
-                      {formData.householdRegistration && (
+                      {formData.householdRegistration && formData.householdRegistration.length > 0 && (
                         <div className="uploaded-files">
-                          <div className="uploaded-file">
-                            <FiFile />
-                            <span title={formData.householdRegistration.name}>
-                              {truncateFileName(formData.householdRegistration.name)}
-                            </span>
-                          </div>
+                          {formData.householdRegistration.map((file, index) => (
+                            <div key={index} className="uploaded-file">
+                              <FiFile />
+                              <span title={file.name}>{truncateFileName(file.name)}</span>
+                              <button
+                                type="button"
+                                className="remove-file"
+                                onClick={() => handleRemoveFile('householdRegistration', index)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -1144,7 +1242,7 @@ const NewEmployees = () => {
                     {/* Bank Account */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> สำเนาสมุดบัญชีธนาคาร
+                        <FiFile /> Copy of Bank Book
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1153,23 +1251,31 @@ const NewEmployees = () => {
                           accept=".pdf,.jpg,.jpeg"
                           onChange={(e) => handleFileUpload(e, 'bankBook')}
                           hidden
+                          multiple
                         />
                         <label htmlFor="bank-book" className="upload-label">
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, JPG, JPEG</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, JPG, JPEG</p>
                         </label>
                       </div>
-                      {formData.bankBook && (
+                      {formData.bankBook && formData.bankBook.length > 0 && (
                         <div className="uploaded-files">
-                          <div className="uploaded-file">
-                            <FiFile />
-                            <span title={formData.bankBook.name}>
-                              {truncateFileName(formData.bankBook.name)}
-                            </span>
-                          </div>
+                          {formData.bankBook.map((file, index) => (
+                            <div key={index} className="uploaded-file">
+                              <FiFile />
+                              <span title={file.name}>{truncateFileName(file.name)}</span>
+                              <button
+                                type="button"
+                                className="remove-file"
+                                onClick={() => handleRemoveFile('bankBook', index)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -1177,7 +1283,7 @@ const NewEmployees = () => {
                     {/* Employment Contract */}
                     <div className="document-upload-card">
                       <h3 className="document-title">
-                        <FiFile /> สัญญาจ้าง
+                        <FiFile /> Employment Contract
                       </h3>
                       <div className="upload-area-doc">
                         <input
@@ -1186,23 +1292,31 @@ const NewEmployees = () => {
                           accept=".pdf,.doc,.docx"
                           onChange={(e) => handleFileUpload(e, 'employmentContract')}
                           hidden
+                          multiple
                         />
                         <label htmlFor="employment-contract" className="upload-label">
                           <div className="upload-icon">
                             <FiUpload />
                           </div>
-                          <p>ลากไฟล์หรือ <span className="choose-text">เลือกไฟล์</span> เพื่ออัปโหลด</p>
-                          <p className="supported-text">รองรับไฟล์: PDF, DOC, DOCX</p>
+                          <p>Drag & drop or <span className="choose-text">choose file</span> to upload</p>
+                          <p className="supported-text">Supported files: PDF, DOC, DOCX</p>
                         </label>
                       </div>
-                      {formData.employmentContract && (
+                      {formData.employmentContract && formData.employmentContract.length > 0 && (
                         <div className="uploaded-files">
-                          <div className="uploaded-file">
-                            <FiFile />
-                            <span title={formData.employmentContract.name}>
-                              {truncateFileName(formData.employmentContract.name)}
-                            </span>
-                          </div>
+                          {formData.employmentContract.map((file, index) => (
+                            <div key={index} className="uploaded-file">
+                              <FiFile />
+                              <span title={file.name}>{truncateFileName(file.name)}</span>
+                              <button
+                                type="button"
+                                className="remove-file"
+                                onClick={() => handleRemoveFile('employmentContract', index)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -1218,7 +1332,7 @@ const NewEmployees = () => {
                 
                 {/* Language Ability Section */}
                 <div className="language-ability-section">
-                  <h3>Language Ability</h3>
+                  <h3>English Language Ability</h3>
                   <div className="language-grid">
                     {/* Speaking */}
                     <div className="language-row">
@@ -1276,10 +1390,10 @@ const NewEmployees = () => {
 
                 {/* Criminal Record Section */}
                 <div className="criminal-record-section">
-                  <h3>ประวัติทางกฎหมาย</h3>
+                  <h3>Legal History</h3>
                   <div className="criminal-record-container">
                     <div className="criminal-record-question">
-                      <p>เคยต้องโทษทางแพ่งหรืออาญาหรือไม่</p>
+                      <p>Have you ever been convicted of a civil or criminal offense?</p>
                       <div className="criminal-options">
                         <label>
                           <input
@@ -1289,7 +1403,7 @@ const NewEmployees = () => {
                             checked={formData.hasCriminalRecord === 'yes'}
                             onChange={handleChange}
                           />
-                          เคย
+                          Yes
                         </label>
                         <label>
                           <input
@@ -1299,20 +1413,20 @@ const NewEmployees = () => {
                             checked={formData.hasCriminalRecord === 'no'}
                             onChange={handleChange}
                           />
-                          ไม่เคย
+                          No
                         </label>
                       </div>
                     </div>
 
                     {formData.hasCriminalRecord === 'yes' && (
                       <div className="criminal-details">
-                        <label htmlFor="criminalDetails">รายละเอียด:</label>
+                        <label htmlFor="criminalDetails">Details:</label>
                         <textarea
                           id="criminalDetails"
                           name="criminalDetails"
                           value={formData.criminalDetails}
                           onChange={handleChange}
-                          placeholder="โปรดระบุรายละเอียดความผิดและโทษที่ได้รับ"
+                          placeholder="Please provide details of the offense and penalty."
                           rows="3"
                         />
                       </div>
@@ -1322,9 +1436,9 @@ const NewEmployees = () => {
 
                 {/* Work Relocation Section */}
                 <div className="relocation-section">
-                  <h3>การปฏิบัติงานต่างจังหวัด</h3>
+                  <h3>Work in other provinces</h3>
                   <div className="relocation-container">
-                    <p>สามารถไปปฏิบัติงานต่างจังหวัดได้หรือไม่</p>
+                    <p>Are you able to work in other provinces?</p>
                     <div className="relocation-options">
                       <label>
                         <input
@@ -1334,7 +1448,7 @@ const NewEmployees = () => {
                           checked={formData.canRelocate === 'yes'}
                           onChange={handleChange}
                         />
-                        ได้
+                        Yes
                       </label>
                       <label>
                         <input
@@ -1344,7 +1458,7 @@ const NewEmployees = () => {
                           checked={formData.canRelocate === 'no'}
                           onChange={handleChange}
                         />
-                        ไม่ได้
+                        No
                       </label>
                     </div>
                   </div>
@@ -1352,40 +1466,40 @@ const NewEmployees = () => {
 
                 {/* Emergency Contact Section */}
                 <div className="emergency-contact-section">
-                  <h3>บุคคลที่ติดต่อได้กรณีฉุกเฉิน</h3>
+                  <h3>Emergency Contact</h3>
                   
                   {/* คนที่ 1 */}
                   <div className="emergency-contact-container">
-                    <h4>บุคคลที่ 1</h4>
+                    <h4>Contact 1</h4>
                     <div className="form-grid">
                       <div className="form-group">
-                        <label>ชื่อ-นามสกุล</label>
+                        <label>Full Name</label>
                         <input
                           type="text"
                           name="emergencyContactName"
-                          placeholder="กรุณากรอกชื่อ-นามสกุล"
+                          placeholder="Enter full name"
                           value={formData.emergencyContactName}
                           onChange={handleChange}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label>ความเกี่ยวข้องกับผู้สมัคร</label>
+                        <label>Relationship to applicant</label>
                         <input
                           type="text"
                           name="emergencyContactRelation"
-                          placeholder="กรุณาระบุความเกี่ยวข้อง"
+                          placeholder="Enter relationship"
                           value={formData.emergencyContactRelation}
                           onChange={handleChange}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label>เบอร์โทรศัพท์</label>
+                        <label>Phone Number</label>
                         <input
                           type="tel"
                           name="emergencyContactPhone"
-                          placeholder="กรุณากรอกเบอร์โทรศัพท์"
+                          placeholder="Enter phone number"
                           value={formData.emergencyContactPhone}
                           onChange={handleChange}
                         />
@@ -1393,10 +1507,10 @@ const NewEmployees = () => {
                     </div>
 
                     <div className="form-group full-width">
-                      <label>ที่อยู่</label>
+                      <label>Address</label>
                       <textarea
                         name="emergencyContactAddress"
-                        placeholder="กรุณากรอกที่อยู่"
+                        placeholder="Enter address"
                         value={formData.emergencyContactAddress}
                         onChange={handleChange}
                         rows="3"
@@ -1406,36 +1520,36 @@ const NewEmployees = () => {
 
                   {/* คนที่ 2 */}
                   <div className="emergency-contact-container" style={{ marginTop: '20px' }}>
-                    <h4>บุคคลที่ 2</h4>
+                    <h4>Contact 2</h4>
                     <div className="form-grid">
                       <div className="form-group">
-                        <label>ชื่อ-นามสกุล</label>
+                        <label>Full Name</label>
                         <input
                           type="text"
                           name="emergencyContactName2"
-                          placeholder="กรุณากรอกชื่อ-นามสกุล"
+                          placeholder="Enter full name"
                           value={formData.emergencyContactName2}
                           onChange={handleChange}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label>ความเกี่ยวข้องกับผู้สมัคร</label>
+                        <label>Relationship to applicant</label>
                         <input
                           type="text"
                           name="emergencyContactRelation2"
-                          placeholder="กรุณาระบุความเกี่ยวข้อง"
+                          placeholder="Enter relationship"
                           value={formData.emergencyContactRelation2}
                           onChange={handleChange}
                         />
                       </div>
 
                       <div className="form-group">
-                        <label>เบอร์โทรศัพท์</label>
+                        <label>Phone Number</label>
                         <input
                           type="tel"
                           name="emergencyContactPhone2"
-                          placeholder="กรุณากรอกเบอร์โทรศัพท์"
+                          placeholder="Enter phone number"
                           value={formData.emergencyContactPhone2}
                           onChange={handleChange}
                         />
@@ -1443,10 +1557,10 @@ const NewEmployees = () => {
                     </div>
 
                     <div className="form-group full-width">
-                      <label>ที่อยู่</label>
+                      <label>Address</label>
                       <textarea
                         name="emergencyContactAddress2"
-                        placeholder="กรุณากรอกที่อยู่"
+                        placeholder="Enter address"
                         value={formData.emergencyContactAddress2}
                         onChange={handleChange}
                         rows="3"
