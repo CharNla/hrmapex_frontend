@@ -9,7 +9,14 @@ const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
+  const effectiveRoles = [userRole];
+  if (userRole === 'superadmin') {
+    effectiveRoles.push('admin');
+  }
+
+  const isAllowed = allowedRoles.some(role => effectiveRoles.includes(role));
+
+  if (allowedRoles && !isAllowed) {
     // If the user's role is not allowed, redirect them.
     // For example, redirect to a default page or a "not authorized" page.
     if (userRole === 'user') {

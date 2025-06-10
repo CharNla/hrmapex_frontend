@@ -36,9 +36,9 @@ function New() {
       return;
     }
 
-    // If user role is not admin, redirect to user news page
-    if (userRole !== 'admin') {
-      navigate('/news');
+    // If user role is not admin or superadmin, redirect to user news page
+    if (userRole !== 'admin' && userRole !== 'superadmin') {
+      navigate('/user/news');
       return;
     }
   }, [navigate, userRole]);
