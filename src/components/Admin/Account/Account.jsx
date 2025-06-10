@@ -90,7 +90,7 @@ const Account = () => {
   }, []);
 
   const handleEdit = async (id) => {
-    navigate(`/edit-account/${id}`);
+    navigate(`/admin/edit-account/${id}`);
   };
 
   const handleDelete = async (id) => {

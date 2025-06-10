@@ -1,6 +1,6 @@
 import React from 'react';
-import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
+import Topbar from '../../Admin/Topbar/Topbar';
 import { useParams, useNavigate } from 'react-router-dom';
 import './leavesdetail.css';
 

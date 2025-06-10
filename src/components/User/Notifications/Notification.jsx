@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FiCheckCircle, FiFileText, FiDollarSign, FiClock } from 'react-icons/fi';
-import SideMenu from '../SideMenu/Side_menu.jsx';
-import Topbar from '../Topbar/Topbar.jsx';
+import SideMenu from '../../Admin/SideMenu/Side_menu.jsx';
+import Topbar from '../../Admin/Topbar/Topbar.jsx';
 import './Notification.css';
 
 const Notification = () => {
@@ -49,7 +49,10 @@ const Notification = () => {
     }
   ];
 
-  const [activeTab, setActiveTab] = useState('all');  const filterNotifications = (tab) => {
+  const [activeTab, setActiveTab] = useState('all');
+  const [isMinimized, setIsMinimized] = useState(false);
+
+  const filterNotifications = (tab) => {
     switch (tab) {
       case 'unread':
         return notifications.filter(n => !n.isRead);

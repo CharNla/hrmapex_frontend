@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiCalendar, FiClock, FiMapPin } from 'react-icons/fi';
-import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
+import Topbar from '../../Admin/Topbar/Topbar';
 import './holidays.css';
 
 const Holidays = () => {  const navigate = useNavigate();

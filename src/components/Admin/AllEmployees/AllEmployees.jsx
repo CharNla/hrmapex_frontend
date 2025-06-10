@@ -231,6 +231,10 @@ const AllEmployees = () => {
     setCurrentPage(page)
   }
 
+  const handleRowClick = (employeeId) => {
+    navigate(`/admin/employee/${employeeId}`);
+  };
+
   const handleMobileMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
   }
@@ -435,9 +439,11 @@ const AllEmployees = () => {
                 <tbody>
                   {currentEmployees.map((employee) => (                    <motion.tr 
                       key={employee.EmployeeId}
-                      variants={itemVariants}
-                      onClick={() => userRole === 'admin' && navigate(`/employee/${employee.EmployeeId}`)}
-                      style={{ cursor: userRole === 'admin' ? 'pointer' : 'default' }}
+                      className="employee-row"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      onClick={() => handleRowClick(employee.EmployeeId)}
                     >
                       <td className="employee-name">
                         <img

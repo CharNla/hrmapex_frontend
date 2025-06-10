@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './PayrollDetail.css';
-import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
+import Topbar from '../../Admin/Topbar/Topbar';
 import { FiDollarSign, FiMinusCircle, FiPlusCircle, FiFile, FiEdit2, FiSave, FiX, FiPlus } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
+//import { db } from "../../../services/firebase";
 
 const mainTabs = [
   { key: 'salary', label: 'เงินเดือนพื้นฐาน', icon: <FiDollarSign /> },

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./leaves.css";
-import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
+import Topbar from '../../Admin/Topbar/Topbar';
 import { FiEdit2, FiTrash2, FiCheck, FiClock, FiX, FiAlertTriangle } from 'react-icons/fi';
 
 const leaveTypesDefault = [

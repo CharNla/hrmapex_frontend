@@ -278,7 +278,7 @@ const Disbursement = () => {  const navigate = useNavigate();
   };
 
   const handleAddDisbursement = () => {
-    navigate('/adddisburse');
+    navigate('/admin/adddisburse');
   };
 
   const openRejectPopup = (id) => {

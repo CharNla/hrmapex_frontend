@@ -154,7 +154,7 @@ const Holidays = () => {  const navigate = useNavigate();
   };
 
   const handleAddHoliday = (monthIndex) => {
-    navigate(`/newholiday/${monthIndex}`);
+    navigate(`/admin/newholiday/${monthIndex}`);
   };
 
   // Add new function to handle holiday cycling

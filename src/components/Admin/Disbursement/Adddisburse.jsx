@@ -119,7 +119,7 @@ const Adddisburse = () => {
       }
 
       // ถ้าบันทึกสำเร็จ redirect ไปหน้า disbursement
-      navigate('/disbursement');
+      navigate('/admin/disbursement');
       
     } catch (error) {
       console.error('Error:', error);
@@ -175,7 +175,7 @@ const Adddisburse = () => {
             <div className="form-header">
               <button 
                 className="back-button"
-                onClick={() => navigate('/disbursement')}
+                onClick={() => navigate('/admin/disbursement')}
               >
                 ← Back
               </button>

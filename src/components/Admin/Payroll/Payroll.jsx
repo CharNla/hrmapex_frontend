@@ -216,7 +216,7 @@ const Payroll = () => {
   });
 
   const handleRowClick = (employeeId) => {
-    navigate(`/payroll-detail/${employeeId}`);
+    navigate(`/admin/payroll-detail/${employeeId}`);
   };
 
   const getTypeColor = (type) => {
@@ -332,42 +332,52 @@ const Payroll = () => {
           </div>
 
           <div className="payroll__table-container">
-            <table className="payroll__table">              <thead>
+            <table className="payroll__table">
+              <thead>
                 <tr>
-                  <th>Full Name (Nickname)</th>
-                  <th>Type</th>
-                  <th>Basic Salary</th>
-                  <th>Deductions</th>
-                  <th>Additional Income</th>
-                  <th>Net Salary</th>
-                  <th>Payment Status</th>
+                  <th className="payroll__th payroll__th--name">Employee Name</th>
+                  <th className="payroll__th">Type</th>
+                  <th className="payroll__th payroll__th--salary">Basic Salary</th>
+                  <th className="payroll__th payroll__th--salary">Deductions</th>
+                  <th className="payroll__th payroll__th--salary">Additions</th>
+                  <th className="payroll__th payroll__th--salary">Net Salary</th>
+                  <th className="payroll__th payroll__th--status">Payment Status</th>
+                  <th className="payroll__th payroll__th--actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredEmployees.map((employee) => (
                   <tr 
                     key={employee.id} 
-                    className={`payroll__table-row payroll__table-row--${employee.paymentStatus}`}
+                    className="payroll__tr" 
                     onClick={() => handleRowClick(employee.id)}
                     onContextMenu={(e) => handleContextMenu(e, employee.id)}
-                    style={{ cursor: 'context-menu' }}
                   >
-                    <td className="payroll__employee-name">
-                      {employee.name} {employee.nickname && `(${employee.nickname})`}
+                    <td className="payroll__td payroll__td--name">
+                      <div className="payroll__employee-info">
+                        <span>{employee.name} {employee.nickname && `(${employee.nickname})`}</span>
+                      </div>
                     </td>
                     <td>
                       <span className={`payroll__employee-type ${getTypeColor(employee.type)}`}>
                         {employee.type}
                       </span>
-                    </td>                    <td data-type="money">{employee.basicSalary.toLocaleString()} บาท</td>
+                    </td>
+                    <td data-type="money">{employee.basicSalary.toLocaleString()} บาท</td>
                     <td data-type="money" className="deduction-amount">-{employee.deductions.toLocaleString()} บาท</td>
                     <td data-type="money" className="additional-income">+{employee.additions.toLocaleString()} บาท</td>
                     <td data-type="money" className="payroll__net-salary">
                       {employee.netSalary.toLocaleString()} บาท
-                    </td>                    <td>
+                    </td>
+                    <td>
                       <span className={`payroll__payment-status payroll__payment-status--${employee.paymentStatus}`}>
                         {employee.paymentStatus === 'paid' ? 'ดำเนินการ' : 'ยังไม่ดำเนินการ'}
                       </span>
+                    </td>
+                    <td>
+                      <div className="payroll__actions">
+                        <button onClick={(e) => { e.stopPropagation(); handleContextMenu(e, employee.id); }}>...</button>
+                      </div>
                     </td>
                   </tr>
                 ))}

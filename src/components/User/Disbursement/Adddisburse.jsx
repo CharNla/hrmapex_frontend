@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiUpload, FiFile, FiX } from 'react-icons/fi';
-import SideMenu from '../SideMenu/Side_menu';
-import Topbar from '../Topbar/Topbar';
+import SideMenu from '../../Admin/SideMenu/Side_menu';
+import Topbar from '../../Admin/Topbar/Topbar';
 import './Adddisburse.css';
 
 const Adddisburse = () => {
@@ -119,7 +119,7 @@ const Adddisburse = () => {
       }
 
       // ถ้าบันทึกสำเร็จ redirect ไปหน้า disbursement
-      navigate('/disbursement');
+      navigate('/user/disbursement');
       
     } catch (error) {
       console.error('Error:', error);
@@ -175,7 +175,7 @@ const Adddisburse = () => {
             <div className="form-header">
               <button 
                 className="back-button"
-                onClick={() => navigate('/disbursement')}
+                onClick={() => navigate('/user/disbursement')}
               >
                 ← Back
               </button>

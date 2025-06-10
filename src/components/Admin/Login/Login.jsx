@@ -107,7 +107,7 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', 'admin')
         localStorage.setItem('token', 'admin-token')
-        navigate('/news'); // Redirect to News page
+        navigate('/admin/news'); // Redirect to Admin News page
         return
       }
 
@@ -123,7 +123,7 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', 'superadmin')
         localStorage.setItem('token', 'superadmin-token')
-        navigate('/news'); // Redirect to News page
+        navigate('/admin/news'); // Redirect to Admin News page
         return
       }
 
@@ -141,7 +141,7 @@ function Login() {
         localStorage.setItem('userRole', 'user')
         localStorage.setItem('token', 'user-token')
         localStorage.setItem('employeeId', '1') // Use first mock employee ID
-        navigate('/news')
+        navigate('/user/news')
         return
       }
 
@@ -170,7 +170,11 @@ function Login() {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('userRole', data.user.role)
         localStorage.setItem('token', data.token)
-        navigate('/news'); // Redirect to News page
+        if (data.user.role === 'admin' || data.user.role === 'superadmin') {
+          navigate('/admin/news');
+        } else {
+          navigate('/user/news');
+        }
       } else {
         setError(data.message || 'Invalid email or password')
       }

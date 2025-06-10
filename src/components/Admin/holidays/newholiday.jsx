@@ -27,7 +27,7 @@ const NewHoliday = () => {
     e.preventDefault();
     // Here you would typically save the holiday to your backend
     // For now, we'll just navigate back
-    navigate('/holidays');
+    navigate('/admin/holidays');
   };
 
   const handleChange = (e) => {
@@ -115,7 +115,7 @@ const NewHoliday = () => {
           <div className="newholiday-form-actions">
             <button 
               type="button" 
-              onClick={() => navigate('/holidays')} 
+              onClick={() => navigate('/admin/holidays')} 
               className="newholiday-btn newholiday-btn-cancel"
             >
               Cancel

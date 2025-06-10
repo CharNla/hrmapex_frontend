@@ -57,48 +57,63 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
     };
   }, [isOpen])
   
-  const menuItems = [
-    { icon: <FaEnvelope />, text: 'News', path: '/news' },
-    { 
-      icon: <FaUsers />, 
-      text: userRole === 'user' ? 'My Profile' : 'All Employees', 
-      path: userRole === 'user' ? `/employee/${employeeId}` : '/employees'
-    },    { icon: <FaFileAlt />, text: 'Disbursement', path: '/disbursement' },
-    { 
-      icon: <FaMoneyBillWave />, 
-      text: 'Payroll', 
-      path: userRole === 'user' ? `/payroll-detail/${employeeId}` : '/payroll' 
-    },
-    { icon: <FaCalendarAlt />, text: 'Leaves', path: '/leaves' },
-    { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/holidays' },
-    ...(userRole !== 'user' ? [{ icon: <FaUser />, text: 'Account', path: '/account' }] : []),
-    { icon: <FaCog />, text: 'Settings', path: '/settings' },
-  ]
+  const adminMenuItems = [
+    { icon: <FaEnvelope />, text: 'News', path: '/admin/news' },
+    { icon: <FaUsers />, text: 'All Employees', path: '/admin/all-employees' },
+    { icon: <FaFileAlt />, text: 'Disbursement', path: '/admin/disbursement' },
+    { icon: <FaMoneyBillWave />, text: 'Payroll', path: '/admin/payroll' },
+    { icon: <FaCalendarAlt />, text: 'Leaves', path: '/admin/leaves' },
+    { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/admin/holidays' },
+    { icon: <FaUser />, text: 'Account', path: '/admin/account' },
+    { icon: <FaCog />, text: 'Settings', path: '/admin/settings' },
+  ];
+
+  const userMenuItems = [
+    { icon: <FaEnvelope />, text: 'News', path: '/user/news' },
+    // My Profile is not a standard page, so linking to admin's detail page for now
+    { icon: <FaUsers />, text: 'My Profile', path: `/admin/employee/${employeeId}` }, 
+    { icon: <FaFileAlt />, text: 'Disbursement', path: '/user/disbursement' },
+     // User has no general payroll page, linking to their specific detail page
+    { icon: <FaMoneyBillWave />, text: 'Payroll', path: `/user/payroll-detail/${employeeId}` },
+    { icon: <FaCalendarAlt />, text: 'Leaves', path: '/user/leaves' },
+    { icon: <FaRegCalendarCheck />, text: 'Holidays', path: '/user/holidays' },
+  ];
+
+  const menuItems = userRole === 'user' ? userMenuItems : adminMenuItems;
 
   const isActive = (path) => {
-    if (path === '/employees' && 
-      (location.pathname === '/employees' || 
-       location.pathname === '/new-employee' || 
-       location.pathname.startsWith('/employee/') ||
-       location.pathname === '/all-employees')) {
+    const basePath = path.split('/:')[0]; // Ignore params for matching
+    const currentBasePath = location.pathname.split('/:')[0];
+
+    if (path.includes('all-employees')) {
+       if (location.pathname.startsWith('/admin/employee/') ||
+           location.pathname === '/admin/new-employee' ||
+           location.pathname === '/admin/all-employees') {
+           return true;
+       }
+    }
+
+    if (location.pathname.startsWith('/admin/addnews') && path.includes('news')) {
       return true;
     }
-    if (location.pathname === '/addnews' && path === '/news') {
+    if (location.pathname.startsWith('/admin/adddisburse') && path.includes('disbursement')) {
       return true;
     }
-    if (location.pathname === '/adddisburse' && path === '/disbursement') {
+    if (location.pathname.startsWith('/admin/payroll-detail/') && path.includes('payroll')) {
       return true;
     }
-    if (location.pathname.startsWith('/payroll-detail/') && path === '/payroll') {
-      return true;
-    }    if ((location.pathname === '/newholiday' || location.pathname.startsWith('/holidays')) && path === '/holidays') {
+    if (location.pathname.startsWith('/user/payroll-detail/') && path.includes('payroll-detail')) {
+        return true;
+    }
+    if (location.pathname.startsWith('/admin/newholiday') && path.includes('holidays')) {
       return true;
     }
-    if (location.pathname.startsWith('/account') || 
-        location.pathname.startsWith('/edit-account')) {
-      return path === '/account';
+    if ((location.pathname.startsWith('/admin/account') ||
+        location.pathname.startsWith('/admin/edit-account')) && path.includes('account')) {
+      return true;
     }
-    return location.pathname === path;
+
+    return currentBasePath === basePath;
   }
 
   return (

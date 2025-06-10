@@ -25,46 +25,54 @@ import './styles/global.css'
 import EditAccount from './components/Admin/Account/EditAccount'
 import Notification from './components/Admin/Notifications/Notification'
 
+// User components
+import UserLeaves from './components/User/Leaves/leaves';
+import UserLeaveDetail from './components/User/Leaves/leavesdetail';
+import UserHolidays from './components/User/holidays/holidays';
+import UserPayrollDetail from './components/User/PayrollDetail/PayrollDetail';
+import UserNotifications from './components/User/Notifications/Notification';
+import UserAdddisburse from './components/User/Disbursement/Adddisburse';
+
 function App() {
-  // Function to check if user has admin role
-  const isAdmin = () => {
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'admin' || userRole === 'superadmin';
-  };
-  // Components to conditionally render based on user role
-  const NewsRouter = () => {
-    return isAdmin() ? <News /> : <News_user />;
-  };
-
-  const DisbursementRouter = () => {
-    return isAdmin() ? <AdminDisbursement /> : <UserDisbursement />;
-  };
-
   return (
     <ThemeProvider>
       <HashRouter>
         <Routes>
+          {/* Common Routes */}
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/all-employees" element={<AllEmployees />} />
-          <Route path="/employees" element={<Navigate to="/all-employees" />} />
-          <Route path="/new-employee" element={<NewEmployees />} />
-          <Route path="/employee/:id" element={<ProfileDetail />} />
-          <Route path="/news" element={<NewsRouter />} />
-          <Route path="/addnews" element={<AddNew />} />
-          <Route path="/leaves" element={<Leaves />} />
-          <Route path="/leaves/detail/:empId" element={<LeaveDetail />} />          <Route path="/payroll" element={<Payroll />} />
-          <Route path="/payroll-detail/:id" element={<PayrollDetail />} />
-          <Route path="/disbursement" element={<DisbursementRouter />} />
-          <Route path="/adddisburse" element={<Adddisburse />} />
-          <Route path="/settings" element={<Setting />} />
-          <Route path="/holidays" element={<Holidays />} />
-          <Route path="/newholiday/:monthIndex" element={<NewHoliday />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/edit-account/:id" element={<EditAccount />} />
+
+          {/* Admin Routes */}
+          <Route path="/admin/all-employees" element={<AllEmployees />} />
+          <Route path="/admin/employees" element={<Navigate to="/admin/all-employees" />} />
+          <Route path="/admin/new-employee" element={<NewEmployees />} />
+          <Route path="/admin/employee/:id" element={<ProfileDetail />} />
+          <Route path="/admin/news" element={<News />} />
+          <Route path="/admin/addnews" element={<AddNew />} />
+          <Route path="/admin/leaves" element={<Leaves />} />
+          <Route path="/admin/leaves/detail/:empId" element={<LeaveDetail />} />
+          <Route path="/admin/payroll" element={<Payroll />} />
+          <Route path="/admin/payroll-detail/:id" element={<PayrollDetail />} />
+          <Route path="/admin/disbursement" element={<AdminDisbursement />} />
+          <Route path="/admin/adddisburse" element={<Adddisburse />} />
+          <Route path="/admin/settings" element={<Setting />} />
+          <Route path="/admin/holidays" element={<Holidays />} />
+          <Route path="/admin/newholiday/:monthIndex" element={<NewHoliday />} />
+          <Route path="/admin/account" element={<Account />} />
+          <Route path="/admin/edit-account/:id" element={<EditAccount />} />
           <Route path="/admin/notifications" element={<Notification />} />
+
+          {/* User Routes */}
+          <Route path="/user/news" element={<News_user />} />
+          <Route path="/user/disbursement" element={<UserDisbursement />} />
+          <Route path="/user/adddisburse" element={<UserAdddisburse />} />
+          <Route path="/user/leaves" element={<UserLeaves />} />
+          <Route path="/user/leaves/detail/:empId" element={<UserLeaveDetail />} />
+          <Route path="/user/holidays" element={<UserHolidays />} />
+          <Route path="/user/payroll-detail/:id" element={<UserPayrollDetail />} />
+          <Route path="/user/notifications" element={<UserNotifications />} />
         </Routes>
       </HashRouter>
     </ThemeProvider>
