@@ -63,19 +63,26 @@ const NewEmployees = () => {
 
     // Family Information
     fatherName: '',
+    fatherDob: '',
     fatherAge: '',
     fatherOccupation: '',
     motherName: '',
+    motherDob: '',
     motherAge: '',
     motherOccupation: '',
     spouseName: '',
+    spouseDob: '',
     spouseAge: '',
     spouseOccupation: '',
-    numberOfChildren: '',
+    numberOfChildren: '0',
+    numberOfBoys: '0',
+    numberOfGirls: '0',
     birthOrder: '',
-    totalSiblings: '',
-    numberOfBrothers: '',
-    numberOfSisters: '',
+    totalSiblings: '0',
+    numberOfBrothers: '0',
+    numberOfSisters: '0',
+    childrenData: [],
+    siblingsData: [],
 
     // Work & Education History
     workHistory: [{ company: '', position: '', start: '', end: '', salary: '', description: '' }],
@@ -217,6 +224,7 @@ const NewEmployees = () => {
     if (!formData.email) newErrors.email = 'Email is required'
     if (!formData.phone) newErrors.phone = 'Phone is required'
     if (!formData.dob) newErrors.dob = 'Date of Birth is required'
+    if (!formData.gender) newErrors.gender = 'Gender is required'
     
     // Validate Professional Information
     if (!formData.position) newErrors.position = 'Position is required'
@@ -232,17 +240,32 @@ const NewEmployees = () => {
       newErrors.accountNumber = 'Account Number must be 10-12 digits'
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    return newErrors
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!validateForm()) {
-      window.scrollTo({
-        top: document.querySelector('.error-text')?.offsetTop - 100,
-        behavior: 'smooth'
-      })
+    const validationErrors = validateForm()
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) {
+      // Since all required fields are under the 'personal' tab,
+      // we can switch to it if it's not active.
+      if (activeTab !== 'personal') {
+        setActiveTab('personal')
+      }
+
+      // Use a timeout to ensure the DOM has updated before we try to scroll.
+      setTimeout(() => {
+        const firstErrorField = Object.keys(validationErrors)[0]
+        const errorElement = document.querySelector(`[name="${firstErrorField}"]`)
+        
+        if (errorElement) {
+          // scrollIntoView is more reliable
+          errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          errorElement.focus({ preventScroll: true })
+        }
+      }, 100)
       return
     }
 
@@ -906,8 +929,7 @@ const NewEmployees = () => {
               </div>
             )}
 
-            {/* Family Information Section */}
-            {activeTab === 'family' && (
+{activeTab === 'family' && (
               <div className="form-section">
                 <h2 className="section-title">Family Information</h2>
                 
@@ -925,18 +947,6 @@ const NewEmployees = () => {
                         onChange={handleChange}
                       />
                     </div>
-
-                    <div className="form-group">
-                      <label>Age</label>
-                      <input
-                        type="number"
-                        name="fatherAge"
-                        placeholder="Father's age"
-                        value={formData.fatherAge}
-                        onChange={handleChange}
-                      />
-                    </div>
-
                     <div className="form-group">
                       <label>Occupation</label>
                       <input
@@ -945,6 +955,26 @@ const NewEmployees = () => {
                         placeholder="Father's occupation"
                         value={formData.fatherOccupation}
                         onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Date of Birth</label>
+                      <input
+                        type="date"
+                        name="fatherDob"
+                        value={formData.fatherDob}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Age</label>
+                      <input
+                        type="number"
+                        name="fatherAge"
+                        placeholder="-"
+                        value={formData.fatherAge}
+                        onChange={handleChange}
+                        disabled
                       />
                     </div>
                   </div>
@@ -964,18 +994,6 @@ const NewEmployees = () => {
                         onChange={handleChange}
                       />
                     </div>
-
-                    <div className="form-group">
-                      <label>Age</label>
-                      <input
-                        type="number"
-                        name="motherAge"
-                        placeholder="Mother's age"
-                        value={formData.motherAge}
-                        onChange={handleChange}
-                      />
-                    </div>
-
                     <div className="form-group">
                       <label>Occupation</label>
                       <input
@@ -984,6 +1002,26 @@ const NewEmployees = () => {
                         placeholder="Mother's occupation"
                         value={formData.motherOccupation}
                         onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Date of Birth</label>
+                      <input
+                        type="date"
+                        name="motherDob"
+                        value={formData.motherDob}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Age</label>
+                      <input
+                        type="number"
+                        name="motherAge"
+                        placeholder="-"
+                        value={formData.motherAge}
+                        onChange={handleChange}
+                        disabled
                       />
                     </div>
                   </div>
@@ -1003,18 +1041,6 @@ const NewEmployees = () => {
                         onChange={handleChange}
                       />
                     </div>
-
-                    <div className="form-group">
-                      <label>Age</label>
-                      <input
-                        type="number"
-                        name="spouseAge"
-                        placeholder="Spouse's age"
-                        value={formData.spouseAge}
-                        onChange={handleChange}
-                      />
-                    </div>
-
                     <div className="form-group">
                       <label>Occupation</label>
                       <input
@@ -1025,49 +1051,209 @@ const NewEmployees = () => {
                         onChange={handleChange}
                       />
                     </div>
+                    <div className="form-group">
+                      <label>Date of Birth</label>
+                      <input
+                        type="date"
+                        name="spouseDob"
+                        value={formData.spouseDob}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Age</label>
+                      <input
+                        type="number"
+                        name="spouseAge"
+                        placeholder="-"
+                        value={formData.spouseAge}
+                        onChange={handleChange}
+                        disabled
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Family Details */}
-                <div className="family-section">
-                  <h3>Family Details</h3>
-                  <div className="form-grid">
-                    <div className="form-group">
+                {/* Children's Information */}
+                <div className="info-section">
+                  <div className="section-title">Children's Information</div>
+                  <div className="info-row">
+                    <div className="info-item">
                       <label>Number of Children</label>
                       <input
                         type="number"
                         name="numberOfChildren"
-                        placeholder="0"
                         value={formData.numberOfChildren}
                         onChange={handleChange}
-                        min="0"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Birth Order</label>
-                      <input
-                        type="number"
-                        name="birthOrder"
-                        placeholder="0"
-                        value={formData.birthOrder}
-                        onChange={handleChange}
-                        min="0"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Total Siblings</label>
-                      <input
-                        type="number"
-                        name="totalSiblings"
-                        placeholder="0"
-                        value={formData.totalSiblings}
-                        onChange={handleChange}
+                        className="edit-input"
                         min="0"
                       />
                     </div>
                   </div>
+                  <div className="info-row">
+                    <div className="info-item">
+                      <label>Total number of Boy</label>
+                      <input
+                        type="number"
+                        name="numberOfBoys"
+                        value={formData.numberOfBoys}
+                        onChange={handleChange}
+                        className="edit-input"
+                        min="0"
+                      />
+                    </div>
+                    <div className="info-item">
+                      <label>Total number of Girl</label>
+                      <input
+                        type="number"
+                        name="numberOfGirls"
+                        value={formData.numberOfGirls}
+                        onChange={handleChange}
+                        className="edit-input"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+
+                  {formData.numberOfChildren > 0 && (
+                    <table className="siblings-table">
+                      <thead>
+                        <tr>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th>Date of Birth</th>
+                          <th>Age</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Array.from({ length: parseInt(formData.numberOfChildren) || 0 }).map((_, index) => (
+                          <tr key={index}>
+                            <td>
+                              <input
+                                type="text"
+                                value={formData.childrenData[index]?.name || ''}
+                                onChange={(e) => handleChildInputChange(index, 'name', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                value={formData.childrenData[index]?.lastname || ''}
+                                onChange={(e) => handleChildInputChange(index, 'lastname', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                value={formData.childrenData[index]?.birthdate || ''}
+                                onChange={(e) => handleChildInputChange(index, 'birthdate', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              {formData.childrenData[index]?.birthdate ? new Date().getFullYear() - new Date(formData.childrenData[index].birthdate).getFullYear() : '-'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+
+                {/* Siblings Details */}
+                <div className="info-section">
+                  <div className="section-title">Siblings Details</div>
+                  <div className="info-row">
+                    <div className="info-item">
+                      <label>Total Siblings (Including Employee)</label>
+                      <input
+                        type="number"
+                        name="totalSiblings"
+                        value={formData.totalSiblings}
+                        onChange={handleChange}
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="info-item">
+                      <label>Birth Order</label>
+                      <input
+                        type="number"
+                        name="birthOrder"
+                        value={formData.birthOrder}
+                        onChange={handleChange}
+                        className="edit-input"
+                      />
+                    </div>
+                  </div>
+                  <div className="info-row">
+                    <div className="info-item">
+                      <label>Number of Brothers</label>
+                      <input
+                        type="number"
+                        name="numberOfBrothers"
+                        value={formData.numberOfBrothers}
+                        onChange={handleChange}
+                        className="edit-input"
+                      />
+                    </div>
+                    <div className="info-item">
+                      <label>Number of Sisters</label>
+                      <input
+                        type="number"
+                        name="numberOfSisters"
+                        value={formData.numberOfSisters}
+                        onChange={handleChange}
+                        className="edit-input"
+                      />
+                    </div>
+                  </div>
+                  {formData.totalSiblings > 1 && (
+                    <table className="siblings-table">
+                       <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Lastname</th>
+                          <th>Date of Birth</th>
+                          <th>Age</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {Array.from({ length: (parseInt(formData.totalSiblings, 10) || 0) - 1 }).map((_, index) => (
+                          <tr key={index}>
+                            <td>
+                              <input
+                                type="text"
+                                value={formData.siblingsData[index]?.name || ''}
+                                onChange={(e) => handleSiblingInputChange(index, 'name', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                value={formData.siblingsData[index]?.lastname || ''}
+                                onChange={(e) => handleSiblingInputChange(index, 'lastname', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="date"
+                                value={formData.siblingsData[index]?.birthdate || ''}
+                                onChange={(e) => handleSiblingInputChange(index, 'birthdate', e.target.value)}
+                                className="edit-input"
+                              />
+                            </td>
+                            <td>
+                              {formData.siblingsData[index]?.birthdate ? new Date().getFullYear() - new Date(formData.siblingsData[index].birthdate).getFullYear() : '-'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
                 </div>
               </div>
             )}
