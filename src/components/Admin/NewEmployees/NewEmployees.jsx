@@ -111,21 +111,6 @@ const NewEmployees = () => {
   const [activeTab, setActiveTab] = useState('personal')
   const navigate = useNavigate()
 
-  useEffect(() => {
-    // Role-based access control
-    const role = localStorage.getItem('userRole')
-    if (!role) {
-      navigate('/login')
-      return
-    }
-    
-    // Restrict access for admin users
-    if (role === 'admin') {
-      navigate('/employees')
-      return
-    }
-  }, [navigate])
-
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => {
@@ -1472,8 +1457,12 @@ const NewEmployees = () => {
               </div>
             )}
 
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => navigate('/employees')}>
+            <div className="new-employee-form-actions">
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => navigate('/admin/all-employees')}
+              >
                 Cancel
               </button>
               <button type="submit" className="btn-submit">

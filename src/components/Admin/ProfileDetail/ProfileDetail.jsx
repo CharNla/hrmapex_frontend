@@ -30,6 +30,7 @@ const ProfileDetail = () => {
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState('');
+  const [siblingsData, setSiblingsData] = useState([]);
   const currentEmployeeId = localStorage.getItem('employeeId');
 
   const toggleSideMenu = () => {
@@ -245,7 +246,7 @@ const ProfileDetail = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     // ตรวจสอบว่าเป็น field array หรือไม่ เช่น education.0.level
-    const match = name.match(/^(education|experience)\.(\d+)\.(\w+)$/);
+    const match = name.match(/^(education|experience|childrenData)\.(\d+)\.(\w+)$/);
     if (match) {
       const [_, field, idx, key] = match;
       setEditData(prev => {
@@ -253,6 +254,19 @@ const ProfileDetail = () => {
         arr[parseInt(idx)] = { ...arr[parseInt(idx)], [key]: value };
         return { ...prev, [field]: arr };
       });
+    } else if (name === 'TotalSiblings') {
+      const totalSiblings = parseInt(value, 10) || 0;
+      const numberOfSiblings = Math.max(0, totalSiblings - 1); // Exclude the employee
+      const newSiblingsData = Array(numberOfSiblings).fill(null).map((_, index) => ({
+        id: index,
+        name: siblingsData[index]?.name || '',
+        lastname: siblingsData[index]?.lastname || '',
+        phoneNumber: siblingsData[index]?.phoneNumber || '',
+        yearOfBirth: siblingsData[index]?.yearOfBirth || '',
+        occupation: siblingsData[index]?.occupation || '',
+      }));
+      setSiblingsData(newSiblingsData);
+      setEditData(prev => ({ ...prev, [name]: value }));
     } else {
       setEditData(prev => ({ ...prev, [name]: value }));
     }
@@ -980,7 +994,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -998,7 +1012,7 @@ const ProfileDetail = () => {
                     strokeLinecap="round"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
                     viewBox="0 0 24 24"
                     height="24"
                     width="24"
@@ -1600,6 +1614,35 @@ const ProfileDetail = () => {
   };
 
   const renderFamilyInfo = () => {
+    const calculateAge = (birthdate) => {
+      const today = new Date();
+      const birthDate = new Date(birthdate);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    };
+
+    const calculateSiblingAge = (birthdate) => {
+      if (!birthdate) return '';
+      const birthDate = new Date(birthdate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    };
+
+    const handleSiblingInputChange = (index, field, value) => {
+      const updatedSiblingsData = [...siblingsData];
+      updatedSiblingsData[index][field] = value;
+      setSiblingsData(updatedSiblingsData);
+    };
+
     return (
       <div className="info-container">
         <div className="info-section">
@@ -1620,22 +1663,6 @@ const ProfileDetail = () => {
               )}
             </div>
             <div className="info-item">
-              <label>Age</label>
-              {isEditing ? (
-                <input
-                  type="number"
-                  name="FatherAge"
-                  value={editData.FatherAge || ''}
-                  onChange={handleInputChange}
-                  className="edit-input"
-                />
-              ) : (
-                <span className="info-value">{employeeData?.FatherAge || '-'}</span>
-              )}
-            </div>
-          </div>
-          <div className="info-row">
-            <div className="info-item">
               <label>Occupation</label>
               {isEditing ? (
                 <input
@@ -1648,6 +1675,34 @@ const ProfileDetail = () => {
               ) : (
                 <span className="info-value">{employeeData?.FatherOccupation || '-'}</span>
               )}
+            </div>
+            <div className="info-item">
+              <label>Date of Birth</label>
+              {isEditing ? (
+                <input
+                  type="date"
+                  name="FatherBirthDate"
+                  value={editData.FatherBirthDate || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                />
+              ) : (
+                <span className="info-value">
+                  {employeeData?.FatherBirthDate
+                    ? new Date(employeeData.FatherBirthDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : '-'}
+                </span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>Age</label>
+              <span className="info-value">
+                {employeeData?.FatherBirthDate ? calculateAge(employeeData.FatherBirthDate) : '-'}
+              </span>
             </div>
           </div>
         </div>
@@ -1670,22 +1725,6 @@ const ProfileDetail = () => {
               )}
             </div>
             <div className="info-item">
-              <label>Age</label>
-              {isEditing ? (
-                <input
-                  type="number"
-                  name="MotherAge"
-                  value={editData.MotherAge || ''}
-                  onChange={handleInputChange}
-                  className="edit-input"
-                />
-              ) : (
-                <span className="info-value">{employeeData?.MotherAge || '-'}</span>
-              )}
-            </div>
-          </div>
-          <div className="info-row">
-            <div className="info-item">
               <label>Occupation</label>
               {isEditing ? (
                 <input
@@ -1699,9 +1738,33 @@ const ProfileDetail = () => {
                 <span className="info-value">{employeeData?.MotherOccupation || '-'}</span>
               )}
             </div>
-          </div>
-        </div>
-
+            <div className="info-item">
+              <label>Date of Birth</label>
+              {isEditing ? (
+                <input
+                  type="date"
+                  name="MotherBirthDate"
+                  value={editData.MotherBirthDate || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                />
+              ) : (
+                <span className="info-value">
+                  {employeeData?.MotherBirthDate
+                    ? new Date(employeeData.MotherBirthDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : '-'}
+                </span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>Age</label>
+              <span className="info-value">
+                {employeeData?.MotherBirthDate ? calculateAge(employeeData.MotherBirthDate) : '-'}
+              </span>            </div>          </div>        </div>
         <div className="info-section">
           <div className="section-title">Spouse Information</div>
           <div className="info-row">
@@ -1720,22 +1783,6 @@ const ProfileDetail = () => {
               )}
             </div>
             <div className="info-item">
-              <label>Age</label>
-              {isEditing ? (
-                <input
-                  type="number"
-                  name="SpouseAge"
-                  value={editData.SpouseAge || ''}
-                  onChange={handleInputChange}
-                  className="edit-input"
-                />
-              ) : (
-                <span className="info-value">{employeeData?.SpouseAge || '-'}</span>
-              )}
-            </div>
-          </div>
-          <div className="info-row">
-            <div className="info-item">
               <label>Occupation</label>
               {isEditing ? (
                 <input
@@ -1749,11 +1796,39 @@ const ProfileDetail = () => {
                 <span className="info-value">{employeeData?.SpouseOccupation || '-'}</span>
               )}
             </div>
+            <div className="info-item">
+              <label>Date of Birth</label>
+              {isEditing ? (
+                <input
+                  type="date"
+                  name="SpouseBirthDate"
+                  value={editData.SpouseBirthDate || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                />
+              ) : (
+                <span className="info-value">
+                  {employeeData?.SpouseBirthDate
+                    ? new Date(employeeData.SpouseBirthDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    : '-'}
+                </span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>Age</label>
+              <span className="info-value">
+                {employeeData?.SpouseBirthDate ? calculateAge(employeeData.SpouseBirthDate) : '-'}
+              </span>
+            </div>
           </div>
         </div>
 
         <div className="info-section">
-          <div className="section-title">Family Details</div>
+          <div className="section-title">Children's Information</div>
           <div className="info-row">
             <div className="info-item">
               <label>Number of Children</label>
@@ -1764,9 +1839,131 @@ const ProfileDetail = () => {
                   value={editData.NumberOfChildren || ''}
                   onChange={handleInputChange}
                   className="edit-input"
+                  min="0"
                 />
               ) : (
                 <span className="info-value">{employeeData?.NumberOfChildren || '0'}</span>
+              )}
+            </div>
+          </div>
+          <div className="info-row">
+            <div className="info-item">
+              <label>Total number of Boy</label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="NumberOfBoys"
+                  value={editData.NumberOfBoys || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  min="0"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.NumberOfBoys || '0'}</span>
+              )}
+            </div>
+            <div className="info-item">
+              <label>Total number of Girl</label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="NumberOfGirls"
+                  value={editData.NumberOfGirls || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                  min="0"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.NumberOfGirls || '0'}</span>
+              )}
+            </div>
+          </div>
+          
+          {/* Show children table only if NumberOfChildren > 0 */}
+          {(employeeData?.NumberOfChildren > 0 || (isEditing && editData.NumberOfChildren > 0)) && (
+            <table className="siblings-table">
+              <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Date of Birth</th>
+                  <th>Age</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: parseInt(isEditing ? editData.NumberOfChildren : employeeData?.NumberOfChildren) || 0 }).map((_, index) => (
+                  <tr key={index}>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name={`childrenData.${index}.name`}
+                          value={editData.childrenData?.[index]?.name || ''}
+                          onChange={handleInputChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        employeeData?.childrenData?.[index]?.name || '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          name={`childrenData.${index}.lastname`}
+                          value={editData.childrenData?.[index]?.lastname || ''}
+                          onChange={handleInputChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        employeeData?.childrenData?.[index]?.lastname || '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="date"
+                          name={`childrenData.${index}.birthdate`}
+                          value={editData.childrenData?.[index]?.birthdate || ''}
+                          onChange={handleInputChange}
+                          className="edit-input"
+                        />
+                      ) : (
+                        employeeData?.childrenData?.[index]?.birthdate ? 
+                          new Date(employeeData.childrenData[index].birthdate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          }) : '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing
+                        ? (editData.childrenData?.[index]?.birthdate ? calculateAge(editData.childrenData[index].birthdate) : '-')
+                        : (employeeData?.childrenData?.[index]?.birthdate ? calculateAge(employeeData.childrenData[index].birthdate) : '-')
+                      }
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+        <div className="info-section">
+          <div className="section-title">Siblings Details</div>
+          <div className="info-row">
+            <div className="info-item">
+              <label>Total Siblings (Including Employee)</label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="TotalSiblings"
+                  value={editData.TotalSiblings || ''}
+                  onChange={handleInputChange}
+                  className="edit-input"
+                />
+              ) : (
+                <span className="info-value">{employeeData?.TotalSiblings || '0'}</span>
               )}
             </div>
             <div className="info-item">
@@ -1781,22 +1978,6 @@ const ProfileDetail = () => {
                 />
               ) : (
                 <span className="info-value">{employeeData?.BirthOrder ? `${employeeData.BirthOrder}${getOrdinalSuffix(employeeData.BirthOrder)} Child` : '-'}</span>
-              )}
-            </div>
-          </div>
-          <div className="info-row">
-            <div className="info-item">
-              <label>Total Siblings (Including Employee)</label>
-              {isEditing ? (
-                <input
-                  type="number"
-                  name="TotalSiblings"
-                  value={editData.TotalSiblings || ''}
-                  onChange={handleInputChange}
-                  className="edit-input"
-                />
-              ) : (
-                <span className="info-value">{employeeData?.TotalSiblings || '0'}</span>
               )}
             </div>
           </div>
@@ -1830,341 +2011,82 @@ const ProfileDetail = () => {
               )}
             </div>
           </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderOtherInfo = () => {
-    return (
-      <div className="info-container">
-        {/* Language Ability Section */}
-        <div className="info-section">
-          <div className="section-title">Language Ability</div>
-          <div className="language-grid">
-            <div className="language-row">
-              <div className="language-label">Speaking:</div>
-              <div className="language-options">
-                {isEditing ? (
-                  ['good', 'fair', 'poor'].map((value) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="speaking"
-                        value={value}
-                        checked={editData.speaking === value}
-                        onChange={handleInputChange}
-                      />
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </label>
-                  ))
-                ) : (
-                  <span className="info-value">
-                    {employeeData?.speaking ? 
-                      employeeData.speaking.charAt(0).toUpperCase() + employeeData.speaking.slice(1) 
-                      : '-'}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="language-row">
-              <div className="language-label">Writing:</div>
-              <div className="language-options">
-                {isEditing ? (
-                  ['good', 'fair', 'poor'].map((value) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="writing"
-                        value={value}
-                        checked={editData.writing === value}
-                        onChange={handleInputChange}
-                      />
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </label>
-                  ))
-                ) : (
-                  <span className="info-value">
-                    {employeeData?.writing ? 
-                      employeeData.writing.charAt(0).toUpperCase() + employeeData.writing.slice(1) 
-                      : '-'}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="language-row">
-              <div className="language-label">Reading:</div>
-              <div className="language-options">
-                {isEditing ? (
-                  ['good', 'fair', 'poor'].map((value) => (
-                    <label key={value}>
-                      <input
-                        type="radio"
-                        name="reading"
-                        value={value}
-                        checked={editData.reading === value}
-                        onChange={handleInputChange}
-                      />
-                      {value.charAt(0).toUpperCase() + value.slice(1)}
-                    </label>
-                  ))
-                ) : (
-                  <span className="info-value">
-                    {employeeData?.reading ? 
-                      employeeData.reading.charAt(0).toUpperCase() + employeeData.reading.slice(1) 
-                      : '-'}
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Criminal Record Section */}
-        <div className="info-section">
-          <div className="section-title">ประวัติทางกฎหมาย</div>
-          <div className="criminal-record-container">
-            <div className="criminal-record-question">
-              <div className="info-row">
-                <div className="info-item">
-                  <label>เคยต้องโทษทางแพ่งหรืออาญาหรือไม่</label>
-                  {isEditing ? (
-                    <div className="criminal-options">
-                      <label>
+          {siblingsData.length > 0 && (
+            <table className="siblings-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Lastname</th>
+                  <th>Phone Number</th>
+                  <th>Date of Birth</th>
+                  <th>Age</th>
+                  <th>Occupation</th>
+                </tr>
+              </thead>
+              <tbody>
+                {siblingsData.map((sibling, index) => (
+                  <tr key={sibling.id}>
+                    <td>
+                      {isEditing ? (
                         <input
-                          type="radio"
-                          name="hasCriminalRecord"
-                          value="yes"
-                          checked={editData.hasCriminalRecord === 'yes'}
-                          onChange={handleInputChange}
+                          type="text"
+                          value={sibling.name || ''}
+                          onChange={(e) => handleSiblingInputChange(index, 'name', e.target.value)}
                         />
-                        เคย
-                      </label>
-                      <label>
+                      ) : (
+                        sibling.name || '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
                         <input
-                          type="radio"
-                          name="hasCriminalRecord"
-                          value="no"
-                          checked={editData.hasCriminalRecord === 'no'}
-                          onChange={handleInputChange}
+                          type="text"
+                          value={sibling.lastname || ''}
+                          onChange={(e) => handleSiblingInputChange(index, 'lastname', e.target.value)}
                         />
-                        ไม่เคย
-                      </label>
-                    </div>
-                  ) : (
-                    <span className="info-value">
-                      {employeeData?.hasCriminalRecord === 'yes' ? 'เคย' : 
-                       employeeData?.hasCriminalRecord === 'no' ? 'ไม่เคย' : '-'}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {(isEditing ? editData.hasCriminalRecord === 'yes' : employeeData?.hasCriminalRecord === 'yes') && (
-              <div className="criminal-details">
-                <div className="info-row">
-                  <div className="info-item full-width">
-                    <label>รายละเอียด</label>
-                    {isEditing ? (
-                      <textarea
-                        name="criminalDetails"
-                        value={editData.criminalDetails || ''}
-                        onChange={handleInputChange}
-                        rows="3"
-                        placeholder="โปรดระบุรายละเอียดความผิดและโทษที่ได้รับ"
-                      />
-                    ) : (
-                      <span className="info-value">{employeeData?.criminalDetails || '-'}</span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Work Relocation Section */}
-        <div className="info-section">
-          <div className="section-title">การปฏิบัติงานต่างจังหวัด</div>
-          <div className="info-row">
-            <div className="info-item">
-              <label>สามารถไปปฏิบัติงานต่างจังหวัดได้หรือไม่</label>
-              {isEditing ? (
-                <div className="relocation-options">
-                  <label>
-                    <input
-                      type="radio"
-                      name="canRelocate"
-                      value="yes"
-                      checked={editData.canRelocate === 'yes'}
-                      onChange={handleInputChange}
-                    />
-                    ได้
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="canRelocate"
-                      value="no"
-                      checked={editData.canRelocate === 'no'}
-                      onChange={handleInputChange}
-                    />
-                    ไม่ได้
-                  </label>
-                </div>
-              ) : (
-                <span className="info-value">
-                  {employeeData?.canRelocate === 'yes' ? 'ได้' : 
-                   employeeData?.canRelocate === 'no' ? 'ไม่ได้' : '-'}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>        {/* Emergency Contact Section */}
-        <div className="info-section">
-          <div className="section-title">บุคคลที่ติดต่อได้กรณีฉุกเฉิน</div>
-          <div className="emergency-contacts-container">
-            {/* บุคคลที่ติดต่อได้กรณีฉุกเฉิน บุคคลที่ 1 */}
-            <div className="emergency-contact-card">
-              <div className="contact-card-header">
-                <div className="contact-number-badge">1</div>
-                <div className="contact-card-title">บุคคลที่ติดต่อได้กรณีฉุกเฉิน คนที่ 1</div>
-              </div>
-              <div className="contact-info-grid">
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ชื่อ-นามสกุล</div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="emergencyContactName1"
-                      value={editData.emergencyContactName1 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณากรอกชื่อ-นามสกุล"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactName1 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ความเกี่ยวข้องกับผู้สมัคร</div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="emergencyContactRelation1"
-                      value={editData.emergencyContactRelation1 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณาระบุความเกี่ยวข้อง"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactRelation1 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">เบอร์โทรศัพท์</div>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      name="emergencyContactPhone1"
-                      value={editData.emergencyContactPhone1 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณากรอกเบอร์โทรศัพท์"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactPhone1 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ที่อยู่</div>
-                  {isEditing ? (
-                    <textarea
-                      name="emergencyContactAddress1"
-                      value={editData.emergencyContactAddress1 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-textarea"
-                      placeholder="กรุณากรอกที่อยู่"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactAddress1 || '-'}</div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* บุคคลที่ติดต่อได้กรณีฉุกเฉิน บุคคลที่ 2 */}
-            <div className="emergency-contact-card">
-              <div className="contact-card-header">
-                <div className="contact-number-badge">2</div>
-                <div className="contact-card-title">บุคคลที่ติดต่อได้กรณีฉุกเฉิน คนที่ 2</div>
-              </div>
-              <div className="contact-info-grid">
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ชื่อ-นามสกุล</div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="emergencyContactName2"
-                      value={editData.emergencyContactName2 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณากรอกชื่อ-นามสกุล"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactName2 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ความเกี่ยวข้องกับผู้สมัคร</div>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      name="emergencyContactRelation2"
-                      value={editData.emergencyContactRelation2 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณาระบุความเกี่ยวข้อง"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactRelation2 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">เบอร์โทรศัพท์</div>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      name="emergencyContactPhone2"
-                      value={editData.emergencyContactPhone2 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-input"
-                      placeholder="กรุณากรอกเบอร์โทรศัพท์"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactPhone2 || '-'}</div>
-                  )}
-                </div>
-                <div className="contact-info-item">
-                  <div className="contact-info-label">ที่อยู่</div>
-                  {isEditing ? (
-                    <textarea
-                      name="emergencyContactAddress2"
-                      value={editData.emergencyContactAddress2 || ''}
-                      onChange={handleInputChange}
-                      className="contact-info-textarea"
-                      placeholder="กรุณากรอกที่อยู่"
-                    />
-                  ) : (
-                    <div className="contact-info-value">{employeeData?.emergencyContactAddress2 || '-'}</div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+                      ) : (
+                        sibling.lastname || '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={sibling.phoneNumber || ''}
+                          onChange={(e) => handleSiblingInputChange(index, 'phoneNumber', e.target.value)}
+                        />
+                      ) : (
+                        sibling.phoneNumber || '-'
+                      )}
+                    </td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="date"
+                          value={sibling.birthdate || ''}
+                          onChange={(e) => handleSiblingInputChange(index, 'birthdate', e.target.value)}
+                        />
+                      ) : (
+                        sibling.birthdate ? new Date(sibling.birthdate).toLocaleDateString('en-US') : '-'
+                      )}
+                    </td>
+                    <td>{calculateSiblingAge(sibling.birthdate)}</td>
+                    <td>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={sibling.occupation || ''}
+                          onChange={(e) => handleSiblingInputChange(index, 'occupation', e.target.value)}
+                        />
+                      ) : (
+                        sibling.occupation || '-'
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     );
@@ -2184,7 +2106,7 @@ const ProfileDetail = () => {
   const calculateAge = (dateOfBirth) => {
     if (!dateOfBirth) return '-';
     const dob = new Date(dateOfBirth);
-    const today = new Date('2025-06-06'); // Use current date
+    const today = new Date(); // Use current date
     let age = today.getFullYear() - dob.getFullYear();
     const monthDiff = today.getMonth() - dob.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
@@ -2251,7 +2173,7 @@ const ProfileDetail = () => {
                         name="AccountNumber"
                         value={editData.AccountNumber || ''}
                         onChange={handleInputChange}
-                        className="edit-input"
+                                               className="edit-input"
                       />
                     ) : (
                       <span className="info-value">{employeeData?.AccountNumber || '-'}</span>
