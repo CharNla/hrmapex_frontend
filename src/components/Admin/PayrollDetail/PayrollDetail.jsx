@@ -8,7 +8,7 @@ import { FiDollarSign, FiMinusCircle, FiPlusCircle, FiFile, FiEdit2, FiSave, FiX
 const mainTabs = [
   { key: 'salary', label: 'Base Salary', icon: <FiDollarSign /> },
   { key: 'deductions', label: 'Deductions', icon: <FiMinusCircle /> },
-  { key: 'additions', label: 'Additional Income', icon: <FiPlusCircle /> },
+  { key: 'additions', label: 'Expense Item', icon: <FiPlusCircle /> },
   { key: 'documents', label: 'Documents', icon: <FiFile /> },
 ];
 
@@ -18,20 +18,18 @@ const PayrollDetail = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
-  const [userRole, setUserRole] = useState('');
-
-  useEffect(() => {
-    // ดึง userRole จาก localStorage
+  const [userRole, setUserRole] = useState('');  useEffect(() => {
+    // Get userRole from localStorage
     const role = localStorage.getItem('userRole') || '';
     
-    // เช็คว่าเป็น admin หรือ superadmin หรือไม่
-    if (role === 'admin' || role === 'superadmin') {
+    // Check if user is an admin
+    if (role === 'admin') {
       setUserRole('admin');
     } else {
       setUserRole('user');
     }
     
-    // แสดง role ที่กำลังใช้งาน
+    // Log the current role
     console.log('Current role:', role);
   }, []);
 
@@ -232,6 +230,7 @@ const PayrollDetail = () => {
             value={category === 'base' ? editData[field] : editData[category][field]}
             onChange={(e) => handleInputChange(category, field, e.target.value)}
             className="payroll-detail__edit-input"
+            readOnly={category === 'additionalIncome'}
           />
         ) : (
           <span className={category === 'deductions' ? 'deduction' : category === 'additionalIncome' ? 'addition' : ''}>
@@ -373,18 +372,22 @@ const PayrollDetail = () => {
           <div className="payroll-detail__tab-content">
             <div className="payroll-detail__card">
               <div className="payroll-detail__info-grid">
-                {isEditing && renderAddItemButton('additionalIncome')}
+                {isEditing && (
+                  <div style={{ color: 'red', gridColumn: '1 / -1', paddingBottom: '1rem', fontStyle: 'italic' }}>
+                    *To edit, please go to the Disbursement menu.
+                  </div>
+                )}
                 {renderEditableField('additionalIncome', 'overtime', 'Overtime (OT)', employeeData.additionalIncome.overtime)}
                 {renderEditableField('additionalIncome', 'travel', 'Travel Allowance', employeeData.additionalIncome.travel)}
                 {renderEditableField('additionalIncome', 'food', 'Food Allowance', employeeData.additionalIncome.food)}
                 {renderEditableField('additionalIncome', 'other', 'Other', employeeData.additionalIncome.other)}
-                {/* Map any additional custom income items */}
+                {/* Map any additional custom expense items */}
                 {Object.entries(editData.additionalIncome)
                   .filter(([key]) => !['overtime', 'travel', 'food', 'other'].includes(key))
                   .map(([key, value]) => renderEditableField('additionalIncome', key, key, value))
                 }
                 <div className="payroll-detail__info-item highlight">
-                  <label>Total Additional Income</label>
+                  <label>Total Expense Item</label>
                   <span className="addition">+฿{(
                     Object.values(isEditing ? editData.additionalIncome : employeeData.additionalIncome)
                       .reduce((a, b) => a + b, 0)
@@ -453,7 +456,7 @@ const PayrollDetail = () => {
                           <div key={index} className="payroll-detail__file-item">
                             <div className="file-info">
                               <FiFile /> {file.name}
-                            </div>                            {userRole === 'admin' && (
+                            </div>                            {userRole === 'user' && (
                               <button 
                                 className="payroll-detail__delete-file" 
                                 onClick={() => handleDeleteFile('paySlip', index)}

@@ -1,13 +1,37 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FiSearch, FiBell, FiChevronDown, FiUser, FiLogOut, FiFileText, FiDollarSign, FiMenu } from 'react-icons/fi'
 import './Topbar.css'
 import userImage from '../../../assets/profile.png'
 import SideMenu from '../SideMenu/Side_menu'
 
-function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick }) {
+const routeInfo = {
+  '/admin/all-employees': { title: 'All Employees', subtitle: 'Manage employee information' },
+  '/admin/employees': { title: 'All Employees', subtitle: 'Manage employee information' },
+  '/admin/new-employee': { title: 'Add New Employee', subtitle: 'Enter details for the new employee' },
+  '/admin/news': { title: 'News', subtitle: 'Manage company news and announcements' },
+  '/admin/addnews': { title: 'Add News', subtitle: 'Create a new news article or announcement' },
+  '/admin/leaves': { title: 'Leaves', subtitle: 'Manage employee leave requests' },
+  '/admin/payroll': { title: 'Payroll', subtitle: 'Process and manage employee payroll' },
+  '/admin/disbursement': { title: 'Disbursement', subtitle: 'Manage employee expense reimbursements' },
+  '/admin/adddisburse': { title: 'Add Disbursement', subtitle: 'Create a new disbursement request' },
+  '/admin/settings': { title: 'Settings', subtitle: 'Configure application settings' },
+  '/admin/holidays': { title: 'Holidays', subtitle: 'Manage company holidays' },
+  '/admin/account': { title: 'My Account', subtitle: 'View and manage your account details' },
+  '/admin/notifications': { title: 'Notifications', subtitle: 'View all your notifications' },
+  '/user/news': { title: 'News', subtitle: 'Latest company news and announcements' },
+  '/user/disbursement': { title: 'My Disbursements', subtitle: 'View your expense reimbursements' },
+  '/user/adddisburse': { title: 'New Disbursement', subtitle: 'Submit a new expense reimbursement' },
+  '/user/leaves': { title: 'My Leaves', subtitle: 'View your leave requests and balances' },
+  '/user/holidays': { title: 'Holidays', subtitle: 'View company holidays' },
+  '/user/notifications': { title: 'Notifications', subtitle: 'View all your notifications' },
+  '/superadmin/account': { title: 'Super Admin Account', subtitle: 'Manage Super Admin accounts' }
+};
+
+function Topbar({ pageTitle: propTitle, pageSubtitle: propSubtitle, onMobileMenuClick }) {
   const navigate = useNavigate()
+  const location = useLocation()
   const [search, setSearch] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
@@ -57,6 +81,57 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
     }
   ]
 
+  const getPageInfo = () => {
+    const path = location.pathname;
+    
+    // Handle dynamic routes like /admin/employee/:id
+    const profileMatch = path.match(/^\/admin\/(employee)\/(\w+)/);
+    if (profileMatch) {
+        return { title: 'Employee Profile', subtitle: 'View and manage employee details' };
+    }
+
+    const payrollDetailMatch = path.match(/^\/admin\/(payroll-detail)\/(\w+)/);
+    if (payrollDetailMatch) {
+      return { title: 'Payroll Details', subtitle: 'View detailed payroll information' };
+    }
+
+    const leaveDetailMatch = path.match(/^\/admin\/(leaves\/detail)\/(\w+)/);
+    if (leaveDetailMatch) {
+      return { title: 'Leave Details', subtitle: 'View detailed leave information' };
+    }
+    
+    const editAccountMatch = path.match(/^\/admin\/(edit-account)\/(\w+)/);
+    if (editAccountMatch) {
+      return { title: 'Edit Account', subtitle: 'Update account information' };
+    }
+
+    const newHolidayMatch = path.match(/^\/admin\/(newholiday)\/(\w+)/);
+    if (newHolidayMatch) {
+      return { title: 'Add New Holiday', subtitle: 'Create a new holiday entry' };
+    }
+    
+    // Super Admin dynamic routes
+    const superAdminEditMatch = path.match(/^\/superadmin\/(edit-account)\/(\w+)/);
+    if (superAdminEditMatch) {
+      return { title: 'Edit Super Admin', subtitle: 'Update Super Admin account information' };
+    }
+
+    // User dynamic routes
+     const userPayrollDetailMatch = path.match(/^\/user\/(payroll-detail)\/(\w+)/);
+    if (userPayrollDetailMatch) {
+      return { title: 'My Payroll Details', subtitle: 'View your detailed payroll information' };
+    }
+
+    const userLeaveDetailMatch = path.match(/^\/user\/(leaves\/detail)\/(\w+)/);
+    if (userLeaveDetailMatch) {
+      return { title: 'My Leave Details', subtitle: 'View your detailed leave information' };
+    }
+
+    return routeInfo[path] || { title: propTitle || 'Dashboard', subtitle: propSubtitle || '' };
+  };
+
+  const { title: currentPageTitle, subtitle: currentPageSubtitle } = getPageInfo();
+
   const getGreeting = () => {
     if (currentHour < 12) return 'Good Morning'
     if (currentHour < 18) return 'Good Afternoon'
@@ -81,9 +156,6 @@ function Topbar({ pageTitle = "Dashboard", pageSubtitle = "", onMobileMenuClick 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen)
   }
-
-  const currentPageTitle = "All Employees";
-  const currentPageSubtitle = "Manage employee information";
 
   return (
     <>
