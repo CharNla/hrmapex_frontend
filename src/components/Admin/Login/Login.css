@@ -50,52 +50,64 @@ html {
 /* Main layout */
 .login-container {
   display: flex;
-  background-color: white;
-  width: 100vw;
-  height: 100vh;
-  padding: 40px;
-  gap: 40px;
-  position: relative;
-  overflow: hidden;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('../../../assets/img/Human Resource Management System.png');
+  background-size: cover;
+  background-position: -3rem center;
+  background-repeat: no-repeat;
 }
 
 /* Left Side - Dashboard Preview */
 .login-left {
-  flex: 2;
-  background-color: #d8d0ff;
-  border-radius: 30px;
-  margin: 40px 0 40px 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: none;
+}
+
+.login-left-content {
+  display: none;
 }
 
 .dashboard-preview {
-  width: 95%;
-  height: auto;
-  border-radius: 20px;
-  background-color: #ffffff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  object-fit: contain;
+  display: none;
+}
+
+.login-branding-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #4A5568;
+  line-height: 1.2;
+  max-width: 420px;
+}
+
+.login-branding-description {
+  font-size: 1.1rem;
+  color: #718096;
+  max-width: 420px;
 }
 
 /* Right Side - Login Form */
 .login-right {
-  flex: 1;
-  background-color: white;
+  width: 100%;
+  max-width: 500px;
+  min-height: 100vh;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-end;
-  padding: 40px 80px 40px 40px;
-  border-radius: 0 0 0 60px;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  margin-right: 65px;
 }
 
 .login-form {
   width: 100%;
   max-width: 400px;
+  margin: auto;
   display: flex;
   flex-direction: column;
-  padding-left: 40px;
+  animation: fadeScale 0.5s ease-out;
 }
 
 .app-logo {
@@ -708,13 +720,12 @@ html {
 /* Main layout - ปรับปรุง animation */
 .login-container {
   display: flex;
-  background-color: white;
   width: 100vw;
   height: 100vh;
-  padding: 40px;
   gap: 40px;
   position: relative;
   overflow: hidden;
+  justify-content: flex-end;
 }
 
 /* เพิ่ม animation สำหรับ login form */
@@ -723,13 +734,7 @@ html {
   background-color: white;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  padding: 40px 80px 40px 40px;
-  border-radius: 0 0 0 60px;
-}
-
-.login-form {
-  animation: fadeScale 0.5s ease-out;
+  justify-content: center;
 }
 
 /* ปรับปรุง animation keyframes */

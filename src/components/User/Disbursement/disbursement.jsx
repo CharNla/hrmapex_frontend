@@ -258,14 +258,27 @@ const Disbursement = () => {  const navigate = useNavigate();
       )
     );
   };  const handleSave = (id) => {
-    console.log("Saving changes for disbursement ID:", id, "with data:", editData);
+    // ใช้ไฟล์แนบที่มีอยู่แล้วในสถานะ editData
+    const newFileAttachments = editData.newAttachments;
+
+    setDisbursements(prevDisbursements =>
+      prevDisbursements.map(item =>
+        item.id === id 
+          ? {
+              ...item,
+              ...editData,
+              attachments: [
+                ...(item.attachments || []),
+                ...newFileAttachments
+              ]
+            }
+          : item
+      )
+    );
     setEditingId(null);
   };
   const handleAddDisbursement = () => {
-    navigate('/user/adddisburse');
-  };
-  const handleStatusUpdate = (id, newStatus) => {
-    console.log(`Updating status for disbursement ${id} to ${newStatus}`);
+    navigate('/adddisburse');
   };
 
   return (

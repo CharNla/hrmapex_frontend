@@ -142,27 +142,60 @@
   margin: 2rem 0;
   border-top: 1px solid rgba(113, 82, 243, 0.15);
   background: transparent;
-  margin-left: 1rem; /* Move buttons to the right */
 }
 
 .btn-cancel, 
 .btn-submit {
-  min-width: 120px;
   padding: 0.75rem 1.5rem;
   font-weight: 500;
   font-size: 0.95rem;
   border: none;
   transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.btn-submit {
+  order: -1; /* Move save button to the left */
+  background: #28a745;
+  color: white;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+  min-width: 180px; /* ทำให้ปุ่ม Save ยาวขึ้น */
+  flex: 2; /* ให้ปุ่ม Save กินพื้นที่มากกว่า */
 }
 
 .btn-cancel {
   background: rgba(113, 82, 243, 0.1);
   color: #7152f3;
+  min-width: 100px; /* ปุ่ม Cancel แคบลง */
+  flex: 1; /* ให้ปุ่ม Cancel กินพื้นที่น้อยกว่า */
 }
 
-.btn-submit {
-  background: #28a745; /* Green color for save button */
-  color: white;
+/* Responsive styles for form actions */
+@media screen and (max-width: 768px) {
+  .form-actions {
+    padding: 1rem;
+    flex-direction: column-reverse; /* Stack buttons vertically */
+    gap: 0.75rem;
+  }
+
+  .btn-cancel, 
+  .btn-submit {
+    width: 100%; /* Full width on mobile */
+    min-width: auto;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .form-actions {
+    margin: 1rem 0;
+    padding: 1rem 0.75rem;
+  }
+  
+  .btn-cancel, 
+  .btn-submit {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 .btn-cancel:hover {

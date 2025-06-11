@@ -87,10 +87,18 @@ const SuperAdminAccount = () => {
     };
 
     fetchAccounts();
-  }, []);
-
-  const handleEdit = async (id) => {
-    navigate(`/admin/edit-superadmin-account/${id}`);
+  }, []);  const handleEdit = async (id) => {
+    try {
+      const accountToEdit = accounts.find(account => account.id === id);
+      if (accountToEdit) {
+        navigate(`/superadmin/edit-account/${id}`, { state: { account: accountToEdit } });
+      } else {
+        throw new Error('Account not found');
+      }
+    } catch (err) {
+      console.error('Error navigating to edit page:', err);
+      alert('Failed to open edit page');
+    }
   };
 
   const handleDelete = async (id) => {
@@ -149,8 +157,7 @@ const SuperAdminAccount = () => {
             onMobileMenuClick={handleMobileMenuToggle}
           />
           <div className="account-container">
-            <div className="account-header">
-              <div className="account-search-bar">
+            <div className="account-header">              <div className="account-search-bar">
                 <FaSearch className="account-search-icon" />
                 <input
                   type="text"
@@ -159,6 +166,13 @@ const SuperAdminAccount = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
+              <button
+                className="add-account-btn"
+                onClick={() => navigate('/admin/add-superadmin-account')}
+              >
+                <span className="add-icon">+</span>
+                Add Account
+              </button>
             </div>
 
             <div className="account-table-container">

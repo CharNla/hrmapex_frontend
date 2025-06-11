@@ -26,6 +26,7 @@ import EditAccount from './components/Admin/Account/EditAccount'
 import Notification from './components/Admin/Notifications/Notification'
 import SuperAdminAccount from './components/SuperAdmin/SuperAdminAccount'
 import EditSuperAdminAccount from './components/SuperAdmin/EditSuperAdminAccount'
+import AddAccountSuperAdmin from './components/SuperAdmin/AddAccountSuperAdmin'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 
 // User components
@@ -71,7 +72,9 @@ function App() {
           {/* Super Admin Routes */}
           <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
             <Route path="/superadmin/account" element={<SuperAdminAccount />} />
+            <Route path="/admin/edit-superadmin-account" element={<EditSuperAdminAccount />} />
             <Route path="/superadmin/edit-account/:id" element={<EditSuperAdminAccount />} />
+            <Route path="/admin/add-superadmin-account" element={<AddAccountSuperAdmin />} />
           </Route>
 
           {/* User Routes */}

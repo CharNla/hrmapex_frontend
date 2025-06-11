@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { FaEye, FaEyeSlash, FaRegUser } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import bgDashboard from "/src/assets/bgdashboard.png"
 import '../AnimationCircles/AnimationCircles.css'
 import './Login.css'
 
@@ -204,18 +203,6 @@ function Login() {
     >
       {isMobileOrTablet && <AnimationCircles />}
       
-      {/* แสดง dashboard preview เฉพาะบน desktop */}
-      {!isMobileOrTablet && (
-        <motion.div 
-          className="login-left"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <img src={bgDashboard} alt="Dashboard Preview" className="dashboard-preview" />
-        </motion.div>
-      )}
-      
       <motion.div 
         className="login-right"
         variants={formVariants}
@@ -224,7 +211,7 @@ function Login() {
         transition={{ duration: 0.5, delay: 0.4 }}
       >
         <div className="login-form">
-          <motion.div 
+          {/* <motion.div 
             className="app-logo"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -232,7 +219,7 @@ function Login() {
           >
             <FaRegUser className="user-icon" />
             <span>HRMS</span>
-          </motion.div>
+          </motion.div> */}
 
           <motion.div
             initial={{ y: 20, opacity: 0 }}
