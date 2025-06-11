@@ -331,9 +331,11 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin: 0 auto;
   table-layout: fixed;
-  background: rgba(255, 255, 255, 0.98);
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .payroll__table thead {
@@ -342,6 +344,10 @@
   top: 0;
   z-index: 10;
   height: 48px;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #dee2e6;
+  position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .payroll__table th {
@@ -357,62 +363,68 @@
   border: none;
   height: 48px;
   vertical-align: middle;
+  background-color: #6366f1;
 }
 
 .payroll__table td {
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #f1f5f9;
-  font-size: 0.875rem;
-  color: #1e293b;
-  vertical-align: middle;
-  transition: all 0.2s ease;
+  padding: 1.25rem 1.5rem;
+  color: #495057;
+  border-bottom: 1px solid #f1f3f5;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease-in-out;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Column widths with modern spacing */
-.payroll__table th:nth-child(1) { width: 22%; }  /* ชื่อ-นามสกุล */
-.payroll__table th:nth-child(2) { width: 13%; }  /* TYPE */
-.payroll__table th:nth-child(3) { width: 16%; }  /* เงินเดือนพื้นฐาน */
-.payroll__table th:nth-child(4) { width: 16%; }  /* รายการหัก */
-.payroll__table th:nth-child(5) { width: 16%; }  /* รายได้เพิ่มเติม */
-.payroll__table th:nth-child(6) { width: 17%; }  /* เงินเดือนสุทธิ */
+/* Adjusted column widths for better balance and responsiveness */
+.payroll__table th:nth-child(1) { width: 16%; } /* Employee Name */
+.payroll__table th:nth-child(2) { width: 12%; } /* Month/Year */
+.payroll__table th:nth-child(3) { width: 10%; } /* Type */
+.payroll__table th:nth-child(4) { width: 12%; } /* Basic Salary */
+.payroll__table th:nth-child(5) { width: 12%; } /* Deductions */
+.payroll__table th:nth-child(6) { width: 12%; } /* Additions */
+.payroll__table th:nth-child(7) { width: 12%; } /* Net Salary */
+.payroll__table th:nth-child(8) { width: 14%; } /* Payment Status */
 
-/* Update column widths */
-.payroll__table th:nth-child(1),
-.payroll__table td:nth-child(1) { 
-  width: 20%;
-}
-
-.payroll__table th:nth-child(2),
-.payroll__table td:nth-child(2) { 
-  width: 10%;
-}
-
-.payroll__table th:nth-child(3),
-.payroll__table td:nth-child(3) { 
-  width: 15%;
-}
-
-.payroll__table th:nth-child(4),
-.payroll__table td:nth-child(4) { 
-  width: 12%;
-}
-
-.payroll__table th:nth-child(5),
-.payroll__table td:nth-child(5) { 
-  width: 12%;
-}
-
-.payroll__table th:nth-child(6),
-.payroll__table td:nth-child(6) { 
-  width: 15%;
-}
-
-.payroll__table th:nth-child(7),
-.payroll__table td:nth-child(7) { 
-  width: 16%;
+/* Alignment adjustments for better readability */
+.payroll__table th:nth-child(3), .payroll__table td:nth-child(3),
+.payroll__table th:nth-child(8), .payroll__table td:nth-child(8) {
   text-align: center;
+}
+
+.payroll__table th:nth-child(4), .payroll__table td:nth-child(4),
+.payroll__table th:nth-child(5), .payroll__table td:nth-child(5),
+.payroll__table th:nth-child(6), .payroll__table td:nth-child(6),
+.payroll__table th:nth-child(7), .payroll__table td:nth-child(7) {
+  text-align: right;
+  padding-right: 2rem;
+}
+
+.payroll__table th:nth-child(1),
+.payroll__table td:nth-child(1) {
+  text-align: left;
+}
+
+.payroll__table td,
+.payroll__table th {
+  vertical-align: middle;
+}
+
+/* Add styles for the date column */
+.payroll__td--date {
+  color: #4B5563;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  text-align: left;
+  padding: 1rem 1.5rem;
+}
+
+.payroll__th--date {
+  text-align: left;
+  background-color: #6366f1 !important;
+  color: #ffffff !important;
+  font-weight: 500;
 }
 
 /* Add subtle hover effect to table headers */
@@ -560,67 +572,8 @@
 
 /* Hover effects for badges */
 .payroll__table .payroll__employee-type:hover {
-  transform: translateY(-1px);
-}
-
-/* Actions column styles */
-.payroll__actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.payroll__action-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  border: none;
-  background: transparent;
-  color: #6b7280;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.payroll__action-button:hover {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
-}
-
-.payroll__action-button:hover {
-  border-color: #6366f1;
-  color: #6366f1;
-  background: rgba(99, 102, 241, 0.05);
-}
-
-/* Category badges styles */
-.payroll__category {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.payroll__category.it {
-  background-color: #f3e8ff;
-  color: #9333ea;
-}
-
-.payroll__category.announcement {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-.payroll__category.activity {
-  background-color: #e0f2fe;
-  color: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .payroll__title-cell {
@@ -664,62 +617,6 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-}
-
-/* Adjust column widths based on the image */
-.payroll__table th:nth-child(1),
-.payroll__table td:nth-child(1) { 
-  width: 25%;
-  max-width: 300px;
-  min-width: 200px;
-  padding-right: 1rem;
-}
-
-.payroll__table th:nth-child(2),
-.payroll__table td:nth-child(2) { 
-  width: 12%;
-}
-
-.payroll__table th:nth-child(3),
-.payroll__table td:nth-child(3) { 
-  width: 15%;
-  text-align: right;
-}
-
-.payroll__table th:nth-child(4),
-.payroll__table td:nth-child(4) { 
-  width: 15%;
-  text-align: right;
-}
-
-.payroll__table th:nth-child(5),
-.payroll__table td:nth-child(5) { 
-  width: 15%;
-  text-align: right;
-}
-
-.payroll__table th:nth-child(6),
-.payroll__table td:nth-child(6) { 
-  width: 18%;
-  text-align: right;
-}
-
-/* Action icons styling */
-.payroll__actions {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.payroll__icon {
-  width: 16px;
-  height: 16px;
-  color: #6b7280;
-}
-
-/* Hover effects */
-
-.payroll__table tr:hover .payroll__title-cell {
-  color: #6366f1;
 }
 
 /* DatePicker styles */
@@ -1037,10 +934,6 @@
 }
 
 /* Container Animation */
-.payroll__container {
-  animation: fadeIn 0.5s ease-out forwards;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;

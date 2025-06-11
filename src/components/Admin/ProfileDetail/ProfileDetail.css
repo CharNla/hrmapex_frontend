@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 24px;
+  padding: 32px 24px;
   background: var(--bg-secondary);
   border-radius: 12px;
   margin-bottom: 24px;
@@ -21,10 +21,44 @@
   border: 2px solid #f3f4f6;
 }
 
+.profile-image-container {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.edit-image-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #6366f1;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.edit-image-btn:hover {
+  transform: scale(1.1);
+}
+
+.edit-image-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
 .profile-info {
   display: flex;
   align-items: center;
   gap: 24px;
+  flex-grow: 1;
 }
 
 .profile-info h2 {
@@ -38,6 +72,12 @@
   color: var(--text-secondary);
   font-size: 14px;
   margin: 4px 0;
+}
+
+.edit-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .profile-main-content {
@@ -311,24 +351,21 @@
 
 .profile-header-section {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  gap: 32px;
-  flex-wrap: wrap; /* ป้องกันปุ่มตกขอบ */
-  margin-bottom: 24px;
-  background: #fff;
+  gap: 24px;
+  background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 48px 24px 24px 24px; /* เพิ่ม padding-top เป็น 48px เพื่อเว้นระยะห่างด้านบน */
+  margin-bottom: 24px;
+  padding: 48px 24px;
   box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
-  min-height: 90px;
 }
 
 .profile-header-info {
   display: flex;
   align-items: center;
-  gap: 20px;
-  min-width: 0;
-  flex: 1 1 0%;
+  gap: 24px;
+  flex-grow: 1;
 }
 
 .profile-name {
@@ -367,7 +404,6 @@
   font-size: 15px;
   font-weight: 500;
   transition: background 0.2s;
-  margin-left: auto;
   margin-right: 16px; /* Increased spacing between buttons */
   min-width: 140px;
   max-width: 180px;
@@ -383,6 +419,7 @@
 .edit-profile-btn.cancel {
   background: #e5e7eb;
   color: #6366f1;
+  margin-left: 0;
   margin-right: 16px;
   margin-top: 5px; /* Increased spacing between buttons */
 }
@@ -405,6 +442,7 @@
   align-items: center;
   gap: 7px;
   transition: all 0.2s ease;
+  margin-left: 0;
   margin-right: 16px; /* Increased spacing between buttons */
   margin-top: -8px; /* Move button upward */
 }

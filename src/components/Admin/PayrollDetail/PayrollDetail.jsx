@@ -6,10 +6,10 @@ import Topbar from '../Topbar/Topbar';
 import { FiDollarSign, FiMinusCircle, FiPlusCircle, FiFile, FiEdit2, FiSave, FiX, FiPlus } from 'react-icons/fi';
 
 const mainTabs = [
-  { key: 'salary', label: 'เงินเดือนพื้นฐาน', icon: <FiDollarSign /> },
-  { key: 'deductions', label: 'รายการหัก', icon: <FiMinusCircle /> },
-  { key: 'additions', label: 'รายได้เพิ่มเติม', icon: <FiPlusCircle /> },
-  { key: 'documents', label: 'เอกสาร', icon: <FiFile /> },
+  { key: 'salary', label: 'Base Salary', icon: <FiDollarSign /> },
+  { key: 'deductions', label: 'Deductions', icon: <FiMinusCircle /> },
+  { key: 'additions', label: 'Additional Income', icon: <FiPlusCircle /> },
+  { key: 'documents', label: 'Documents', icon: <FiFile /> },
 ];
 
 const PayrollDetail = () => {
@@ -18,7 +18,9 @@ const PayrollDetail = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
-  const [userRole, setUserRole] = useState('');  useEffect(() => {
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
     // ดึง userRole จาก localStorage
     const role = localStorage.getItem('userRole') || '';
     
@@ -37,7 +39,7 @@ const PayrollDetail = () => {
     id: id,
     name: "John Doe",
     position: "Software Engineer",
-    department: "Development",
+    payrollMonth: new Date(),
     baseSalary: 50000,
     deductions: {
       socialSecurity: 750,
@@ -86,7 +88,13 @@ const PayrollDetail = () => {
   const handleInputChange = (category, field, value) => {
     setEditData(prev => {
       if (category === 'base') {
-        return { ...prev, [field]: value };
+        let newValue = value;
+        if (field === 'payrollMonth') {
+          newValue = new Date(value);
+        } else if (field === 'baseSalary') {
+          newValue = parseFloat(value) || 0;
+        }
+        return { ...prev, [field]: newValue };
       }
       return {
         ...prev,
@@ -96,7 +104,9 @@ const PayrollDetail = () => {
         }
       };
     });
-  };  const handleFileChange = (e, type) => {
+  };
+
+  const handleFileChange = (e, type) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
       // Update the file input's parent div to show success state
@@ -139,7 +149,9 @@ const PayrollDetail = () => {
         [type]: prev.documents[type].filter((_, i) => i !== index)
       }
     }));
-  };  const handleDeductionInputChange = (field, value, inputType) => {
+  };
+
+  const handleDeductionInputChange = (field, value, inputType) => {
     const numericValue = parseFloat(value) || 0;
     const baseSalary = editData.baseSalary;
     let newDeductions = { ...editData.deductions };
@@ -159,9 +171,10 @@ const PayrollDetail = () => {
       deductions: newDeductions
     }));
   };
+
   const renderEditableField = (category, field, label, value) => {
     if (category === 'deductions' && isEditing) {
-      // คำนวณเปอร์เซ็นต์จากค่าใน editData แทน employeeData
+      // Calculate percentage from values in editData instead of employeeData
       const percentage = ((editData.deductions[field] / editData.baseSalary) * 100).toFixed(2);
       return (
         <div className="payroll-detail__info-item">
@@ -176,7 +189,7 @@ const PayrollDetail = () => {
                 max={editData.baseSalary}
                 placeholder="0"
               />
-              <span className="payroll-detail__input-label-bottom">จำนวนเงิน (บาท)</span>
+              <span className="payroll-detail__input-label-bottom">Amount (THB)</span>
             </div>
             <div className="payroll-detail__input-wrapper">
               <input
@@ -188,9 +201,24 @@ const PayrollDetail = () => {
                 max="100"
                 placeholder="0"
               />
-              <span className="payroll-detail__input-label-bottom">เปอร์เซ็นต์ (%)</span>
+              <span className="payroll-detail__input-label-bottom">Percentage (%)</span>
             </div>
           </div>
+        </div>
+      );
+    }
+
+    if (isEditing && field === 'payrollMonth') {
+      const yyyyMM = editData.payrollMonth ? new Date(editData.payrollMonth).toISOString().slice(0, 7) : '';
+      return (
+        <div className="payroll-detail__info-item">
+          <label>{label}</label>
+          <input
+            type="month"
+            value={yyyyMM}
+            onChange={(e) => handleInputChange(category, field, e.target.value)}
+            className="payroll-detail__edit-input"
+          />
         </div>
       );
     }
@@ -249,7 +277,7 @@ const PayrollDetail = () => {
         onClick={() => handleAddItem(category)}
       >
         <FiPlus />
-        เพิ่มรายการ
+        Add Item
       </button>
       
       {showNewItemForm[category] && (
@@ -261,13 +289,13 @@ const PayrollDetail = () => {
             <input
               type="text"
               className="payroll-detail__form-input"
-              placeholder="ชื่อรายการ"
+              placeholder="Item Name"
               value={newItemName}
               onChange={(e) => setNewItemName(e.target.value)}
               autoFocus
             />
             <button type="submit" className="payroll-detail__form-submit">
-              เพิ่ม
+              Add
             </button>
             <button 
               type="button" 
@@ -277,7 +305,7 @@ const PayrollDetail = () => {
                 [category]: false
               }))}
             >
-              ยกเลิก
+              Cancel
             </button>
           </div>
         </form>
@@ -288,15 +316,16 @@ const PayrollDetail = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case 'salary':
+        const formattedDate = new Date(employeeData.payrollMonth).toLocaleString('en-US', { month: 'long', year: 'numeric' });
         return (
           <div className="payroll-detail__tab-content">
             <div className="payroll-detail__card">
               <div className="payroll-detail__info-grid">
-                {renderEditableField('base', 'name', 'ชื่อ-นามสกุล', employeeData.name)}
-                {renderEditableField('base', 'position', 'ตำแหน่ง', employeeData.position)}
-                {renderEditableField('base', 'department', 'แผนก', employeeData.department)}
+                {renderEditableField('base', 'name', 'Full Name', employeeData.name)}
+                {renderEditableField('base', 'position', 'Position', employeeData.position)}
+                {renderEditableField('base', 'payrollMonth', 'Month/Year', formattedDate)}
                 <div className="payroll-detail__info-item highlight">
-                  <label>เงินเดือนพื้นฐาน</label>
+                  <label>Base Salary</label>
                   {isEditing ? (
                     <input
                       type="number"
@@ -319,16 +348,16 @@ const PayrollDetail = () => {
             <div className="payroll-detail__card">
               <div className="payroll-detail__info-grid">
                 {isEditing && renderAddItemButton('deductions')}
-                {renderEditableField('deductions', 'socialSecurity', 'ประกันสังคม', employeeData.deductions.socialSecurity)}
-                {renderEditableField('deductions', 'withHoldingTax', 'หัก ณ ที่จ่าย (WHT)', employeeData.deductions.withHoldingTax)}
-                {renderEditableField('deductions', 'withoutPay', 'ขาด/ลาไม่รับค่าจ้าง', employeeData.deductions.withoutPay)}
+                {renderEditableField('deductions', 'socialSecurity', 'Social Security', employeeData.deductions.socialSecurity)}
+                {renderEditableField('deductions', 'withHoldingTax', 'Withholding Tax (WHT)', employeeData.deductions.withHoldingTax)}
+                {renderEditableField('deductions', 'withoutPay', 'Leave Without Pay', employeeData.deductions.withoutPay)}
                 {/* Map any additional custom deductions */}
                 {Object.entries(editData.deductions)
                   .filter(([key]) => !['socialSecurity', 'withHoldingTax', 'withoutPay'].includes(key))
                   .map(([key, value]) => renderEditableField('deductions', key, key, value))
                 }
                 <div className="payroll-detail__info-item highlight">
-                  <label>รวมรายการหัก</label>
+                  <label>Total Deductions</label>
                   <span className="deduction">-฿{(
                     Object.values(isEditing ? editData.deductions : employeeData.deductions)
                       .reduce((a, b) => a + b, 0)
@@ -345,17 +374,17 @@ const PayrollDetail = () => {
             <div className="payroll-detail__card">
               <div className="payroll-detail__info-grid">
                 {isEditing && renderAddItemButton('additionalIncome')}
-                {renderEditableField('additionalIncome', 'overtime', 'ค่าล่วงเวลา (OT)', employeeData.additionalIncome.overtime)}
-                {renderEditableField('additionalIncome', 'travel', 'ค่าเดินทาง', employeeData.additionalIncome.travel)}
-                {renderEditableField('additionalIncome', 'food', 'ค่าอาหาร', employeeData.additionalIncome.food)}
-                {renderEditableField('additionalIncome', 'other', 'อื่นๆ', employeeData.additionalIncome.other)}
+                {renderEditableField('additionalIncome', 'overtime', 'Overtime (OT)', employeeData.additionalIncome.overtime)}
+                {renderEditableField('additionalIncome', 'travel', 'Travel Allowance', employeeData.additionalIncome.travel)}
+                {renderEditableField('additionalIncome', 'food', 'Food Allowance', employeeData.additionalIncome.food)}
+                {renderEditableField('additionalIncome', 'other', 'Other', employeeData.additionalIncome.other)}
                 {/* Map any additional custom income items */}
                 {Object.entries(editData.additionalIncome)
                   .filter(([key]) => !['overtime', 'travel', 'food', 'other'].includes(key))
                   .map(([key, value]) => renderEditableField('additionalIncome', key, key, value))
                 }
                 <div className="payroll-detail__info-item highlight">
-                  <label>รวมรายได้เพิ่มเติม</label>
+                  <label>Total Additional Income</label>
                   <span className="addition">+฿{(
                     Object.values(isEditing ? editData.additionalIncome : employeeData.additionalIncome)
                       .reduce((a, b) => a + b, 0)
@@ -369,7 +398,7 @@ const PayrollDetail = () => {
           <div className="payroll-detail__tab-content">
             <div className="payroll-detail__card">
               <div className="payroll-detail__document-section">
-                <div className="payroll-detail__document-item">                  <h4>แบบ ภ.ง.ด.1 (N550)</h4>
+                <div className="payroll-detail__document-item">                  <h4>P.N.D.1 Form (N550)</h4>
                   <div className="payroll-detail__upload-area">                    {userRole === 'admin' && (
                       <div className="payroll-detail__file-input">
                         <input 
@@ -380,7 +409,7 @@ const PayrollDetail = () => {
                           onChange={(e) => handleFileChange(e, 'n550')} 
                         />
                         <label htmlFor="n550" className="payroll-detail__upload-button">
-                          <FiFile /> อัพโหลดเอกสาร
+                          <FiFile /> Upload Document
                         </label>
                       </div>
                     )}
@@ -393,7 +422,7 @@ const PayrollDetail = () => {
                               <button 
                                 className="payroll-detail__delete-file" 
                                 onClick={() => handleDeleteFile('n550', index)}
-                                title="ลบไฟล์"
+                                title="Delete File"
                               >
                                 <FiX />
                               </button>
@@ -404,7 +433,7 @@ const PayrollDetail = () => {
                     )}
                   </div>
                 </div>
-                <div className="payroll-detail__document-item">                  <h4>สลิปเงินเดือน</h4>
+                <div className="payroll-detail__document-item">                  <h4>Payslip</h4>
                   <div className="payroll-detail__upload-area">                    {userRole === 'admin' && (
                       <div className="payroll-detail__file-input">
                         <input 
@@ -415,7 +444,7 @@ const PayrollDetail = () => {
                           onChange={(e) => handleFileChange(e, 'paySlip')} 
                         />
                         <label htmlFor="payslip" className="payroll-detail__upload-button">
-                          <FiFile /> อัพโหลดเอกสาร
+                          <FiFile /> Upload Document
                         </label>
                       </div>
                     )}
@@ -424,11 +453,11 @@ const PayrollDetail = () => {
                           <div key={index} className="payroll-detail__file-item">
                             <div className="file-info">
                               <FiFile /> {file.name}
-                            </div>                            {userRole === 'user' && (
+                            </div>                            {userRole === 'admin' && (
                               <button 
                                 className="payroll-detail__delete-file" 
                                 onClick={() => handleDeleteFile('paySlip', index)}
-                                title="ลบไฟล์"
+                                title="Delete File"
                               >
                                 <FiX />
                               </button>
@@ -469,22 +498,22 @@ const PayrollDetail = () => {
           <li></li>
           <li></li>
           <li></li>
-        </ul>        <Topbar pageTitle={`${employeeData.name}`} pageSubtitle="รายละเอียดเงินเดือน" />
+        </ul>        <Topbar pageTitle={`${employeeData.name}`} pageSubtitle="Salary Details" />
         <div className="payroll-detail__main">
           <div className="payroll-detail__header">
-            <h2>รายละเอียดเงินเดือนของ {employeeData.name}</h2>
+            <h2>Salary Details for {employeeData.name}</h2>
             <div className="payroll-detail__actions">              {isEditing ? (
                 <>
                   <button onClick={handleSave} className="payroll-detail__button save">
-                    <FiSave /> บันทึก
+                    <FiSave /> Save
                   </button>
                   <button onClick={handleCancel} className="payroll-detail__button cancel">
-                    <FiX /> ยกเลิก
+                    <FiX /> Cancel
                   </button>
                 </>              ) : (
                 userRole === 'admin' && (
                   <button onClick={handleEdit} className="payroll-detail__button edit">
-                    <FiEdit2 /> แก้ไข
+                    <FiEdit2 /> Edit
                   </button>
                 )
               )}

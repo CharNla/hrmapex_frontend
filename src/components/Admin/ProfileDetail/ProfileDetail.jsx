@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import SideMenu from '../SideMenu/Side_menu';
 import Topbar from '../Topbar/Topbar';
@@ -32,6 +32,25 @@ const ProfileDetail = () => {
   const [userRole, setUserRole] = useState('');
   const [siblingsData, setSiblingsData] = useState([]);
   const currentEmployeeId = localStorage.getItem('employeeId');
+  const fileInputRef = useRef(null);
+
+  const handleProfileImageChange = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEmployeeData(prevData => ({
+          ...prevData,
+          ImageUrl: reader.result
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const toggleSideMenu = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
@@ -1677,10 +1696,7 @@ const ProfileDetail = () => {
                               minHeight: '80px',
                             }}
                           />
-                        ) : (
-                          <div style={{ whiteSpace: 'pre-line' }}>{row.jobDescription || '-'}</div>
-                        )}
-                      </td>
+                        ) : row.jobDescription || '-'}</td>
                     </tr>
                   </React.Fragment>
                 ))}
@@ -2509,83 +2525,56 @@ const ProfileDetail = () => {
 
   return (
     <div className="dashboard-container">
-      <SideMenu isMinimized={isMinimized} onToggleMinimize={() => setIsMinimized(!isMinimized)} />
+      <SideMenu isMinimized={isMinimized} isSideMenuOpen={isSideMenuOpen} toggleSideMenu={toggleSideMenu} />
       <div className={`dashboard-main ${isMinimized ? 'expanded' : ''}`}>
-        <ul className="circles">
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-        </ul>
-        <ul className="circles-bottom">
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-          <li></li><li></li><li></li><li></li><li></li>
-        </ul>
+        <Topbar toggleSideMenu={toggleSideMenu} />
 
-        <Topbar 
-          pageTitle={id === currentEmployeeId ? 'My Profile' : `All Employees > ${employeeData?.FName || ''} ${employeeData?.LName || ''}`}
-          pageSubtitle="" 
-        />
         <div className="profile-header-section">
           <div className="profile-header-info">
-            <div className="profile-image-wrapper">
-              <img
-                src={isEditing ? (editData.ImageUrl || '/src/assets/profile.png') : (employeeData.ImageUrl || '/src/assets/profile.png')}
-                alt="Profile"
-                className={`profile-image${isEditing ? ' editable' : ''}`}
-                onClick={isEditing ? () => document.getElementById('profile-image-input').click() : undefined}
-                onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = '/src/assets/profile.png';
-                }}
+            <div className="profile-image-container">
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                accept="image/*"
+                onChange={handleFileChange}
               />
+              <img src={employeeData.ImageUrl} alt="Profile" className="profile-image" />
               {isEditing && (
-                <>
-                  <input
-                    id="profile-image-input"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleProfileImageChange}
-                  />
-                  <div className="profile-image-overlay">
-                    <svg width="32" height="32" fill="none" stroke="#fff" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M2 7.5V17a2.5 2.5 0 0 1 2.5 2.5h15A2.5 2.5 0 0 1 22 17V7.5M16.5 7.5l-1.38-2.07A2 2 0 0013.5 4.5h-3a2 2 0 00-1.62.93L7.5 7.5"/></svg>
-                  </div>
-                </>
+                <button className="edit-image-btn" onClick={handleProfileImageChange}>
+                  <FiEdit2 />
+                </button>
               )}
             </div>
-            <div>
-              <h2 className="profile-name">
-                {`${employeeData.FName} ${employeeData.LName}`}
-                {employeeData.Nickname && ` (${employeeData.Nickname})`}
-              </h2>
-              <span className="profile-role">
-                <svg width="18" height="18" style={{verticalAlign: 'middle', marginRight: 4}} fill="none" stroke="#22223b" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 21v-2a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v2h-2v-2a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2H3z"/><circle cx="12" cy="7" r="4"/></svg>
-                {employeeData.Position || '-'}
-              </span>
-              <span className="profile-email">
-                <svg width="18" height="18" style={{verticalAlign: 'middle', marginRight: 4}} fill="none" stroke="#22223b" strokeWidth="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-                {employeeData.Email || '-'}
-              </span>
+            <div className="profile-info">
+              <div>
+                <h2>{employeeData.FName} {employeeData.LName} ({employeeData.Nickname})</h2>
+                <p>{employeeData.Position}</p>
+                <p>{employeeData.Email}</p>
+              </div>
             </div>
-          </div>          {isEditing ? (
-            <div className="edit-action-group">
-              <button className="edit-profile-btn save" onClick={handleSave} type="button">
-                <FiSave className="save-icon" />
-                Save
-              </button>
-              <button className="edit-profile-btn cancel" onClick={handleCancelEdit} type="button">
-                Cancel
-              </button>
-            </div>          ) : (
-            (userRole === 'superadmin' || id === currentEmployeeId) && (
-              <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
-                <FiEdit2 className="edit-icon" />
-                Edit Profile
-              </button>
-            )
-          )}
+            
+            {isEditing ? (
+              <div className="edit-action-group">
+                <button className="edit-profile-btn save" onClick={handleSave} type="button">
+                  <FiSave className="save-icon" />
+                  Save
+                </button>
+                <button className="edit-profile-btn cancel" onClick={handleCancelEdit} type="button">
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              (userRole === 'superadmin' || id === currentEmployeeId) && (
+                <button className="edit-profile-btn" onClick={handleEditClick} disabled={isEditing}>
+                  <FiEdit2 className="edit-icon" />
+                  Edit Profile
+                </button>
+              )
+            )}
+          </div>
         </div>
+
         <div className="profile-main-content">
           <div className="profile-tabs">
             {mainTabs.map(tab => (
@@ -2630,17 +2619,5 @@ const ProfileDetail = () => {
     </div>
   );
 };
-
-// ฟังก์ชันสำหรับอัปโหลดและ preview รูปโปรไฟล์
-function handleProfileImageChange(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setEditData(prev => ({ ...prev, ImageUrl: reader.result }));
-    };
-    reader.readAsDataURL(file);
-  }
-}
 
 export default ProfileDetail;

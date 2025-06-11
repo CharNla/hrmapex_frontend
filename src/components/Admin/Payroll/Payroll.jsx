@@ -3,7 +3,7 @@ import './Payroll.css';
 import SideMenu from '../SideMenu/Side_menu';
 import Topbar from '../Topbar/Topbar';
 import { useNavigate } from 'react-router-dom';
-import { FiChevronLeft, FiChevronRight, FiFileText, FiEdit2, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import { FiChevronLeft, FiChevronRight, FiFileText, FiEdit2, FiCheckCircle, FiXCircle, FiTrash2 } from 'react-icons/fi';
 
 const Payroll = () => {
   const navigate = useNavigate();
@@ -247,8 +247,8 @@ const Payroll = () => {
     e.preventDefault();
     setContextMenu({
       show: true,
-      x: e.pageX,
-      y: e.pageY,
+      x: e.clientX,
+      y: e.clientY,
       employeeId
     });
   };
@@ -272,6 +272,11 @@ const Payroll = () => {
 
   const handleEdit = (employeeId) => {
     navigate(`/payroll-detail/${employeeId}`);
+    setContextMenu({ show: false, x: 0, y: 0, employeeId: null });
+  };
+
+  const handleDelete = (employeeId) => {
+    setEmployees(employees.filter(emp => emp.id !== employeeId));
     setContextMenu({ show: false, x: 0, y: 0, employeeId: null });
   };
 
@@ -320,7 +325,8 @@ const Payroll = () => {
                   <option value="freelance">Freelance</option>
                   <option value="intern">Intern</option>
                 </select>
-                <div className="payroll__search">                  <input
+                <div className="payroll__search">
+                  <input
                     type="text"
                     placeholder="Search employees..."
                     value={searchTerm}
@@ -336,13 +342,13 @@ const Payroll = () => {
               <thead>
                 <tr>
                   <th className="payroll__th payroll__th--name">Employee Name</th>
+                  <th className="payroll__th payroll__th--date">Month/Year</th>
                   <th className="payroll__th">Type</th>
                   <th className="payroll__th payroll__th--salary">Basic Salary</th>
                   <th className="payroll__th payroll__th--salary">Deductions</th>
                   <th className="payroll__th payroll__th--salary">Additions</th>
                   <th className="payroll__th payroll__th--salary">Net Salary</th>
                   <th className="payroll__th payroll__th--status">Payment Status</th>
-                  <th className="payroll__th payroll__th--actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -357,6 +363,9 @@ const Payroll = () => {
                       <div className="payroll__employee-info">
                         <span>{employee.name} {employee.nickname && `(${employee.nickname})`}</span>
                       </div>
+                    </td>
+                    <td className="payroll__td payroll__td--date">
+                      {new Date(currentDate).toLocaleString('th-TH', { month: 'long', year: 'numeric', calendar: 'buddhist' })}
                     </td>
                     <td>
                       <span className={`payroll__employee-type ${getTypeColor(employee.type)}`}>
@@ -373,11 +382,6 @@ const Payroll = () => {
                       <span className={`payroll__payment-status payroll__payment-status--${employee.paymentStatus}`}>
                         {employee.paymentStatus === 'paid' ? 'ดำเนินการ' : 'ยังไม่ดำเนินการ'}
                       </span>
-                    </td>
-                    <td>
-                      <div className="payroll__actions">
-                        <button onClick={(e) => { e.stopPropagation(); handleContextMenu(e, employee.id); }}>...</button>
-                      </div>
                     </td>
                   </tr>
                 ))}
@@ -410,6 +414,11 @@ const Payroll = () => {
               <div className="payroll__context-menu-item" onClick={() => handleEdit(contextMenu.employeeId)}>
                 <FiEdit2 className="payroll__context-menu-icon" />
                 <span>แก้ไข</span>
+              </div>
+              <div className="payroll__context-menu-divider"></div>
+              <div className="payroll__context-menu-item" onClick={() => handleDelete(contextMenu.employeeId)}>
+                <FiTrash2 className="payroll__context-menu-icon payroll__context-menu-icon--danger" />
+                <span>ลบ</span>
               </div>
             </div>
           )}
