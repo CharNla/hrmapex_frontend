@@ -1677,7 +1677,10 @@ const ProfileDetail = () => {
                               minHeight: '80px',
                             }}
                           />
-                        ) : row.jobDescription || '-'}</td>
+                        ) : (
+                          <div style={{ whiteSpace: 'pre-line' }}>{row.jobDescription || '-'}</div>
+                        )}
+                      </td>
                     </tr>
                   </React.Fragment>
                 ))}
