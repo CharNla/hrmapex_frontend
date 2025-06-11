@@ -1,85 +1,93 @@
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import './Popup.css'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiCheck, FiX } from 'react-icons/fi';
+import './Popup.css';
 
 const PopupUpdatePass = ({ isOpen, onClose }) => {
-  const navigate = useNavigate()
-  const [isClosing, setIsClosing] = useState(false)
+  const navigate = useNavigate();
 
-  const handleBackToLogin = () => {
-    setIsClosing(true)
-    setTimeout(() => {
-      onClose()
-      navigate('/login')
-    }, 300) // Match animation duration
-  }
+  const handleClose = () => {
+    onClose();
+    navigate('/login');
+  };
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsClosing(false)
+  const backdropVariants = {
+    visible: { opacity: 1 },
+    hidden: { opacity: 0 },
+  };
+
+  const modalVariants = {
+    hidden: {
+      y: "-50px",
+      opacity: 0,
+      scale: 0.95,
+      transition: { type: 'spring', damping: 15, stiffness: 200 }
+    },
+    visible: {
+      y: "0",
+      opacity: 1,
+      scale: 1,
+      transition: { type: 'spring', damping: 15, stiffness: 200 }
+    },
+    exit: {
+      y: "50px",
+      opacity: 0,
+      scale: 0.95,
+      transition: { ease: "easeOut", duration: 0.2 }
     }
-  }, [isOpen])
+  };
 
-  if (!isOpen) return null
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.div 
-          className={`popup-overlay ${isClosing ? 'closing' : ''}`}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+        <motion.div
+          className="popup-backdrop"
+          variants={backdropVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
         >
-          <motion.div 
-            className={`popup-content ${isClosing ? 'closing' : ''}`}
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ type: "spring", damping: 15 }}
+          <motion.div
+            className="popup-modal"
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
           >
-            <motion.div 
-              className="success-animation"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", damping: 12 }}
-            >
-              <div className="checkmark-circle">
-                <div className="checkmark-check"></div>
-              </div>
-            </motion.div>
-            <motion.h2 
-              className="popup-title"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              Password Updated Successfully!
-            </motion.h2>
-            <motion.p 
-              className="popup-message"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              Your password has been changed successfully. Please use your new password to login.
-            </motion.p>
-            <motion.button 
-              className="back-to-login-button"
-              onClick={handleBackToLogin}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <div className="popup-icon-container">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1, transition: { delay: 0.2, type: 'spring' } }}
+              >
+                <FiCheck className="popup-icon" />
+              </motion.div>
+            </div>
+
+            <h2 className="popup-heading">Success!</h2>
+            <p className="popup-subheading">
+              Your password has been updated.
+            </p>
+
+            <button
+              className="popup-button"
+              onClick={handleClose}
             >
               Back to Login
-            </motion.button>
+            </button>
+            
+            <button
+                className="popup-close-btn"
+                onClick={onClose}
+                aria-label="Close"
+            >
+                <FiX />
+            </button>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default PopupUpdatePass
+export default PopupUpdatePass;

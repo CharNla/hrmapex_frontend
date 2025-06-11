@@ -413,11 +413,12 @@ html {
 }
 .input:focus, .input:hover {
   border-color: #7152f3;
-  background-color: #fff;
+  background-color: transparent;
   box-shadow: 0 0 0 4px rgba(113, 82, 243, 0.1);
 }
 .icon {
   position: absolute;
+  z-index: 1;
   left: 1rem;
   fill: none;
   width: 1.2rem;
