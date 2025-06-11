@@ -123,6 +123,34 @@ const NewEmployees = () => {
   const [activeTab, setActiveTab] = useState('personal')
   const navigate = useNavigate()
 
+  const calculateAge = (dob) => {
+    if (!dob) return "";
+    const birthDate = new Date(dob);
+    if (isNaN(birthDate.getTime())) return ""; // Invalid date
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age >= 0 ? age.toString() : "";
+  };
+
+  useEffect(() => {
+    const age = calculateAge(formData.fatherDob);
+    setFormData(prev => ({ ...prev, fatherAge: age }));
+  }, [formData.fatherDob]);
+
+  useEffect(() => {
+    const age = calculateAge(formData.motherDob);
+    setFormData(prev => ({ ...prev, motherAge: age }));
+  }, [formData.motherDob]);
+
+  useEffect(() => {
+    const age = calculateAge(formData.spouseDob);
+    setFormData(prev => ({ ...prev, spouseAge: age }));
+  }, [formData.spouseDob]);
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => {
@@ -187,6 +215,21 @@ const NewEmployees = () => {
     updated[idx][field] = value
     setFormData(prev => ({ ...prev, educationHistory: updated }))
   }
+
+  const handleChildInputChange = (index, field, value) => {
+    const updatedChildren = [...formData.childrenData];
+    const childData = updatedChildren[index] || {};
+    updatedChildren[index] = { ...childData, [field]: value };
+    setFormData(prev => ({ ...prev, childrenData: updatedChildren }));
+  };
+
+  const handleSiblingInputChange = (index, field, value) => {
+    const updatedSiblings = [...formData.siblingsData];
+    const siblingData = updatedSiblings[index] || {};
+    updatedSiblings[index] = { ...siblingData, [field]: value };
+    setFormData(prev => ({ ...prev, siblingsData: updatedSiblings }));
+  };
+
   const handleAddWorkHistory = () => {
     setFormData(prev => ({
       ...prev,
@@ -1153,7 +1196,7 @@ const NewEmployees = () => {
                               />
                             </td>
                             <td>
-                              {formData.childrenData[index]?.birthdate ? new Date().getFullYear() - new Date(formData.childrenData[index].birthdate).getFullYear() : '-'}
+                              {calculateAge(formData.childrenData[index]?.birthdate) || '-'}
                             </td>
                           </tr>
                         ))}
@@ -1247,7 +1290,7 @@ const NewEmployees = () => {
                               />
                             </td>
                             <td>
-                              {formData.siblingsData[index]?.birthdate ? new Date().getFullYear() - new Date(formData.siblingsData[index].birthdate).getFullYear() : '-'}
+                              {calculateAge(formData.siblingsData[index]?.birthdate) || '-'}
                             </td>
                           </tr>
                         ))}

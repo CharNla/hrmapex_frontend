@@ -207,10 +207,10 @@ const Adddisburse = () => {
                     required
                   >
                     <option value="">Select category</option>
-                    <option value="ค่าเดินทาง">ค่าเดินทาง</option>
-                    <option value="ค่าอาหาร">ค่าอาหาร</option>
-                    <option value="ค่าอุปกรณ์">ค่าอุปกรณ์</option>
-                    <option value="อื่นๆ">อื่นๆ</option>
+                    <option value="OT">OT</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Food">Food</option>
+                    <option value="Other">Other</option>
                   </select>
                   {errors.category && <span className="error-text">{errors.category}</span>}
                 </div>

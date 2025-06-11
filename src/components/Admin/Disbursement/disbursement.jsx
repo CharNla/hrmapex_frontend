@@ -456,13 +456,19 @@ const Disbursement = () => {  const navigate = useNavigate();
                     <div className="disbursement-details">                      <div className="detail-row">
                         <span className="detail-label">Category:</span>
                         {editingId === item.id ? (
-                          <input
-                            type="text"
-                            name="category"
-                            value={editData.category}
-                            onChange={handleEditChange}
-                            className="edit-input"
-                          />
+                          <div className="detail-value-edit">
+                            <select
+                              name="category"
+                              value={editData.category}
+                              onChange={handleEditChange}
+                              className="edit-input"
+                            >
+                              <option value="OT">OT</option>
+                              <option value="Travel">Travel</option>
+                              <option value="Food">Food</option>
+                              <option value="Other">Other</option>
+                            </select>
+                          </div>
                         ) : (
                           <span className="detail-value">{item.category}</span>
                         )}
