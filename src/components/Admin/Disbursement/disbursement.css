@@ -124,15 +124,21 @@
   gap: 16px;
 }
 
-.filter-panel select {
-  padding: 12px;
+.filter-panel select,
+.filter-panel input {
+  padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  background-color: #ffffff !important;
+  background-color: #ffffff;
   min-width: 180px;
   font-size: 0.95rem;
   font-weight: 500;
   color: #000000 !important;
+  height: 42px; /* Set a fixed height */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.filter-panel select {
   -webkit-appearance: menulist !important;
   appearance: menulist !important;
 }
@@ -143,20 +149,16 @@
   font-weight: normal;
 }
 
-.filter-panel input {
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  background-color: #ffffff;
-  min-width: 180px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #000000 !important;
+.filter-panel .filter-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.filter-panel select:not(:disabled),
-.filter-panel select option:not(:disabled) {
-  color: #000000 !important;
+.filter-panel .filter-control label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-left: 2px;
 }
 
 .filter-panel select:focus,

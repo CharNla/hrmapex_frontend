@@ -15,7 +15,8 @@ const Disbursement = () => {  const navigate = useNavigate();
   const [filterCriteria, setFilterCriteria] = useState({
     category: '',
     status: '',
-    date: ''
+    startDate: '',
+    endDate: ''
   });
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({
@@ -200,7 +201,8 @@ const Disbursement = () => {  const navigate = useNavigate();
   const filteredDisbursements = disbursements.filter(item => {
     if (filterCriteria.category && item.category !== filterCriteria.category) return false;
     if (filterCriteria.status && item.status !== filterCriteria.status) return false;
-    if (filterCriteria.date && item.date !== filterCriteria.date) return false;
+    if (filterCriteria.startDate && new Date(item.date) < new Date(filterCriteria.startDate)) return false;
+    if (filterCriteria.endDate && new Date(item.date) > new Date(filterCriteria.endDate)) return false;
     return true;
   });
   const handleEdit = (id) => {
@@ -387,36 +389,57 @@ const Disbursement = () => {  const navigate = useNavigate();
 
             {showFilter && (
               <div className="filter-panel">
-                <select
-                  name="category"
-                  value={filterCriteria.category}
-                  onChange={handleFilterChange}
-                  style={{ color: '#000000' }}
-                >                  <option value="" style={{ color: '#000000' }}>All Categories</option>
-                  <option value="Travel" style={{ color: '#000000' }}>Travel</option>
-                  <option value="Food" style={{ color: '#000000' }}>Food</option>
-                  <option value="Equipment" style={{ color: '#000000' }}>Equipment</option>
-                  <option value="Others" style={{ color: '#000000' }}>Others</option>
-                </select>
+                <div className="filter-control">
+                  <label htmlFor="category">Category</label>
+                  <select
+                    id="category"
+                    name="category"
+                    value={filterCriteria.category}
+                    onChange={handleFilterChange}
+                  >
+                    <option value="">All Categories</option>
+                    <option value="OT">OT</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Food">Food</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
 
-                <select
-                  name="status"
-                  value={filterCriteria.status}
-                  onChange={handleFilterChange}
-                  style={{ color: '#000000' }}
-                >
-                  <option value="" style={{ color: '#000000' }}>All Status</option>
-                  <option value="Pending" style={{ color: '#000000' }}>Pending</option>
-                  <option value="Approved" style={{ color: '#000000' }}>Approved</option>
-                  <option value="Rejected" style={{ color: '#000000' }}>Rejected</option>
-                </select>
+                <div className="filter-control">
+                  <label htmlFor="status">Status</label>
+                  <select
+                    id="status"
+                    name="status"
+                    value={filterCriteria.status}
+                    onChange={handleFilterChange}
+                  >
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
 
-                <input
-                  type="date"
-                  name="date"
-                  value={filterCriteria.date}
-                  onChange={handleFilterChange}
-                />
+                <div className="filter-control">
+                  <label htmlFor="startDate">Start Date</label>
+                  <input
+                    type="date"
+                    id="startDate"
+                    name="startDate"
+                    value={filterCriteria.startDate}
+                    onChange={handleFilterChange}
+                  />
+                </div>
+                <div className="filter-control">
+                  <label htmlFor="endDate">End Date</label>
+                  <input
+                    type="date"
+                    id="endDate"
+                    name="endDate"
+                    value={filterCriteria.endDate}
+                    onChange={handleFilterChange}
+                  />
+                </div>
               </div>
             )}
 
