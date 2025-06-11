@@ -278,7 +278,7 @@ const Disbursement = () => {  const navigate = useNavigate();
     setEditingId(null);
   };
   const handleAddDisbursement = () => {
-    navigate('/adddisburse');
+    navigate('/user/adddisburse');
   };
 
   return (

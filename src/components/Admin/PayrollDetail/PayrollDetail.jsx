@@ -22,8 +22,8 @@ const PayrollDetail = () => {
     // ดึง userRole จาก localStorage
     const role = localStorage.getItem('userRole') || '';
     
-    // เช็คว่าเป็น admin หรือไม่
-    if (role === 'admin') {
+    // เช็คว่าเป็น admin หรือ superadmin หรือไม่
+    if (role === 'admin' || role === 'superadmin') {
       setUserRole('admin');
     } else {
       setUserRole('user');

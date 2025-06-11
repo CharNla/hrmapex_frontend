@@ -107,7 +107,7 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
     if (location.pathname.startsWith('/admin/addnews') && path.includes('news')) {
       return true;
     }
-    if (location.pathname.startsWith('/admin/adddisburse') && path.includes('disbursement')) {
+    if ((location.pathname.startsWith('/admin/adddisburse') || location.pathname.startsWith('/user/adddisburse')) && path.includes('disbursement')) {
       return true;
     }
     if (location.pathname.startsWith('/admin/payroll-detail/') && path.includes('payroll')) {
@@ -122,7 +122,8 @@ const SideMenu = ({ isMinimized, onToggleMinimize, hasPopup, isOpen, onClose }) 
     if ((location.pathname.startsWith('/admin/account') ||
         location.pathname.startsWith('/admin/edit-account') ||
         location.pathname.startsWith('/superadmin/account') ||
-        location.pathname.startsWith('/superadmin/edit-account')) && path.includes('account')) {
+        location.pathname.startsWith('/superadmin/edit-account') ||
+        location.pathname.startsWith('/admin/add-superadmin-account')) && path.includes('account')) {
       return true;
     }
 
