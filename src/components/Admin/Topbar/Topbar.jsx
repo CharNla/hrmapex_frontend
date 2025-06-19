@@ -10,7 +10,7 @@ const routeInfo = {
   '/admin/all-employees': { title: 'All Employees', subtitle: 'Manage employee information' },
   '/admin/employees': { title: 'All Employees', subtitle: 'Manage employee information' },
   '/admin/new-employee': { title: 'Add New Employee', subtitle: 'Enter details for the new employee' },
-  '/admin/news': { title: 'News', subtitle: 'Manage company news and announcements' },
+  '/admin/news': { title: 'News', subtitle: 'Manage news and announcements' },
   '/admin/addnews': { title: 'Add News', subtitle: 'Create a new news article or announcement' },
   '/admin/leaves': { title: 'Leaves', subtitle: 'Manage employee leave requests' },
   '/admin/payroll': { title: 'Payroll', subtitle: 'Process and manage employee payroll' },
