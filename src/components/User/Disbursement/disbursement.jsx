@@ -22,8 +22,6 @@ const Disbursement = () => {  const navigate = useNavigate();
     category: '',
     amount: 0,
     details: '',
-    status: '',
-    date: '',
     newAttachments: []
   });  const [disbursements, setDisbursements] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -203,15 +201,13 @@ const Disbursement = () => {  const navigate = useNavigate();
     const disbursementToEdit = disbursements.find(item => item.id === id);
     const currentEmployeeId = localStorage.getItem('employeeId');
     
-    // Only allow editing if this disbursement belongs to the current user
-    if (String(disbursementToEdit.employeeId) === String(currentEmployeeId)) {
+    // Only allow editing if this disbursement belongs to the current user and status is Pending
+    if (String(disbursementToEdit.employeeId) === String(currentEmployeeId) && disbursementToEdit.status === 'Pending') {
       setEditingId(id);
       setEditData({
         category: disbursementToEdit.category,
         amount: disbursementToEdit.amount,
         details: disbursementToEdit.details,
-        status: disbursementToEdit.status,
-        date: disbursementToEdit.date,
         newAttachments: []
       });
     }
@@ -404,91 +400,13 @@ const Disbursement = () => {  const navigate = useNavigate();
                         )}
                       </div>                      <div className="detail-row">
                         <span className="detail-label">Date:</span>
-                        {editingId === item.id ? (
-                          <input
-                            type="date"
-                            name="date"
-                            value={editData.date}
-                            onChange={handleEditChange}
-                            className="edit-input"
-                          />
-                        ) : (
-                          <span className="detail-value">{new Date(item.date).toLocaleDateString('th-TH')}</span>
-                        )}
+                        <span className="detail-value">{new Date(item.date).toLocaleDateString('th-TH')}</span>
                       </div>
-                      {editingId === item.id && (                      <div className="detail-row">
-                        <span className="detail-label">Status:</span>
-                        <select
-                            name="status"
-                            value={editData.status}
-                            onChange={handleEditChange}
-                            className="edit-input status-select"
-                          >
-                            <option value="Pending">Pending</option>
-                            <option value="Approved">Approved</option>
-                            <option value="Rejected">Rejected</option>
-                          </select>
+                      {item.status === 'Rejected' && item.rejectReason && (
+                        <div className="rejection-reason">
+                          <strong>Reason:</strong> {item.rejectReason}
                         </div>
-                      )}                      <div className="detail-row">                        <span className="detail-label">Attachments:</span>
-                        <div className="attachments-container">
-                          <div className="attachment-header">
-                          </div>
-                          
-                          {(!item.attachments || item.attachments.length === 0) && !editingId && (
-                            <span className="no-attachments">None</span>
-                          )}
-                          
-                          {item.attachments && item.attachments.map((file) => (
-                            <div key={file.id} className="attachment-item">
-                              <span className="file-icon">📄</span>
-                              <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                {file.name}
-                              </a>
-                              {editingId === item.id && (
-                                <button
-                                  className="remove-attachment-btn"
-                                  onClick={() => handleAttachmentRemove(item.id, file.id)}
-                                  title="Delete file"
-                                >
-                                  <FiX />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-                          
-                          {editingId === item.id && editData.newAttachments.map((file, index) => (
-                            <div key={file.id} className="attachment-item new-attachment">
-                              <span className="file-icon">📄</span>
-                              <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                {file.name}
-                              </a>
-                              <button
-                                className="remove-attachment-btn"
-                                onClick={() => handleFileRemove(index)}
-                                title="ลบไฟล์"
-                              >
-                                <FiX />
-                              </button>
-                            </div>
-                          ))}
-                          
-                          {editingId === item.id && (
-                            <div className="file-upload-container">
-                              <input
-                                type="file"
-                                multiple
-                                onChange={handleFileChange}
-                                id={`file-upload-${item.id}`}
-                                className="file-input"
-                                accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
-                              />
-                              <label htmlFor={`file-upload-${item.id}`} className="file-upload-label">
-                                <FiPlus /> Add file
-                              </label>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                   
@@ -501,12 +419,14 @@ const Disbursement = () => {  const navigate = useNavigate();
                         <FiSave style={{ marginRight: '5px' }} /> Save
                       </button>
                     ) : (
-                      <button 
-                        className="edit-button"
-                        onClick={() => handleEdit(item.id)}
-                      >
-                        <FiEdit style={{ marginRight: '5px' }} /> Edit
-                      </button>
+                      item.status === 'Pending' && (
+                        <button 
+                          className="edit-button"
+                          onClick={() => handleEdit(item.id)}
+                        >
+                          <FiEdit style={{ marginRight: '5px' }} /> Edit
+                        </button>
+                      )
                     )}
                   </div>
                 </div>
@@ -515,6 +435,23 @@ const Disbursement = () => {  const navigate = useNavigate();
           </div>
         </div>
       </div>
+      <style>
+        {`
+          .rejection-reason {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff5f5;
+            border: 1px solid #e53e3e;
+            border-left-width: 5px;
+            border-radius: 4px;
+            color: #c53030;
+            font-size: 0.9em;
+          }
+          .rejection-reason strong {
+            color: #b91c1c;
+          }
+        `}
+      </style>
     </div>
   );
 };
